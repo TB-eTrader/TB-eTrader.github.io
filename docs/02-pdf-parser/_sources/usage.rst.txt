@@ -1,0 +1,25 @@
+=========
+使用文档
+=========
+
+Quick Start
+===========
+
+在 **项目根目录** 下执行以下命令以解析目标路径下的所有PDF文件:
+
+.. code-block:: bash
+
+    python -m schedule_run --pdf_dir <pdf_dir>
+
+其中 ``<pdf_dir>`` 是存放pdf文件的目录, 可以是绝对路径, 也可以是基于项目根目录的相对路径.
+
+更多可选的参数及其用法可以通过 ``python -m schedule_run -h`` 或 :func:`~.schedule_run.parse_args` 查看.
+
+Settings
+========
+
+在 ``config_and_utils.py`` 中的 ``12-14`` 行可以配置数据库相关的参数:
+
+- ``dev_url``: 测试环境数据库的URL
+- ``local_prod_url``: 本地运行, 结果写入生产环境数据库的URL
+- ``prod_url``: 生产环境数据库的URL
