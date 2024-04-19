@@ -1,14 +1,15 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN" data-content_root="">
+<html class="no-js" lang="zh-CN" data-content_root="./">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="使用文档" href="usage.html" /><link rel="prev" title="PDF文件解析应用" href="index.html" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="使用文档" href="usage.html" /><link rel="prev" title="储能策略文档" href="index.html" />
 
-    <!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
-        <title>安装与部署 - PDFparser 1.0 文档</title>
+    <link rel="shortcut icon" href="_static/favicon.svg"/><!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+        <title>安装与部署 - ems strategy 1.0 文档</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
     
@@ -123,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">PDFparser 1.0 文档</div></a>
+      <a href="index.html"><div class="brand">ems strategy 1.0 文档</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -134,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -143,26 +144,20 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">PDFparser 1.0 文档</span>
+  <span class="sidebar-brand-text">ems strategy 1.0 文档</span>
   
-</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+</a><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">安装与部署</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">使用文档</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API文档</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">modules’ API</a></li>
 </ul>
 
 </div>
 </div>
-
       </div>
       
     </div>
@@ -186,33 +181,42 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
           <section id="id1">
-<h1>安装与部署<a class="headerlink" href="#id1" title="此标题的永久链接">#</a></h1>
-<section id="id2">
-<h2>1、基础环境安装<a class="headerlink" href="#id2" title="此标题的永久链接">#</a></h2>
-<p>应用运行于 <code class="docutils literal notranslate"><span class="pre">Python</span></code> 3.9.x环境下，建议使用 <a class="reference external" href="https://docs.conda.io/en/latest/">conda</a> 创建独立的虚拟环境并激活：</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myenv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
-conda<span class="w"> </span>activate<span class="w"> </span>myenv
-</pre></div>
+<h1>安装与部署<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>项目的部署依赖Python环境, 首先需要安装基础环境和第三方依赖库.
+安装所需要的软件已经全部打包在 <code class="docutils literal notranslate"><span class="pre">software</span></code> 文件夹中.</p>
+<ol class="arabic simple">
+<li><p>将 <code class="docutils literal notranslate"><span class="pre">software</span></code> 文件夹中的 <strong>所有内容</strong> 拷贝至目标服务器的特定路径下(推荐路径 <code class="docutils literal notranslate"><span class="pre">/home/ems-strategy</span></code>);</p></li>
+<li><p>切换至该目录(<code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/home/ems-strategy</span></code>), 以下所有操作均在该目录下执行;</p></li>
+<li><p>执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">deploy_python.sh</span></code> 来安装Python环境和第三方依赖库, 成功后, 屏幕会打印”All done!”;</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>可能需要修改 <code class="docutils literal notranslate"><span class="pre">deploy_python.sh</span></code> 的权限以使其可以被执行.</p>
 </div>
-</section>
-<section id="id3">
-<h2>2、安装依赖<a class="headerlink" href="#id3" title="此标题的永久链接">#</a></h2>
-<p>应用运行的所有直接依赖项都在 <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> 文件中列出。要安装这些依赖项，请运行：</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>myenv<span class="o">)</span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</pre></div>
+<ol class="arabic simple" start="4">
+<li><p>执行 <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> 来使Python环境生效;</p></li>
+</ol>
+<p>至此, 策略运行所依赖的环境已经安装完成, 接下来需要部署策略代码.</p>
+<ol class="arabic simple" start="5">
+<li><p>执行 <code class="docutils literal notranslate"><span class="pre">unzip</span> <span class="pre">-d</span> <span class="pre">code</span> <span class="pre">code.zip</span></code> 解压源代码压缩包;</p></li>
+<li><p>执行 <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">code</span> <span class="pre">&amp;&amp;</span> <span class="pre">sh</span> <span class="pre">start.sh</span></code> 来启动策略;</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>可能需要修改 <code class="docutils literal notranslate"><span class="pre">start.sh</span></code> 的权限以使其可以被执行.</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">警告</p>
-<p>请确保在安装依赖项时可以访问网络。</p>
-</div>
-</section>
+<ol class="arabic simple" start="7">
+<li><p>(可选)正常情况下, 策略启动后没有任何输出, 可以通过 <code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">-ef</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">gunicorn</span></code> 来查看进程是否启动;</p></li>
+<li><p>(可选)执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">stop.sh</span></code> 来停止策略.</p></li>
+</ol>
+<p>至此, 策略服务已经部署完成.</p>
 </section>
 
         </article>
@@ -258,36 +262,18 @@ conda<span class="w"> </span>activate<span class="w"> </span>myenv
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">安装与部署</a><ul>
-<li><a class="reference internal" href="#id2">1、基础环境安装</a></li>
-<li><a class="reference internal" href="#id3">2、安装依赖</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8930e309"></script>
+</div><script src="_static/documentation_options.js?v=f115507d"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/translations.js?v=beaddf03"></script>
     </body>
 </html>

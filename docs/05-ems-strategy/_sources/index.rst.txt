@@ -1,0 +1,23 @@
+.. ems strategy documentation master file, created by
+   sphinx-quickstart on Tue Apr 16 16:27:42 2024.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+储能策略文档
+========================================
+
+针对储能项目开发的策略的配套文档. 包括部署方法, 使用方法以及各模块的API.
+
+.. warning::
+
+   当前, 只有功率分配策略经过完整的测试且可用.
+
+目录
+--------
+
+.. toctree::
+   :maxdepth: 2
+
+   install
+   usage
+   api

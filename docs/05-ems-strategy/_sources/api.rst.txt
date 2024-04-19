@@ -1,0 +1,16 @@
+================
+modules' API
+================
+
+ems_app.py
+============
+
+.. automodule:: ems_app
+    :members: distribute
+
+main.pd_main.py
+=================
+
+.. automodule:: main.pd_main
+    :members:
+    :private-members:
