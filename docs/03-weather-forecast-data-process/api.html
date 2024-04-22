@@ -1,0 +1,907 @@
+<!doctype html>
+<html class="no-js" lang="zh-CH" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="prev" title="使用文档" href="usage.html" />
+
+    <link rel="shortcut icon" href="_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
+        <title>API - weather data process 1.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">weather data process 1.0 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">weather data process 1.0 文档</span>
+  
+</a><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">环境配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">使用文档</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">API</a></li>
+</ul>
+
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="api">
+<h1>API<a class="headerlink" href="#api" title="此标题的永久链接">#</a></h1>
+<section id="module-hefeng">
+<span id="id1"></span><h2>1、和风API<a class="headerlink" href="#module-hefeng" title="此标题的永久链接">#</a></h2>
+<p>本package包含了从 <a class="reference external" href="https://www.qweather.com/">和风气象</a> 获取天气预报（实测）数据并存入数据库的代码.</p>
+<p>包含的模块及其主要功能如下：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hefeng/168h_forecast_to_platform.py</span></code>：获取168小时天气预报数据并存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hefeng/30d_forecast_to_platform.py</span></code>：获取30天天气预报数据并存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hefeng/rt_weather_data_to_platform.py</span></code>：获取实时天气数据并存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hefeng/resave_csv.py</span></code>：重新存储csv文件中的数据到数据库</p></li>
+</ul>
+<section id="package">
+<h3>1.1 package 函数<a class="headerlink" href="#package" title="此标题的永久链接">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.init_logger">
+<span class="sig-prename descclassname"><span class="pre">hefeng.</span></span><span class="sig-name descname"><span class="pre">init_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.init_logger" title="永久链接至目标">#</a></dt>
+<dd><p>初始化一个日志记录器.</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>三个气象预报数据获取模块共用一个日志记录器, 即name为'weather'的记录器.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>root_dir</strong> -- <code class="docutils literal notranslate"><span class="pre">str</span></code>, 日志文件的根目录</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code>, 日志记录器的名称</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.initialize">
+<span class="sig-prename descclassname"><span class="pre">hefeng.</span></span><span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prod_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.initialize" title="永久链接至目标">#</a></dt>
+<dd><p>根据命令行参数, 初始化数据库连接.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prod_run</strong> -- 是否在生产环境执行</p></li>
+<li><p><strong>local_run</strong> -- 是否在本地执行</p></li>
+<li><p><strong>test_run</strong> -- 是否在测试环境执行</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> -- 如果三个参数中不是有且仅有一个为True, 则抛出异常</p>
+</dd>
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">sqlalchemy.engine.base.Engine</span></code>, 数据库连接引擎</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.parse_args">
+<span class="sig-prename descclassname"><span class="pre">hefeng.</span></span><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.parse_args" title="永久链接至目标">#</a></dt>
+<dd><p>定义命令行参数.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-P</span></code>, <code class="docutils literal notranslate"><span class="pre">--prod_run</span></code>: 在生产环境执行</p>
+<p><code class="docutils literal notranslate"><span class="pre">-L</span></code>, <code class="docutils literal notranslate"><span class="pre">--local_run</span></code>: 在本地执行</p>
+<p><code class="docutils literal notranslate"><span class="pre">-T</span></code>, <code class="docutils literal notranslate"><span class="pre">--test_run</span></code>: 在测试环境执行</p>
+<p><code class="docutils literal notranslate"><span class="pre">--retry</span></code>: 是否为重试过程</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p><code class="docutils literal notranslate"><span class="pre">-P</span></code>, <code class="docutils literal notranslate"><span class="pre">-L</span></code>, <code class="docutils literal notranslate"><span class="pre">-T</span></code> 三个参数互斥, 只能且必须指定一个.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">argparse.Namespace</span></code>, 命令行参数</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.request_data">
+<span class="sig-prename descclassname"><span class="pre">hefeng.</span></span><span class="sig-name descname"><span class="pre">request_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">county_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.request_data" title="永久链接至目标">#</a></dt>
+<dd><p>请求数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_url</strong> -- 请求的url</p></li>
+<li><p><strong>county_id</strong> -- 区县ID</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> -- 如果请求失败, 则抛出异常</p>
+</dd>
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code>, 请求结果</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-hefeng.168h_forecast_to_platform">
+<span id="module"></span><h3>1.2 module 函数<a class="headerlink" href="#module-hefeng.168h_forecast_to_platform" title="此标题的永久链接">#</a></h3>
+<section id="h-forecast-to-platform">
+<h4>168h_forecast_to_platform<a class="headerlink" href="#h-forecast-to-platform" title="此标题的永久链接">#</a></h4>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>未来168小时逐小时天气预报数据获取.</p>
+<p>更多参考：<a class="reference external" href="https://dev.qweather.com/docs/api/weather/weather-hourly-forecast/">和风天气开发服务&gt;开发文档&gt;城市天气&gt;逐小时天气预报</a>.</p>
+</div>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.168h_forecast_to_platform.get_data">
+<span class="sig-prename descclassname"><span class="pre">hefeng.168h_forecast_to_platform.</span></span><span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">county_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.168h_forecast_to_platform.get_data" title="永久链接至目标">#</a></dt>
+<dd><p>解析返回的json数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>county_id</strong> -- 区县的id</p></li>
+<li><p><strong>response_json</strong> -- 接口返回的json数据</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list[tuple]</span></code>, 解析后的数据</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.168h_forecast_to_platform.re_run">
+<span class="sig-prename descclassname"><span class="pre">hefeng.168h_forecast_to_platform.</span></span><span class="sig-name descname"><span class="pre">re_run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.168h_forecast_to_platform.re_run" title="永久链接至目标">#</a></dt>
+<dd><p>对获取失败的county_id进行重新获取.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.168h_forecast_to_platform.run">
+<span class="sig-prename descclassname"><span class="pre">hefeng.168h_forecast_to_platform.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.168h_forecast_to_platform.run" title="永久链接至目标">#</a></dt>
+<dd><p>执行入口函数.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.168h_forecast_to_platform.save_to_db">
+<span class="sig-prename descclassname"><span class="pre">hefeng.168h_forecast_to_platform.</span></span><span class="sig-name descname"><span class="pre">save_to_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insert_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.168h_forecast_to_platform.save_to_db" title="永久链接至目标">#</a></dt>
+<dd><p>结果入库.</p>
+<p>结果先写入明细表再写入分区表, 如果写入明细表失败, 则缓存成csv文件, 且不再写入
+分区表. 在写入分区表时, 会将滚动预测的旧版数据删除, 只保留最新的预测结果.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>insert_values</strong> -- 待插入的数据</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-hefeng.30d_forecast_to_platform"></span><section id="d-forecast-to-platform">
+<h4>30d_forecast_to_platform<a class="headerlink" href="#d-forecast-to-platform" title="此标题的永久链接">#</a></h4>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>未来30天逐日天气预报数据获取.</p>
+<p>更多参考：<a class="reference external" href="https://dev.qweather.com/docs/api/weather/weather-daily-forecast/">和风天气开发服务&gt;开发文档&gt;城市天气&gt;每日天气预报</a>.</p>
+</div>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.30d_forecast_to_platform.get_data">
+<span class="sig-prename descclassname"><span class="pre">hefeng.30d_forecast_to_platform.</span></span><span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">city_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.30d_forecast_to_platform.get_data" title="永久链接至目标">#</a></dt>
+<dd><p>解析返回的json数据.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.30d_forecast_to_platform.re_run">
+<span class="sig-prename descclassname"><span class="pre">hefeng.30d_forecast_to_platform.</span></span><span class="sig-name descname"><span class="pre">re_run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.30d_forecast_to_platform.re_run" title="永久链接至目标">#</a></dt>
+<dd><p>对获取失败的county_id进行重新获取.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.30d_forecast_to_platform.run">
+<span class="sig-prename descclassname"><span class="pre">hefeng.30d_forecast_to_platform.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.30d_forecast_to_platform.run" title="永久链接至目标">#</a></dt>
+<dd><p>执行入口函数.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.30d_forecast_to_platform.save_to_db">
+<span class="sig-prename descclassname"><span class="pre">hefeng.30d_forecast_to_platform.</span></span><span class="sig-name descname"><span class="pre">save_to_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insert_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.30d_forecast_to_platform.save_to_db" title="永久链接至目标">#</a></dt>
+<dd><p>结果入库.</p>
+</dd></dl>
+
+<span class="target" id="module-hefeng.rt_weather_data_to_platform"></span><section id="rt-weather-data-to-platform">
+<h4>rt_weather_data_to_platform<a class="headerlink" href="#rt-weather-data-to-platform" title="此标题的永久链接">#</a></h4>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>实时天气数据获取.</p>
+<p>更多参考：<a class="reference external" href="https://dev.qweather.com/docs/api/weather/weather-now/">和风天气开发服务&gt;开发文档&gt;城市天气&gt;实时天气</a>.</p>
+</div>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.rt_weather_data_to_platform.get_data">
+<span class="sig-prename descclassname"><span class="pre">hefeng.rt_weather_data_to_platform.</span></span><span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.rt_weather_data_to_platform.get_data" title="永久链接至目标">#</a></dt>
+<dd><p>解析返回的json数据.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.rt_weather_data_to_platform.re_run">
+<span class="sig-prename descclassname"><span class="pre">hefeng.rt_weather_data_to_platform.</span></span><span class="sig-name descname"><span class="pre">re_run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.rt_weather_data_to_platform.re_run" title="永久链接至目标">#</a></dt>
+<dd><p>对请求失败的county_id进行重试.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.rt_weather_data_to_platform.run">
+<span class="sig-prename descclassname"><span class="pre">hefeng.rt_weather_data_to_platform.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.rt_weather_data_to_platform.run" title="永久链接至目标">#</a></dt>
+<dd><p>执行入口函数.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.rt_weather_data_to_platform.save_to_db">
+<span class="sig-prename descclassname"><span class="pre">hefeng.rt_weather_data_to_platform.</span></span><span class="sig-name descname"><span class="pre">save_to_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insert_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.rt_weather_data_to_platform.save_to_db" title="永久链接至目标">#</a></dt>
+<dd><p>结果入库.</p>
+</dd></dl>
+
+<span class="target" id="module-hefeng.resave_csv"></span><div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>将入库失败的缓存csv文件重新入库.</p>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.resave_csv.parse_args">
+<span class="sig-prename descclassname"><span class="pre">hefeng.resave_csv.</span></span><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.resave_csv.parse_args" title="永久链接至目标">#</a></dt>
+<dd><p>定义命令行参数.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-P</span></code>, <code class="docutils literal notranslate"><span class="pre">--prod_run</span></code>: 在生产环境执行</p>
+<p><code class="docutils literal notranslate"><span class="pre">-L</span></code>, <code class="docutils literal notranslate"><span class="pre">--local_run</span></code>: 在本地执行</p>
+<p><code class="docutils literal notranslate"><span class="pre">-T</span></code>, <code class="docutils literal notranslate"><span class="pre">--test_run</span></code>: 在测试环境执行</p>
+<p><code class="docutils literal notranslate"><span class="pre">--file_type</span></code>: 数据类型, <code class="docutils literal notranslate"><span class="pre">rt</span></code>: 实时数据, <code class="docutils literal notranslate"><span class="pre">168</span></code>: 168小时预测数据, <code class="docutils literal notranslate"><span class="pre">30</span></code>: 30天预测数据</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p><code class="docutils literal notranslate"><span class="pre">-P</span></code>, <code class="docutils literal notranslate"><span class="pre">-L</span></code>, <code class="docutils literal notranslate"><span class="pre">-T</span></code> 三个参数互斥, 只能且必须指定一个.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">argparse.Namespace</span></code>, 命令行参数</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.resave_csv.save_168">
+<span class="sig-prename descclassname"><span class="pre">hefeng.resave_csv.</span></span><span class="sig-name descname"><span class="pre">save_168</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.resave_csv.save_168" title="永久链接至目标">#</a></dt>
+<dd><p>重新存储168小时预测数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_dir</strong> -- csv文件所在目录</p></li>
+<li><p><strong>file_date</strong> -- csv文件的日期, 如不指定, 则遍历 <code class="docutils literal notranslate"><span class="pre">file_dir</span></code> 下所有用于存储
+168小时预测数据的csv文件.</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.resave_csv.save_30">
+<span class="sig-prename descclassname"><span class="pre">hefeng.resave_csv.</span></span><span class="sig-name descname"><span class="pre">save_30</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.resave_csv.save_30" title="永久链接至目标">#</a></dt>
+<dd><p>重新存储30天预测数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_dir</strong> -- csv文件所在目录</p></li>
+<li><p><strong>file_name</strong> -- csv文件名, 如不指定, 则遍历 <code class="docutils literal notranslate"><span class="pre">file_dir</span></code> 下所有用于存储
+30天预测数据的csv文件.</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hefeng.resave_csv.save_rt">
+<span class="sig-prename descclassname"><span class="pre">hefeng.resave_csv.</span></span><span class="sig-name descname"><span class="pre">save_rt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hefeng.resave_csv.save_rt" title="永久链接至目标">#</a></dt>
+<dd><p>重新存储实时数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_dir</strong> -- csv文件所在目录</p></li>
+<li><p><strong>file_name</strong> -- csv文件名, 如不指定, 则遍历 <code class="docutils literal notranslate"><span class="pre">file_dir</span></code> 下所有用于存储
+实时数据的csv文件.</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-tianji">
+<span id="id6"></span><h2>2、天机API<a class="headerlink" href="#module-tianji" title="此标题的永久链接">#</a></h2>
+<p>本程序包包含了处理天机气象数据的代码.</p>
+<p>包含的模块及其主要功能如下:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tianji/csv_2_taos_15d.py</span></code>: 将15天天气预报数据存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tianji/csv_2_taos_45d.py</span></code>: 将45天天气预报数据存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tianji/history_2_taos.py</span></code>: 将历史天气数据存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tianji/init_sqls.py</span></code>: 初始化数据库表</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tianji/latest_2_county.py</span></code>: 将最新的天气数据存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tianji/ori_2_latest.py</span></code>: 将原始天气数据存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tianji/ori_2_ms.py</span></code>: 将实时天气数据存入数据库</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tianji/resume_15d_15min.py</span></code>: 将15天15分钟天气预报数据存入数据库</p></li>
+</ul>
+<section id="id7">
+<h3>2.1 package 函数<a class="headerlink" href="#id7" title="此标题的永久链接">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.init_logger">
+<span class="sig-prename descclassname"><span class="pre">tianji.</span></span><span class="sig-name descname"><span class="pre">init_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.init_logger" title="永久链接至目标">#</a></dt>
+<dd><p>初始化一个日志记录器.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logger_name</strong> -- logger的名称, 处理天机数据的logger名称为'tj-data', 定义在本模块的全局变量中</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.init_cache_db">
+<span class="sig-prename descclassname"><span class="pre">tianji.</span></span><span class="sig-name descname"><span class="pre">init_cache_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.init_cache_db" title="永久链接至目标">#</a></dt>
+<dd><p>初始化缓存数据库, 用于记录已经处理过的预报文件名.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> -- 预报类型, 包括'15d'和'45d'</p>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> -- 如果type_不在['15d', '45d']中, 则抛出异常</p>
+</dd>
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.get_cache">
+<span class="sig-prename descclassname"><span class="pre">tianji.</span></span><span class="sig-name descname"><span class="pre">get_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.get_cache" title="永久链接至目标">#</a></dt>
+<dd><p>获取缓存数据库中的数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> -- 预报类型, 包括'15d'和'45d'</p>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> -- 如果type_不在['15d', '45d']中, 则抛出异常</p>
+</dd>
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">list</span></code>, 缓存数据库中的数据</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.set_cache">
+<span class="sig-prename descclassname"><span class="pre">tianji.</span></span><span class="sig-name descname"><span class="pre">set_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.set_cache" title="永久链接至目标">#</a></dt>
+<dd><p>设置缓存数据库中的数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> -- 文件名</p></li>
+<li><p><strong>type</strong> -- 预报类型, 包括'15d'和'45d'</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> -- 如果type_不在['15d', '45d']中, 则抛出异常</p>
+</dd>
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.calc_millis_suffix">
+<span class="sig-prename descclassname"><span class="pre">tianji.</span></span><span class="sig-name descname"><span class="pre">calc_millis_suffix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.calc_millis_suffix" title="永久链接至目标">#</a></dt>
+<dd><p>计算时间戳的后缀.</p>
+<p>由于预报数据是滚动更新的, 因此需要通过为相同时刻的预报数据添加不同的时间戳后缀
+来区分起报时间.</p>
+<p>该时间戳后缀由秒和毫秒构成, 对于类似‘2023112400’的起报日期字符串, 选取其5、6
+位数字作为秒, 7、8位数字作为毫秒, 并在毫秒后添加一个0或1, 用于区分是当天的第几次起报.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dir_name</strong> -- <code class="docutils literal notranslate"><span class="pre">str</span></code>, 类似于‘2023112400’的字符串</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code>, 时间戳后缀</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-tianji.csv_2_taos_15d">
+<span id="id8"></span><h3>2.2 module 函数<a class="headerlink" href="#module-tianji.csv_2_taos_15d" title="此标题的永久链接">#</a></h3>
+<p>遍历推送的目录, 找到15天预报数据的新的tar包, 解压后将其中的csv文件存入数据库.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.csv_2_taos_15d.save_15d_15min">
+<span class="sig-prename descclassname"><span class="pre">tianji.csv_2_taos_15d.</span></span><span class="sig-name descname"><span class="pre">save_15d_15min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.csv_2_taos_15d.save_15d_15min" title="永久链接至目标">#</a></dt>
+<dd><p>存储预报的15天逐15分钟数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_path</strong> -- csv文件</p></li>
+<li><p><strong>time_suffix</strong> -- 时间后缀</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.csv_2_taos_15d.save_15d_1d">
+<span class="sig-prename descclassname"><span class="pre">tianji.csv_2_taos_15d.</span></span><span class="sig-name descname"><span class="pre">save_15d_1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.csv_2_taos_15d.save_15d_1d" title="永久链接至目标">#</a></dt>
+<dd><p>存储预报的15天逐日数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_path</strong> -- csv文件</p></li>
+<li><p><strong>time_suffix</strong> -- 时间后缀</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-tianji.csv_2_taos_45d"></span><p>遍历推送的目录, 找到45天预报数据的新的tar包, 解压后将其中的csv文件存入数据库.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.csv_2_taos_45d.save_45d_1d">
+<span class="sig-prename descclassname"><span class="pre">tianji.csv_2_taos_45d.</span></span><span class="sig-name descname"><span class="pre">save_45d_1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.csv_2_taos_45d.save_45d_1d" title="永久链接至目标">#</a></dt>
+<dd><p>存储预报的45天逐日数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_path</strong> -- csv文件</p></li>
+<li><p><strong>time_suffix</strong> -- 时间后缀</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.csv_2_taos_45d.save_45d_1h">
+<span class="sig-prename descclassname"><span class="pre">tianji.csv_2_taos_45d.</span></span><span class="sig-name descname"><span class="pre">save_45d_1h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.csv_2_taos_45d.save_45d_1h" title="永久链接至目标">#</a></dt>
+<dd><p>存储预报的45天逐小时数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_path</strong> -- csv文件</p></li>
+<li><p><strong>time_suffix</strong> -- 数据时间后缀</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.csv_2_taos_45d.save_pro_mean_1h">
+<span class="sig-prename descclassname"><span class="pre">tianji.csv_2_taos_45d.</span></span><span class="sig-name descname"><span class="pre">save_pro_mean_1h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.csv_2_taos_45d.save_pro_mean_1h" title="永久链接至目标">#</a></dt>
+<dd><p>存储全省的平均逐小时数据.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_path</strong> -- csv文件</p></li>
+<li><p><strong>time_suffix</strong> -- 时间戳后缀</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-tianji.ori_2_ms"></span><dl class="py function">
+<dt class="sig sig-object py" id="tianji.ori_2_ms.add_suffix">
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">add_suffix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.ori_2_ms.add_suffix" title="永久链接至目标">#</a></dt>
+<dd><p>根据给定的时间戳ts和超级表stable，获取最新一次预测该时间戳对应的气象数据的
+后缀，并将其拼接在ts后返回。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ts</strong> -- 时间戳，格式为： <code class="docutils literal notranslate"><span class="pre">YYYY-mm-dd</span> <span class="pre">HH:MM:SS</span></code></p></li>
+<li><p><strong>stable</strong> -- 超级表名称，可选值为：'w_15d_15min'，'w_45d_1d'</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code>，添加了后缀的时间戳
+<code class="docutils literal notranslate"><span class="pre">None</span></code>: 如果没有找到对应的后缀，则返回 <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.ori_2_ms.add_suffix_15d_15min">
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">add_suffix_15d_15min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.ori_2_ms.add_suffix_15d_15min" title="永久链接至目标">#</a></dt>
+<dd><p>为防止有的数据更新不全，如果 <a class="reference internal" href="#tianji.ori_2_ms.add_suffix" title="tianji.ori_2_ms.add_suffix"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_suffix()</span></code></a> 函数没有获取到数据，
+则调用本函数从数据库直接进行查询以获取上述时间戳。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.ori_2_ms.county_code_2_loc_ids">
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">county_code_2_loc_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">county_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.ori_2_ms.county_code_2_loc_ids" title="永久链接至目标">#</a></dt>
+<dd><p>根据给定的区县代码, 获取该区县下所有的loc_id。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>county_code</strong> -- 区县code</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code>，loc_id列表
+<code class="docutils literal notranslate"><span class="pre">None</span></code>，如果没有找到对应的loc_id，则返回None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.ori_2_ms.get_county_codes">
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">get_county_codes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.get_county_codes" title="永久链接至目标">#</a></dt>
+<dd><p>从网格点表中获取其对应的区县的编码。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Note<span class="colon">:</span></dt>
+<dd class="field-odd"><p>一个区县可能包含多个网格点。</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code>，区县编码列表</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.ori_2_ms.get_latest_ts">
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">get_latest_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.get_latest_ts" title="永久链接至目标">#</a></dt>
+<dd><p>获取当前粒度的数据在MySQL中的最新的时间戳。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>time_freq</strong> -- 数据类型，可选值为: '15d', '45d'</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code>，时间戳</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.ori_2_ms.k2c">
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">k2c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.k2c" title="永久链接至目标">#</a></dt>
+<dd><p>开氏温度转摄氏温度。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>k</strong> -- 开氏温度</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code> 摄氏温度</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianji.ori_2_ms.update_data_parallel">
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">update_data_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.update_data_parallel" title="永久链接至目标">#</a></dt>
+<dd><p>利用多线程来更新数据。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_freq</strong> -- 数据类型, 可选值为: '15d', '45d'</p></li>
+<li><p><strong>start_time</strong> -- 更新开始时间, 格式为: 'YYYY-mm-dd HH:MM:SS', 如果指定, 则从start_time开始更新;
+默认为None, 表示从最早时间开始更新</p></li>
+<li><p><strong>end_time</strong> -- 更新结束时间, 格式为: 'YYYY-mm-dd HH:MM:SS', 如果指定, 则更新至end_time结束;
+默认为None, 表示更新至最新时间</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>AssertionError</strong> -- 如果time_freq不在指定的范围内, 则抛出异常</p></li>
+<li><p><strong>ValueError</strong> -- 如果没有需要更新的数据, 则抛出异常</p></li>
+</ul>
+</dd>
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="usage.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">使用文档</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, sunjiawei
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#module-hefeng">1、和风API</a><ul>
+<li><a class="reference internal" href="#package">1.1 package 函数</a><ul>
+<li><a class="reference internal" href="#hefeng.init_logger"><code class="docutils literal notranslate"><span class="pre">init_logger()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.initialize"><code class="docutils literal notranslate"><span class="pre">initialize()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.parse_args"><code class="docutils literal notranslate"><span class="pre">parse_args()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.request_data"><code class="docutils literal notranslate"><span class="pre">request_data()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-hefeng.168h_forecast_to_platform">1.2 module 函数</a><ul>
+<li><a class="reference internal" href="#h-forecast-to-platform">168h_forecast_to_platform</a></li>
+<li><a class="reference internal" href="#hefeng.168h_forecast_to_platform.get_data"><code class="docutils literal notranslate"><span class="pre">get_data()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.168h_forecast_to_platform.re_run"><code class="docutils literal notranslate"><span class="pre">re_run()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.168h_forecast_to_platform.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.168h_forecast_to_platform.save_to_db"><code class="docutils literal notranslate"><span class="pre">save_to_db()</span></code></a></li>
+<li><a class="reference internal" href="#d-forecast-to-platform">30d_forecast_to_platform</a></li>
+<li><a class="reference internal" href="#hefeng.30d_forecast_to_platform.get_data"><code class="docutils literal notranslate"><span class="pre">get_data()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.30d_forecast_to_platform.re_run"><code class="docutils literal notranslate"><span class="pre">re_run()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.30d_forecast_to_platform.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.30d_forecast_to_platform.save_to_db"><code class="docutils literal notranslate"><span class="pre">save_to_db()</span></code></a></li>
+<li><a class="reference internal" href="#rt-weather-data-to-platform">rt_weather_data_to_platform</a></li>
+<li><a class="reference internal" href="#hefeng.rt_weather_data_to_platform.get_data"><code class="docutils literal notranslate"><span class="pre">get_data()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.rt_weather_data_to_platform.re_run"><code class="docutils literal notranslate"><span class="pre">re_run()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.rt_weather_data_to_platform.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.rt_weather_data_to_platform.save_to_db"><code class="docutils literal notranslate"><span class="pre">save_to_db()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.resave_csv.parse_args"><code class="docutils literal notranslate"><span class="pre">parse_args()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.resave_csv.save_168"><code class="docutils literal notranslate"><span class="pre">save_168()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.resave_csv.save_30"><code class="docutils literal notranslate"><span class="pre">save_30()</span></code></a></li>
+<li><a class="reference internal" href="#hefeng.resave_csv.save_rt"><code class="docutils literal notranslate"><span class="pre">save_rt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-tianji">2、天机API</a><ul>
+<li><a class="reference internal" href="#id7">2.1 package 函数</a><ul>
+<li><a class="reference internal" href="#tianji.init_logger"><code class="docutils literal notranslate"><span class="pre">init_logger()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.init_cache_db"><code class="docutils literal notranslate"><span class="pre">init_cache_db()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.get_cache"><code class="docutils literal notranslate"><span class="pre">get_cache()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.set_cache"><code class="docutils literal notranslate"><span class="pre">set_cache()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.calc_millis_suffix"><code class="docutils literal notranslate"><span class="pre">calc_millis_suffix()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-tianji.csv_2_taos_15d">2.2 module 函数</a><ul>
+<li><a class="reference internal" href="#tianji.csv_2_taos_15d.save_15d_15min"><code class="docutils literal notranslate"><span class="pre">save_15d_15min()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.csv_2_taos_15d.save_15d_1d"><code class="docutils literal notranslate"><span class="pre">save_15d_1d()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.csv_2_taos_45d.save_45d_1d"><code class="docutils literal notranslate"><span class="pre">save_45d_1d()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.csv_2_taos_45d.save_45d_1h"><code class="docutils literal notranslate"><span class="pre">save_45d_1h()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.csv_2_taos_45d.save_pro_mean_1h"><code class="docutils literal notranslate"><span class="pre">save_pro_mean_1h()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.ori_2_ms.add_suffix"><code class="docutils literal notranslate"><span class="pre">add_suffix()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.ori_2_ms.add_suffix_15d_15min"><code class="docutils literal notranslate"><span class="pre">add_suffix_15d_15min()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.ori_2_ms.county_code_2_loc_ids"><code class="docutils literal notranslate"><span class="pre">county_code_2_loc_ids()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.ori_2_ms.get_county_codes"><code class="docutils literal notranslate"><span class="pre">get_county_codes()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.ori_2_ms.get_latest_ts"><code class="docutils literal notranslate"><span class="pre">get_latest_ts()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.ori_2_ms.k2c"><code class="docutils literal notranslate"><span class="pre">k2c()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.ori_2_ms.update_data_parallel"><code class="docutils literal notranslate"><span class="pre">update_data_parallel()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=ab1be541"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/scripts/furo.js?v=32e29ea5"></script>
+    </body>
+</html>

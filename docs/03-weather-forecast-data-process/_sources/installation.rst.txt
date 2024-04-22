@@ -1,0 +1,26 @@
+=============
+环境配置
+=============
+
+1. 基础环境安装
+--------------------
+
+应用运行于 ``Python`` 3.8.x环境下, 建议使用 `conda <https://docs.conda.io/en/latest/>`_ 创建独立的虚拟环境并激活: 
+
+.. code-block:: bash
+
+    conda create -n myenv python=3.8
+    conda activate myenv
+
+2. 安装依赖包
+--------------------
+
+应用运行的所有依赖项都在根目录下的 ``requirements.txt`` 文件中列出. 要安装这些依赖项, 请运行以下命令: 
+
+.. code-block:: bash
+
+    (myenv)pip install -r requirements.txt
+
+.. warning::
+
+    请确保在安装依赖项时可以访问网络. 
