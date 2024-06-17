@@ -1,0 +1,90 @@
+=============
+快速开始
+=============
+
+1. 基础环境安装
+--------------------
+
+项目运行于 ``Python`` 3.8.x环境下，建议使用 `conda <https://docs.conda.io/en/latest/>`_ 创建独立的虚拟环境并激活：
+
+.. code-block:: bash
+
+    conda create -n pfam python=3.8
+    conda activate pfam
+
+2. 安装依赖包
+--------------------
+
+2.1 普通依赖包
+~~~~~~~~~~~~~~~~~~~~~~~
+
+应用运行的所有依赖项都在根目录下的 ``requirements.txt`` 文件中列出。要安装这些依赖项，请运行以下命令：
+
+.. code-block:: bash
+
+    (pfam)pip install -r requirements.txt
+
+.. warning::
+
+    请确保在安装依赖项时可以访问网络。
+
+2.2 安装求解器
+~~~~~~~~~~~~~~~~~~~~~~~
+
+现货辅助交易算法的执行需要用到求解器，可以通过如下命令进行安装：
+
+.. code-block:: bash
+
+    (pfam)conda install glpk
+
+3. 使用方法
+--------------------
+
+.. warning::
+
+    在执行前请确保：
+
+    1. 已经切换到项目的根目录；
+
+    2. 已经切换到正确的虚拟环境。
+
+1. 项目配置
+
+算法需要与数据库进行交互，因此需要预先配置数据库的连接信息。具体做法是修改项目根目录下的 ``DATABASE_CONF.py`` 脚本中的内容。
+该脚本中定义了三个数据库连接字符串，其名称分为别 ``dev_url``、``prod_url`` 和 ``local_prod_url``，分别按注释修改对应的内容即可。
+
+2. 调用
+
+所有的脚本都可以通过命令行的方式进行调用，基本用法如下：
+
+.. code-block:: bash
+
+    (pfam)python -m <package_name>.<script_name> [options]
+
+
+不同的脚本所需要的命令行参数是不同的，可以通过 ``-h`` 查看相关命令行参数。完整的用法说明参考各模块的 :ref:`doc <doc-and-api>` 内容。
+
+
+在 :ref:`doc <doc-and-api>` 中，如果一段文本在如下的格式范围内，
+则说明该文本是模块的说明文档。
+
+.. mod-doc::
+
+    一个模块说明文档的示例。
+
+3. 便捷调用
+
+为了方便在私有云中通过 ``crontab`` 来设置定时调度任务，项目提供了 ``crontab.py`` 脚本。
+使用方式如下：
+
+.. code-block:: bash
+
+    python crontab.py <positional_arguments> [options]
+
+其中，``positional_arguments`` 为需要调度的脚本名称，可选参数请参考 ``crontab.py`` 的 ``help`` 命令；
+``options`` 为调度脚本的执行参数，可选参数请参考各个脚本的 ``help`` 命令。
+
+.. note::
+
+    运行 ``crontab.py`` 时确保python版本大于3.6即可，且对于运行目录并无要求；但需要再 ``crontab.py``
+    脚本中配置正确的解释器的路径。

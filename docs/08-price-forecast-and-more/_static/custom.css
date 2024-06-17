@@ -1,0 +1,15 @@
+/* custom.css */
+.admonition.custom-doc {
+    border-left: 5px solid #4CAF50;;
+    background-color: #f9f9f9;
+    padding: 10px;
+}
+
+.admonition.custom-doc p {
+    font-size: 18px;  /* 设置字体大小 */
+}
+
+.admonition.custom-doc .highlight pre {
+    font-size: 16px;  /* 设置 code-block 的字体大小 */
+    background-color: #e8e8e8;
+}

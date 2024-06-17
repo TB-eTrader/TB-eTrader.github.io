@@ -1,0 +1,66 @@
+.. _doc-and-api:
+
+================
+文档与接口
+================
+
+0. 项目共用函数
+============================
+.. automodule:: utils
+    :members:
+
+
+1. 山西
+==============
+
+1.1 现货电价预测
+--------------------------------------------
+
+.. automodule:: shanxi.price_forecast
+    :members:
+    :undoc-members:
+
+
+1.2 现货电价预测(基于深度学习)
+--------------------------------------------
+
+.. automodule:: shanxi.dl_node_price_forecast
+    :members:
+
+1.3 旬分时电价预测
+--------------------------------------------
+
+.. automodule:: shanxi.ten_days_forecast
+    :members:
+
+
+1.4 现货辅助申报
+--------------------------------------------
+
+.. automodule:: shanxi.spot_support
+    :members:
+
+
+2. 甘肃
+==============
+
+2.1 现货电价预测
+--------------------------------------------
+
+.. automodule:: gansu.price_forecast
+    :members:
+
+2.2 竞价日优化预测
+--------------------------------------------
+
+.. automodule:: gansu.opt_1d_node_price
+    :members:
+
+3. 蒙西
+==============
+
+3.1 现货节点电价预测
+--------------------------------------------
+
+.. automodule:: mengxi.node_price_forecast
+    :members:
