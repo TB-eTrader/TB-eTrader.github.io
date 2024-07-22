@@ -198,13 +198,22 @@ conda<span class="w"> </span>activate<span class="w"> </span>myenv
 </section>
 <section id="id3">
 <h2>2. 安装依赖包<a class="headerlink" href="#id3" title="此标题的永久链接">#</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>在解析GFS数据时用到了第三方库 <a class="reference external" href="https://github.com/jswhit/pygrib">pygrib</a>，该库在MacOS下无法正常安装，
+但在Linux下可以，因此并未列入 <code class="docutils literal notranslate"><span class="pre">requirement.txt</span></code> 中。该库影响的是解析原生GFS数据并入库的过程。</p>
+</div>
 <p>应用运行的所有依赖项都在根目录下的 <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> 文件中列出. 要安装这些依赖项, 请运行以下命令:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>myenv<span class="o">)</span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </pre></div>
 </div>
+<p>在Linux环境下，仍需手动安装 <code class="docutils literal notranslate"><span class="pre">pygrib</span></code> 库：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>myenv<span class="o">)</span>pip<span class="w"> </span>install<span class="w"> </span>pygrib
+</pre></div>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">警告</p>
-<p>请确保在安装依赖项时可以访问网络.</p>
+<p>请确保在安装依赖项时可以访问网络。</p>
 </div>
 </section>
 </section>

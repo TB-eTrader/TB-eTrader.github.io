@@ -9,8 +9,9 @@
 
 本文档对售电交易平台中所用到的天气预报数据处理模块进行了说明. 数据来源及获取方式分别为: 
 
-- `和风气象 <https://www.qweather.com/>`_: 通过和风天气API定时获取获取
-- 天机数据: 签订数据服务协议, 对方定时推送数据至目标服务器. 
+- `和风气象 <https://www.qweather.com/>`_: 通过和风天气API定时获取获取。
+- 天机数据: 签订数据服务协议, 对方定时推送数据至目标服务器.。
+- GFS数据：从 `GFS服务器 <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>`_ 下载的、包含全国范围的、分辨率为0.25°×0.25°的天气预报数据。
 
 目录
 ====

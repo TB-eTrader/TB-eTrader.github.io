@@ -58,3 +58,27 @@ API
 
 .. automodule:: tianji.ori_2_ms
     :members:
+
+
+3、GFS API
+=================
+.. automodule:: gfs
+    :members: __doc__
+
+3.1 module 函数
+----------------
+
+gfs.get_data
+~~~~~~~~~~~~~~~~
+.. automodule:: gfs.get_data
+    :members:
+
+gfs.raw_file_2_db
+~~~~~~~~~~~~~~~~~~~~~~~
+.. automodule:: gfs.raw_file_2_db
+    :members:
+
+gfs.fill_partition_tab
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. automodule:: gfs.fill_partition_tab
+    :members:

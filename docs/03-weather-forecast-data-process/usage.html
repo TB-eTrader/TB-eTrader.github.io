@@ -262,9 +262,9 @@
 </ul>
 <p>按照时间颗粒度, 未来15日预报数据可分为逐15分钟预报和逐小时预报两种；未来45日预报数据可分为逐小时预报和逐日预报两种.</p>
 <p>不同日期长度, 不同颗粒度的预报要素不同, 具体如下:</p>
-<div class="table-wrapper docutils container" id="id14">
-<table class="docutils align-left" id="id14">
-<caption><span class="caption-text">15日15分钟预报</span><a class="headerlink" href="#id14" title="此表格的永久链接">#</a></caption>
+<div class="table-wrapper docutils container" id="id16">
+<table class="docutils align-left" id="id16">
+<caption><span class="caption-text">15日15分钟预报</span><a class="headerlink" href="#id16" title="此表格的永久链接">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>气象要素名称</p></th>
 <th class="head"><p>字段名</p></th>
@@ -341,9 +341,9 @@
 </tbody>
 </table>
 </div>
-<div class="table-wrapper docutils container" id="id15">
-<table class="docutils align-left" id="id15">
-<caption><span class="caption-text">15日逐小时预报</span><a class="headerlink" href="#id15" title="此表格的永久链接">#</a></caption>
+<div class="table-wrapper docutils container" id="id17">
+<table class="docutils align-left" id="id17">
+<caption><span class="caption-text">15日逐小时预报</span><a class="headerlink" href="#id17" title="此表格的永久链接">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>气象要素名称</p></th>
 <th class="head"><p>字段名</p></th>
@@ -460,9 +460,9 @@
 </tbody>
 </table>
 </div>
-<div class="table-wrapper docutils container" id="id16">
-<table class="docutils align-left" id="id16">
-<caption><span class="caption-text">45日逐小时预报</span><a class="headerlink" href="#id16" title="此表格的永久链接">#</a></caption>
+<div class="table-wrapper docutils container" id="id18">
+<table class="docutils align-left" id="id18">
+<caption><span class="caption-text">45日逐小时预报</span><a class="headerlink" href="#id18" title="此表格的永久链接">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>气象要素名称</p></th>
 <th class="head"><p>字段名</p></th>
@@ -529,9 +529,9 @@
 </tbody>
 </table>
 </div>
-<div class="table-wrapper docutils container" id="id17">
-<table class="docutils align-left" id="id17">
-<caption><span class="caption-text">45日逐日预报</span><a class="headerlink" href="#id17" title="此表格的永久链接">#</a></caption>
+<div class="table-wrapper docutils container" id="id19">
+<table class="docutils align-left" id="id19">
+<caption><span class="caption-text">45日逐日预报</span><a class="headerlink" href="#id19" title="此表格的永久链接">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>气象要素名称</p></th>
 <th class="head"><p>字段名</p></th>
@@ -690,6 +690,76 @@ python<span class="w"> </span>-m<span class="w"> </span>tianji.ori_2_ms<span cla
 </div>
 </section>
 </section>
+<section id="gfs">
+<h2>3 GFS数据<a class="headerlink" href="#gfs" title="此标题的永久链接">#</a></h2>
+<section id="id14">
+<h3>3.1 数据概况<a class="headerlink" href="#id14" title="此标题的永久链接">#</a></h3>
+<p>GFS是全球预报系统（Global Forecast System）的简称，它可以提供全球范围内多种气象指标的预报情况。
+本项目采用了覆全中国范围的GFS数据，数据经纬度范围为：73°E-135°E，18°N-54°N，空间分辨率为：0.5°×0.5°。
+GFS每天更新四次预报数据，但项目只采集了其中的第一次预报的数据。</p>
+<div class="table-wrapper docutils container" id="id20">
+<table class="docutils align-left" id="id20">
+<caption><span class="caption-text">气象要素指标</span><a class="headerlink" href="#id20" title="此表格的永久链接">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>指标代码</p></th>
+<th class="head"><p>指标名称</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GUST</p></td>
+<td><p>阵风风速</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWAT</p></td>
+<td><p>降水量</p></td>
+</tr>
+<tr class="row-even"><td><p>RH</p></td>
+<td><p>相对湿度</p></td>
+</tr>
+<tr class="row-odd"><td><p>SUNSD</p></td>
+<td><p>太阳辐射</p></td>
+</tr>
+<tr class="row-even"><td><p>TCDC</p></td>
+<td><p>总云量</p></td>
+</tr>
+<tr class="row-odd"><td><p>TMP</p></td>
+<td><p>温度</p></td>
+</tr>
+<tr class="row-even"><td><p>UGRD</p></td>
+<td><p>风速U分量</p></td>
+</tr>
+<tr class="row-odd"><td><p>VGRD</p></td>
+<td><p>风速V分量</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id15">
+<h3>3.2 脚本使用<a class="headerlink" href="#id15" title="此标题的永久链接">#</a></h3>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>脚本的调用均需要在项目根目录下执行。</p>
+</div>
+<p>获取原始的数据文件：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>gfs.get_data<span class="w"> </span>--date<span class="w"> </span><span class="m">2024</span>-7-1
+</pre></div>
+</div>
+<p>解析原始文件并入库：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>gfs.raw_file_2_db<span class="w"> </span>--date<span class="w"> </span><span class="m">2024</span>-7-1
+</pre></div>
+</div>
+<p>将最新的预报数据滚动存入分区表：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>gfs.fill_partition_tab<span class="w"> </span>--date<span class="w"> </span><span class="m">2024</span>-7-1
+</pre></div>
+</div>
+<p>在上述三个脚本中，<code class="docutils literal notranslate"><span class="pre">--date</span></code> 参数指定了起报日期；如忽略该参数，则默认为脚本运行日的预报数据。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>在调用 <code class="docutils literal notranslate"><span class="pre">gfs.fill_partition_tab</span></code> 时，如果指定起报日期，那么需要将该日期按照自然日的顺序逐个指定，
+否则会导致数据缺失。</p>
+</div>
+</section>
+</section>
 </section>
 
         </article>
@@ -761,6 +831,11 @@ python<span class="w"> </span>-m<span class="w"> </span>tianji.ori_2_ms<span cla
 <li><a class="reference internal" href="#id11">2.2 更新频率</a></li>
 <li><a class="reference internal" href="#id12">2.3 地理范围</a></li>
 <li><a class="reference internal" href="#id13">2.4 脚本使用</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gfs">3 GFS数据</a><ul>
+<li><a class="reference internal" href="#id14">3.1 数据概况</a></li>
+<li><a class="reference internal" href="#id15">3.2 脚本使用</a></li>
 </ul>
 </li>
 </ul>

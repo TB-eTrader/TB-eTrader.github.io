@@ -671,83 +671,51 @@
 
 <span class="target" id="module-tianji.ori_2_ms"></span><dl class="py function">
 <dt class="sig sig-object py" id="tianji.ori_2_ms.add_suffix">
-<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">add_suffix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.ori_2_ms.add_suffix" title="永久链接至目标">#</a></dt>
-<dd><p>根据给定的时间戳ts和超级表stable，获取最新一次预测该时间戳对应的气象数据的
-后缀，并将其拼接在ts后返回。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ts</strong> -- 时间戳，格式为： <code class="docutils literal notranslate"><span class="pre">YYYY-mm-dd</span> <span class="pre">HH:MM:SS</span></code></p></li>
-<li><p><strong>stable</strong> -- 超级表名称，可选值为：'w_15d_15min'，'w_45d_1d'</p></li>
-</ul>
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">add_suffix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.add_suffix" title="永久链接至目标">#</a></dt>
+<dd><p>根据给定的时间戳ts和超级表stable, 获取最新一次预测该时间戳对应的气象数据的
+后缀, 并将其拼接在ts后返回.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ts: 时间戳, 格式为: YYYY-mm-dd HH:MM:SS
+stable: 超级表名称, 可选值为: 'w_15d_15min', 'w_45d_1d'</p>
 </dd>
-<dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code>，添加了后缀的时间戳
-<code class="docutils literal notranslate"><span class="pre">None</span></code>: 如果没有找到对应的后缀，则返回 <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dt>Returns:</dt><dd><p>str: 添加了后缀的时间戳
+None: 如果没有找到对应的后缀, 则返回None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tianji.ori_2_ms.add_suffix_15d_15min">
-<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">add_suffix_15d_15min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.ori_2_ms.add_suffix_15d_15min" title="永久链接至目标">#</a></dt>
-<dd><p>为防止有的数据更新不全，如果 <a class="reference internal" href="#tianji.ori_2_ms.add_suffix" title="tianji.ori_2_ms.add_suffix"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_suffix()</span></code></a> 函数没有获取到数据，
-则调用本函数从数据库直接进行查询以获取上述时间戳。</p>
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">add_suffix_15d_15min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.add_suffix_15d_15min" title="永久链接至目标">#</a></dt>
+<dd><p>为防止有的数据更新不全, 如果`add_suffix`函数获取到的时间戳没有
+对应数据, 则调用本函数从数据库直接进行查询以获取上述时间戳.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tianji.ori_2_ms.county_code_2_loc_ids">
-<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">county_code_2_loc_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">county_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tianji.ori_2_ms.county_code_2_loc_ids" title="永久链接至目标">#</a></dt>
-<dd><p>根据给定的区县代码, 获取该区县下所有的loc_id。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>county_code</strong> -- 区县code</p>
-</dd>
-<dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code>，loc_id列表
-<code class="docutils literal notranslate"><span class="pre">None</span></code>，如果没有找到对应的loc_id，则返回None</p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">county_code_2_loc_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">county_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.county_code_2_loc_ids" title="永久链接至目标">#</a></dt>
+<dd><p>根据给定的区县代码, 获取该区县下所有的loc_id</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tianji.ori_2_ms.get_county_codes">
 <span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">get_county_codes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.get_county_codes" title="永久链接至目标">#</a></dt>
-<dd><p>从网格点表中获取其对应的区县的编码。</p>
-<dl class="field-list simple">
-<dt class="field-odd">Note<span class="colon">:</span></dt>
-<dd class="field-odd"><p>一个区县可能包含多个网格点。</p>
-</dd>
-<dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code>，区县编码列表</p>
-</dd>
-</dl>
+<dd><p>获取所有的区县代码</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tianji.ori_2_ms.get_latest_ts">
-<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">get_latest_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.get_latest_ts" title="永久链接至目标">#</a></dt>
-<dd><p>获取当前粒度的数据在MySQL中的最新的时间戳。</p>
+<dt class="sig sig-object py" id="tianji.ori_2_ms.update_data">
+<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">update_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.update_data" title="永久链接至目标">#</a></dt>
+<dd><p>更新数据</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>time_freq</strong> -- 数据类型，可选值为: '15d', '45d'</p>
-</dd>
-<dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code>，时间戳</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tianji.ori_2_ms.k2c">
-<span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">k2c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.k2c" title="永久链接至目标">#</a></dt>
-<dd><p>开氏温度转摄氏温度。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>k</strong> -- 开氏温度</p>
-</dd>
-<dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code> 摄氏温度</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_freq</strong> -- 数据类型, 可选值为: '15d', '45d'</p></li>
+<li><p><strong>start_time</strong> -- 更新开始时间, 格式为: 'YYYY-mm-dd HH:MM:SS', 如果指定, 则从start_time开始更新；
+默认为None, 表示从最早时间开始更新</p></li>
+<li><p><strong>end_time</strong> -- 更新结束时间, 格式为: 'YYYY-mm-dd HH:MM:SS', 如果指定, 则更新至end_time结束；
+默认为None, 表示更新至最新时间</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -755,29 +723,158 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="tianji.ori_2_ms.update_data_parallel">
 <span class="sig-prename descclassname"><span class="pre">tianji.ori_2_ms.</span></span><span class="sig-name descname"><span class="pre">update_data_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#tianji.ori_2_ms.update_data_parallel" title="永久链接至目标">#</a></dt>
-<dd><p>利用多线程来更新数据。</p>
+<dd><p>并行更新数据</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>time_freq</strong> -- 数据类型, 可选值为: '15d', '45d'</p></li>
-<li><p><strong>start_time</strong> -- 更新开始时间, 格式为: 'YYYY-mm-dd HH:MM:SS', 如果指定, 则从start_time开始更新;
+<li><p><strong>start_time</strong> -- 更新开始时间, 格式为: 'YYYY-mm-dd HH:MM:SS', 如果指定, 则从start_time开始更新；
 默认为None, 表示从最早时间开始更新</p></li>
-<li><p><strong>end_time</strong> -- 更新结束时间, 格式为: 'YYYY-mm-dd HH:MM:SS', 如果指定, 则更新至end_time结束;
+<li><p><strong>end_time</strong> -- 更新结束时间, 格式为: 'YYYY-mm-dd HH:MM:SS', 如果指定, 则更新至end_time结束；
 默认为None, 表示更新至最新时间</p></li>
 </ul>
-</dd>
-<dt class="field-even">抛出<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>AssertionError</strong> -- 如果time_freq不在指定的范围内, 则抛出异常</p></li>
-<li><p><strong>ValueError</strong> -- 如果没有需要更新的数据, 则抛出异常</p></li>
-</ul>
-</dd>
-<dt class="field-odd">返回<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
+</section>
+<section id="module-gfs">
+<span id="gfs-api"></span><h2>3、GFS API<a class="headerlink" href="#module-gfs" title="此标题的永久链接">#</a></h2>
+<p>本package用于处理从美国国家环境预报中心（National Center for Environment Prediction，NCEP）
+的全球预报系统（Global Forecast System，GFS）得到的 <a class="reference external" href="https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast">全球天气数据</a>。</p>
+<p>处理的过程分为三步：</p>
+<ul class="simple">
+<li><p>从GFS服务器下载数据文件；</p></li>
+<li><p>将下载的数据文件进行解析入库；</p></li>
+<li><p>定时保留最新版本的预报数据。</p></li>
+</ul>
+<section id="id10">
+<h3>3.1 module 函数<a class="headerlink" href="#id10" title="此标题的永久链接">#</a></h3>
+<section id="module-gfs.get_data">
+<span id="gfs-get-data"></span><h4>gfs.get_data<a class="headerlink" href="#module-gfs.get_data" title="此标题的永久链接">#</a></h4>
+<p>本module用于从GFS服务器获取天气预报的原始数据。</p>
+<p>服务器地址由两部分组成：<code class="docutils literal notranslate"><span class="pre">baseUrl</span></code> 和 <code class="docutils literal notranslate"><span class="pre">suffix</span></code>。
+本项目只采用空间分辨率为0.25°×0.25°的数据，此项约束在 <code class="docutils literal notranslate"><span class="pre">baseUrl</span></code> 中进行了设置；
+原始数据文件中的数据项和空间分类很多，本项目只采用了其中一部分，此项约束在 <code class="docutils literal notranslate"><span class="pre">suffix</span></code> 中进行了设置。</p>
+<p>具体如下：</p>
+<p>数据项：</p>
+<ul class="simple">
+<li><p>GUST：阵风风速</p></li>
+<li><p>PWAT：降水量</p></li>
+<li><p>RH：相对湿度</p></li>
+<li><p>SUNSD：太阳辐射</p></li>
+<li><p>TCDC：总云量</p></li>
+<li><p>TMP：温度</p></li>
+<li><p>UGRD：风速U分量</p></li>
+<li><p>VGRD：风速V分量</p></li>
+</ul>
+<p>空间分类：</p>
+<ul class="simple">
+<li><p>100_m_above_ground：100米高度</p></li>
+<li><p>surface：地表</p></li>
+<li><p>entire_atmosphere：整个大气层</p></li>
+<li><p>entire_atmosphere_(considered_as_a_single_layer)：整个大气层（视为单层）</p></li>
+<li><p>toplat：最大纬度，本项目为54</p></li>
+<li><p>bottomlat：最小纬度，本项目为18</p></li>
+<li><p>leftlon：经度最西侧值，本项目为73</p></li>
+<li><p>rightlon：经度最东侧值，本项目为135</p></li>
+</ul>
+<p>上述经纬度范围覆盖了全国。</p>
+<p>GFS每天更新四次预报数据，本项目只选用其中的第一次。</p>
+<p>关于全部数据项及其解析的内容，可以参考 <a class="reference external" href="https://blog.csdn.net/qq_38423499/article/details/123925884">此处</a>。</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gfs.get_data.download_data">
+<span class="sig-prename descclassname"><span class="pre">gfs.get_data.</span></span><span class="sig-name descname"><span class="pre">download_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gfs.get_data.download_data" title="永久链接至目标">#</a></dt>
+<dd><p>下载指定日期和时间的GFS原生数据文件。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_url</strong> -- 数据地址</p></li>
+<li><p><strong>date_str</strong> -- 日期</p></li>
+<li><p><strong>time_str</strong> -- 时刻，本项目中默认为“00”</p></li>
+<li><p><strong>output_dir</strong> -- 数据保存目录</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>无返回值，通过调用 <a class="reference internal" href="#gfs.get_data.download_with_retries" title="gfs.get_data.download_with_retries"><code class="xref py py-func docutils literal notranslate"><span class="pre">download_with_retries()</span></code></a> 函数将下载的内容写入文件。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gfs.get_data.download_with_retries">
+<span class="sig-prename descclassname"><span class="pre">gfs.get_data.</span></span><span class="sig-name descname"><span class="pre">download_with_retries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gfs.get_data.download_with_retries" title="永久链接至目标">#</a></dt>
+<dd><p>带有重试机制的文件下载。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> -- 文件链接</p></li>
+<li><p><strong>filepath</strong> -- 下载文件路径</p></li>
+<li><p><strong>retries</strong> -- 最大重试次数</p></li>
+<li><p><strong>delay</strong> -- 重试间隔，单位：秒</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>是否下载成功，<code class="docutils literal notranslate"><span class="pre">True</span></code> 表示下载成功，<code class="docutils literal notranslate"><span class="pre">False</span></code> 表示下载失败。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gfs.get_data.get_file_no">
+<span class="sig-prename descclassname"><span class="pre">gfs.get_data.</span></span><span class="sig-name descname"><span class="pre">get_file_no</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gfs.get_data.get_file_no" title="永久链接至目标">#</a></dt>
+<dd><p>获取原始文件的编号。</p>
+<p>文件一共包含未来16天的预测数据。其中，前5天每小时一个数据点；后11天每3小时一个数据点。
+一共有 <code class="docutils literal notranslate"><span class="pre">5*24+11*8=208</span></code> 个文件。</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>文件编号组成的数组。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gfs.get_data.main">
+<span class="sig-prename descclassname"><span class="pre">gfs.get_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'00'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gfs.get_data.main" title="永久链接至目标">#</a></dt>
+<dd><p>下载指定日期、指定时刻的GFS原生数据文件。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>date_str</strong> -- 预报数据的日期</p></li>
+<li><p><strong>time_str</strong> -- 预报数据的时刻，默认从0点开始，即只下载每天第一次预报的数据</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>无返回值，预报数据将被写入文件中。</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="gfs-raw-file-2-db">
+<h4>gfs.raw_file_2_db<a class="headerlink" href="#gfs-raw-file-2-db" title="此标题的永久链接">#</a></h4>
+</section>
+<section id="module-gfs.fill_partition_tab">
+<span id="gfs-fill-partition-tab"></span><h4>gfs.fill_partition_tab<a class="headerlink" href="#module-gfs.fill_partition_tab" title="此标题的永久链接">#</a></h4>
+<p>本模块的作用是定期获取已入库的预报数据中最新的部分，并存入另外的分区表中。</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gfs.fill_partition_tab.main">
+<span class="sig-prename descclassname"><span class="pre">gfs.fill_partition_tab.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gfs.fill_partition_tab.main" title="永久链接至目标">#</a></dt>
+<dd><p>滚动向分区表中写入最新的预测数据。</p>
+<p>对于指定的日期，先删除 <code class="docutils literal notranslate"><span class="pre">date_str</span></code> 日 <code class="docutils literal notranslate"><span class="pre">08：:00</span></code> 之后所有的数据，
+再将原始表中的 <code class="docutils literal notranslate"><span class="pre">fcst_date=date_str</span></code> 的数据写入分区表中。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>date_str</strong> -- 预测的日期</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>无返回值，只写写入数据库。</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 </section>
 </section>
@@ -881,9 +978,26 @@
 <li><a class="reference internal" href="#tianji.ori_2_ms.add_suffix_15d_15min"><code class="docutils literal notranslate"><span class="pre">add_suffix_15d_15min()</span></code></a></li>
 <li><a class="reference internal" href="#tianji.ori_2_ms.county_code_2_loc_ids"><code class="docutils literal notranslate"><span class="pre">county_code_2_loc_ids()</span></code></a></li>
 <li><a class="reference internal" href="#tianji.ori_2_ms.get_county_codes"><code class="docutils literal notranslate"><span class="pre">get_county_codes()</span></code></a></li>
-<li><a class="reference internal" href="#tianji.ori_2_ms.get_latest_ts"><code class="docutils literal notranslate"><span class="pre">get_latest_ts()</span></code></a></li>
-<li><a class="reference internal" href="#tianji.ori_2_ms.k2c"><code class="docutils literal notranslate"><span class="pre">k2c()</span></code></a></li>
+<li><a class="reference internal" href="#tianji.ori_2_ms.update_data"><code class="docutils literal notranslate"><span class="pre">update_data()</span></code></a></li>
 <li><a class="reference internal" href="#tianji.ori_2_ms.update_data_parallel"><code class="docutils literal notranslate"><span class="pre">update_data_parallel()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-gfs">3、GFS API</a><ul>
+<li><a class="reference internal" href="#id10">3.1 module 函数</a><ul>
+<li><a class="reference internal" href="#module-gfs.get_data">gfs.get_data</a><ul>
+<li><a class="reference internal" href="#gfs.get_data.download_data"><code class="docutils literal notranslate"><span class="pre">download_data()</span></code></a></li>
+<li><a class="reference internal" href="#gfs.get_data.download_with_retries"><code class="docutils literal notranslate"><span class="pre">download_with_retries()</span></code></a></li>
+<li><a class="reference internal" href="#gfs.get_data.get_file_no"><code class="docutils literal notranslate"><span class="pre">get_file_no()</span></code></a></li>
+<li><a class="reference internal" href="#gfs.get_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gfs-raw-file-2-db">gfs.raw_file_2_db</a></li>
+<li><a class="reference internal" href="#module-gfs.fill_partition_tab">gfs.fill_partition_tab</a><ul>
+<li><a class="reference internal" href="#gfs.fill_partition_tab.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

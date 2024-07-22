@@ -214,3 +214,58 @@
 
     python -m tianji.ori_2_ms --tab 15d  # 15天预报
     python -m tianji.ori_2_ms --tab 45d  # 45天预报
+
+3 GFS数据
+===============
+
+3.1 数据概况
+-------------------
+GFS是全球预报系统（Global Forecast System）的简称，它可以提供全球范围内多种气象指标的预报情况。
+本项目采用了覆全中国范围的GFS数据，数据经纬度范围为：73°E-135°E，18°N-54°N，空间分辨率为：0.5°×0.5°。
+GFS每天更新四次预报数据，但项目只采集了其中的第一次预报的数据。
+
+.. csv-table:: 气象要素指标
+    :header: "指标代码", "指标名称"
+    :align: left
+
+    "GUST","阵风风速"
+    "PWAT","降水量"
+    "RH","相对湿度"
+    "SUNSD","太阳辐射"
+    "TCDC","总云量"
+    "TMP","温度"
+    "UGRD","风速U分量"
+    "VGRD","风速V分量"
+
+3.2 脚本使用
+-------------------
+.. note::
+
+    脚本的调用均需要在项目根目录下执行。
+
+获取原始的数据文件：
+
+.. code-block:: bash
+
+    python -m gfs.get_data --date 2024-7-1
+
+
+解析原始文件并入库：
+
+.. code-block:: bash
+
+    python -m gfs.raw_file_2_db --date 2024-7-1
+
+将最新的预报数据滚动存入分区表：
+
+.. code-block:: bash
+
+    python -m gfs.fill_partition_tab --date 2024-7-1
+
+在上述三个脚本中，``--date`` 参数指定了起报日期；如忽略该参数，则默认为脚本运行日的预报数据。
+
+
+.. warning::
+
+    在调用 ``gfs.fill_partition_tab`` 时，如果指定起报日期，那么需要将该日期按照自然日的顺序逐个指定，
+    否则会导致数据缺失。

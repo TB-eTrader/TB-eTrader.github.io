@@ -15,12 +15,23 @@
 2. 安装依赖包
 --------------------
 
+.. warning::
+
+    在解析GFS数据时用到了第三方库 `pygrib <https://github.com/jswhit/pygrib>`_，该库在MacOS下无法正常安装，
+    但在Linux下可以，因此并未列入 ``requirement.txt`` 中。该库影响的是解析原生GFS数据并入库的过程。
+
 应用运行的所有依赖项都在根目录下的 ``requirements.txt`` 文件中列出. 要安装这些依赖项, 请运行以下命令: 
 
 .. code-block:: bash
 
     (myenv)pip install -r requirements.txt
 
+在Linux环境下，仍需手动安装 ``pygrib`` 库：
+
+.. code-block:: bash
+
+    (myenv)pip install pygrib
+
 .. warning::
 
-    请确保在安装依赖项时可以访问网络. 
+    请确保在安装依赖项时可以访问网络。
