@@ -1,11 +1,11 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN" data-content_root="">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
-        <title>gansu.opt_1d_node_price - price forecast and more 1.0 文档</title>
+        <title>gansu.opt_1d_node_price - price forecast and more 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=87c5882b" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">price forecast and more 1.0 文档</div></a>
+      <a href="../../index.html"><div class="brand">price forecast and more 1.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">price forecast and more 1.0 文档</span>
+  <span class="sidebar-brand-text">price forecast and more 1.0 documentation</span>
   
 </a><div class="sidebar-tree">
   <ul>
@@ -184,7 +184,7 @@
           </label>
         </div>
         <article role="main">
-          <h1>gansu.opt_1d_node_price 源代码</h1><div class="highlight"><pre>
+          <h1>Source code for gansu.opt_1d_node_price</h1><div class="highlight"><pre>
 <span></span><span class="ch">#! /root/miniconda3/bin/python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># Author: Sun Jiawei</span>
@@ -269,7 +269,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="post_process"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.post_process">[文档]</a><span class="k">def</span> <span class="nf">post_process</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="post_process"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.post_process">[docs]</a><span class="k">def</span> <span class="nf">post_process</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;对预测的结果进行后处理.</span>
 
 <span class="sd">    处理的流程共分三步:</span>
@@ -294,7 +294,7 @@
     <span class="k">return</span> <span class="n">post_vals</span></div>
 
 
-<div class="viewcode-block" id="calc_indicators"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.calc_indicators">[文档]</a><span class="k">def</span> <span class="nf">calc_indicators</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="calc_indicators"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.calc_indicators">[docs]</a><span class="k">def</span> <span class="nf">calc_indicators</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;计算派生指标&quot;&quot;&quot;</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;conn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;value_30&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># 联络线出力</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;all_power&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;conn&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;value_3&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;value_2&#39;</span><span class="p">]</span>
@@ -307,7 +307,7 @@
     <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;ratio_1&#39;</span><span class="p">,</span> <span class="s1">&#39;ratio_2&#39;</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="OptNodePrice"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.OptNodePrice">[文档]</a><span class="k">class</span> <span class="nc">OptNodePrice</span><span class="p">(</span><span class="n">PriceForecast</span><span class="p">):</span>
+<div class="viewcode-block" id="OptNodePrice"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.OptNodePrice">[docs]</a><span class="k">class</span> <span class="nc">OptNodePrice</span><span class="p">(</span><span class="n">PriceForecast</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">base_date</span><span class="p">,</span> <span class="n">PROVINCE_ID</span><span class="p">,</span> <span class="n">RemoteControl</span><span class="p">,</span>
                          <span class="n">MODEL_DT</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">)</span>
@@ -315,7 +315,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">predict_end_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_start_date</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;预测数据的起止日期: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_start_date</span><span class="si">}</span><span class="s1">~</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_end_date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="OptNodePrice.post_process"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.OptNodePrice.post_process">[文档]</a>    <span class="k">def</span> <span class="nf">post_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ori_vals</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="OptNodePrice.post_process"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.OptNodePrice.post_process">[docs]</a>    <span class="k">def</span> <span class="nf">post_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ori_vals</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;对预测的结果进行后处理.</span>
 
 <span class="sd">        处理的流程共分三步:</span>
@@ -345,7 +345,7 @@
 
         <span class="k">return</span> <span class="n">fore_values</span></div>
 
-<div class="viewcode-block" id="OptNodePrice.add_feature"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.OptNodePrice.add_feature">[文档]</a>    <span class="k">def</span> <span class="nf">add_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<div class="viewcode-block" id="OptNodePrice.add_feature"><a class="viewcode-back" href="../../api.html#gansu.opt_1d_node_price.OptNodePrice.add_feature">[docs]</a>    <span class="k">def</span> <span class="nf">add_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ori_fea_cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ori_fea_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;value_&#39;</span><span class="p">)]</span>
 
@@ -482,10 +482,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=8930e309"></script>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=359c27e9"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="../../_static/translations.js?v=beaddf03"></script>
     </body>
 </html>

@@ -1,11 +1,11 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN" data-content_root="">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
-        <title>shanxi.spot_support - price forecast and more 1.0 文档</title>
+        <title>shanxi.spot_support - price forecast and more 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=87c5882b" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">price forecast and more 1.0 文档</div></a>
+      <a href="../../index.html"><div class="brand">price forecast and more 1.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">price forecast and more 1.0 文档</span>
+  <span class="sidebar-brand-text">price forecast and more 1.0 documentation</span>
   
 </a><div class="sidebar-tree">
   <ul>
@@ -184,7 +184,7 @@
           </label>
         </div>
         <article role="main">
-          <h1>shanxi.spot_support 源代码</h1><div class="highlight"><pre>
+          <h1>Source code for shanxi.spot_support</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># Author: Sun Jiawei</span>
 <span class="c1"># E-mail: sunjiawei@tbea.com</span>
@@ -245,7 +245,7 @@
     <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="get_node_id"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.get_node_id">[文档]</a><span class="k">def</span> <span class="nf">get_node_id</span><span class="p">(</span><span class="n">station_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="get_node_id"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.get_node_id">[docs]</a><span class="k">def</span> <span class="nf">get_node_id</span><span class="p">(</span><span class="n">station_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;根据给定的场站id，获取其所属电力节点的id。</span>
 
 <span class="sd">    :param station_id: 场站id</span>
@@ -263,7 +263,7 @@
         <span class="k">return</span> <span class="n">node_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="get_forecast_price"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.get_forecast_price">[文档]</a><span class="k">def</span> <span class="nf">get_forecast_price</span><span class="p">(</span><span class="n">date_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<div class="viewcode-block" id="get_forecast_price"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.get_forecast_price">[docs]</a><span class="k">def</span> <span class="nf">get_forecast_price</span><span class="p">(</span><span class="n">date_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    获取场站在指定日期的预测的日前电价与实时电价。</span>
 
@@ -345,6 +345,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">pass</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">recommend_available</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;最优结果表中没有对应的预测数据，将从常规预测表中获取&#39;</span><span class="p">)</span>
             <span class="c1"># 在常规模型表中获取预测结果</span>
             <span class="k">if</span> <span class="n">market_id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">opt_forecast_dates</span> <span class="o">=</span> <span class="p">[</span>
@@ -385,10 +386,11 @@
             <span class="k">if</span> <span class="n">id_</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ser</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;常规节点电价预测表中没有节点</span><span class="si">{</span><span class="n">node_id</span><span class="si">}</span><span class="s1">在</span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s1">的`market_id=</span><span class="si">{</span><span class="n">market_id</span><span class="si">}</span><span class="s1">`电价记录&#39;</span><span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;常规节点电价预测表中没有节点</span><span class="si">{</span><span class="n">node_id</span><span class="si">}</span><span class="s1">在</span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s1">的`market_id=</span><span class="si">{</span><span class="n">market_id</span><span class="si">}</span><span class="s1">`电价记录&#39;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;常规电价预测数据获取成功&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ser</span><span class="o">.</span><span class="n">values</span>
 
 
-<div class="viewcode-block" id="get_ori_short_power"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.get_ori_short_power">[文档]</a><span class="k">def</span> <span class="nf">get_ori_short_power</span><span class="p">(</span><span class="n">date_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">station_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="get_ori_short_power"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.get_ori_short_power">[docs]</a><span class="k">def</span> <span class="nf">get_ori_short_power</span><span class="p">(</span><span class="n">date_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">station_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    获取指定场站在指定日期的原始短期功率预测数据。</span>
 
@@ -408,7 +410,7 @@
     <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;original_short_power&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="get_real_price"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.get_real_price">[文档]</a><span class="k">def</span> <span class="nf">get_real_price</span><span class="p">(</span><span class="n">date_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="get_real_price"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.get_real_price">[docs]</a><span class="k">def</span> <span class="nf">get_real_price</span><span class="p">(</span><span class="n">date_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    获取指定节点在指定日期的真实的日前电价与实时电价。</span>
 
@@ -443,7 +445,7 @@
     <span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="acc"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.acc">[文档]</a><span class="k">def</span> <span class="nf">acc</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+<div class="viewcode-block" id="acc"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.acc">[docs]</a><span class="k">def</span> <span class="nf">acc</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    计算预测准确率。</span>
 
@@ -464,7 +466,7 @@
     <span class="k">return</span> <span class="n">acc_</span> <span class="k">if</span> <span class="n">acc_</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span></div>
 
 
-<div class="viewcode-block" id="PowerAdjustment"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.PowerAdjustment">[文档]</a><span class="k">class</span> <span class="nc">PowerAdjustment</span><span class="p">:</span>
+<div class="viewcode-block" id="PowerAdjustment"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.PowerAdjustment">[docs]</a><span class="k">class</span> <span class="nc">PowerAdjustment</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;对指定场站的短期功率预测进行调整，以期更多的套利。&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>                <span class="c1"># pyomo模型</span>
@@ -503,7 +505,7 @@
                          <span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span>
                          <span class="mi">22</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">23</span><span class="p">]</span>
 
-<div class="viewcode-block" id="PowerAdjustment.calc_price_coffs"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.PowerAdjustment.calc_price_coffs">[文档]</a>    <span class="k">def</span> <span class="nf">calc_price_coffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">nid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">days</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+<div class="viewcode-block" id="PowerAdjustment.calc_price_coffs"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.PowerAdjustment.calc_price_coffs">[docs]</a>    <span class="k">def</span> <span class="nf">calc_price_coffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">nid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">days</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;获取从 ``single_date`` 起往前 ``days`` 天的真实电价（包含日前与实时）和预测电价（包含日前与实时）。</span>
 <span class="sd">        并计算价差（日前价格减去实时价格）和预测准确率。</span>
 
@@ -515,7 +517,7 @@
         <span class="n">end_date</span> <span class="o">=</span> <span class="n">single_date</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">start_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;价差数据的日期范围: </span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s1"> ~ </span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;价差数据的日期范围: </span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s1"> ~ </span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="n">daily_da_acc</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">daily_rt_acc</span> <span class="o">=</span> <span class="p">[]</span>
@@ -755,16 +757,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;求解器未收敛到解决方案.&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PowerAdjustment.run"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.PowerAdjustment.run">[文档]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">station_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<div class="viewcode-block" id="PowerAdjustment.run"><a class="viewcode-back" href="../../api.html#shanxi.spot_support.PowerAdjustment.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">station_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;执行入口函数。</span>
 
-<span class="sd">        :param single_date: 指定的日期</span>
+<span class="sd">        :param single_date: 要调整功率的日期</span>
 <span class="sd">        :param station_id: 指定的场站唯一标识</span>
 <span class="sd">        :return: ``None``，直接将结果写入数据库。</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;获取</span><span class="si">{</span><span class="n">station_id</span><span class="si">}</span><span class="s1">对应的节点id&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;获取场站：·</span><span class="si">{</span><span class="n">station_id</span><span class="si">}</span><span class="s1">·对应的节点id&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">get_node_id</span><span class="p">(</span><span class="n">station_id</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;成功! 对应的节点id为</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;成功! 对应的节点id为·</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="si">}</span><span class="s1">·&#39;</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;计算历史电价差相关的系数...&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_price_coffs</span><span class="p">(</span><span class="n">single_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="p">)</span>
@@ -796,14 +798,16 @@
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;完成&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">Date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">Date</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s1">&#39;today&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">Date</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s1">&#39;today&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">Date</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;需要调整的日期为</span><span class="si">{</span><span class="n">Date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">sid</span> <span class="ow">in</span> <span class="n">StationID</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;对场站</span><span class="si">{</span><span class="n">sid</span><span class="si">}</span><span class="s1">进行曲线调整...&#39;</span><span class="p">)</span>
         <span class="n">adjuster</span> <span class="o">=</span> <span class="n">PowerAdjustment</span><span class="p">()</span>
         <span class="n">adjuster</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">Date</span><span class="p">,</span> <span class="n">sid</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;完成对场站</span><span class="si">{</span><span class="n">sid</span><span class="si">}</span><span class="s1">的曲线调整&#39;</span><span class="p">)</span>
 </pre></div>
         </article>
       </div>
@@ -836,10 +840,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=8930e309"></script>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=359c27e9"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="../../_static/translations.js?v=beaddf03"></script>
     </body>
 </html>

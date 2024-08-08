@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN" data-content_root="">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="文档与接口" href="api.html" /><link rel="prev" title="价格预测及相关应用" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="文档与接口" href="api.html" /><link rel="prev" title="价格预测及相关应用" href="index.html" />
 
     <link rel="shortcut icon" href="_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
-        <title>快速开始 - price forecast and more 1.0 文档</title>
+        <title>快速开始 - price forecast and more 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=87c5882b" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">price forecast and more 1.0 文档</div></a>
+      <a href="index.html"><div class="brand">price forecast and more 1.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">price forecast and more 1.0 文档</span>
+  <span class="sidebar-brand-text">price forecast and more 1.0 documentation</span>
   
 </a><div class="sidebar-tree">
   <ul class="current">
@@ -187,9 +187,9 @@
         </div>
         <article role="main">
           <section id="id1">
-<h1>快速开始<a class="headerlink" href="#id1" title="此标题的永久链接">#</a></h1>
+<h1>快速开始<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
 <section id="id2">
-<h2>1. 基础环境安装<a class="headerlink" href="#id2" title="此标题的永久链接">#</a></h2>
+<h2>1. 基础环境安装<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
 <p>项目运行于 <code class="docutils literal notranslate"><span class="pre">Python</span></code> 3.8.x环境下，建议使用 <a class="reference external" href="https://docs.conda.io/en/latest/">conda</a> 创建独立的虚拟环境并激活：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pfam<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
 conda<span class="w"> </span>activate<span class="w"> </span>pfam
@@ -197,20 +197,20 @@ conda<span class="w"> </span>activate<span class="w"> </span>pfam
 </div>
 </section>
 <section id="id3">
-<h2>2. 安装依赖包<a class="headerlink" href="#id3" title="此标题的永久链接">#</a></h2>
+<h2>2. 安装依赖包<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
 <section id="id4">
-<h3>2.1 普通依赖包<a class="headerlink" href="#id4" title="此标题的永久链接">#</a></h3>
+<h3>2.1 普通依赖包<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
 <p>应用运行的所有依赖项都在根目录下的 <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> 文件中列出。要安装这些依赖项，请运行以下命令：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>pfam<span class="o">)</span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </pre></div>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">警告</p>
+<p class="admonition-title">Warning</p>
 <p>请确保在安装依赖项时可以访问网络。</p>
 </div>
 </section>
 <section id="id5">
-<h3>2.2 安装求解器<a class="headerlink" href="#id5" title="此标题的永久链接">#</a></h3>
+<h3>2.2 安装求解器<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
 <p>现货辅助交易算法的执行需要用到求解器，可以通过如下命令进行安装：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>pfam<span class="o">)</span>conda<span class="w"> </span>install<span class="w"> </span>glpk
 </pre></div>
@@ -218,9 +218,9 @@ conda<span class="w"> </span>activate<span class="w"> </span>pfam
 </section>
 </section>
 <section id="id6">
-<h2>3. 使用方法<a class="headerlink" href="#id6" title="此标题的永久链接">#</a></h2>
+<h2>3. 使用方法<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h2>
 <div class="admonition warning">
-<p class="admonition-title">警告</p>
+<p class="admonition-title">Warning</p>
 <p>在执行前请确保：</p>
 <ol class="arabic simple">
 <li><p>已经切换到项目的根目录；</p></li>
@@ -239,12 +239,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>pfam
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>pfam<span class="o">)</span>python<span class="w"> </span>-m<span class="w"> </span>&lt;package_name&gt;.&lt;script_name&gt;<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
 </pre></div>
 </div>
-<p>不同的脚本所需要的命令行参数是不同的，可以通过 <code class="docutils literal notranslate"><span class="pre">-h</span></code> 查看相关命令行参数。完整的用法说明参考各模块的 <a class="reference internal" href="api.html#doc-and-api"><span class="std std-ref">doc</span></a> 内容。</p>
-<p>在 <a class="reference internal" href="api.html#doc-and-api"><span class="std std-ref">doc</span></a> 中，如果一段文本在如下的格式范围内，
-则说明该文本是模块的说明文档。</p>
-<div class="custom-doc admonition">
-<p>一个模块说明文档的示例。</p>
-</div>
+<p>不同的脚本所需要的命令行参数是不同的，可以通过指定脚本的 <code class="docutils literal notranslate"><span class="pre">-h</span></code> 查看帮助。</p>
 <ol class="arabic simple" start="3">
 <li><p>便捷调用</p></li>
 </ol>
@@ -253,13 +248,18 @@ conda<span class="w"> </span>activate<span class="w"> </span>pfam
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>crontab.py<span class="w"> </span>&lt;positional_arguments&gt;<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
 </pre></div>
 </div>
-<p>其中，<code class="docutils literal notranslate"><span class="pre">positional_arguments</span></code> 为需要调度的脚本名称，可选参数请参考 <code class="docutils literal notranslate"><span class="pre">crontab.py</span></code> 的 <code class="docutils literal notranslate"><span class="pre">help</span></code> 命令；
-<code class="docutils literal notranslate"><span class="pre">options</span></code> 为调度脚本的执行参数，可选参数请参考各个脚本的 <code class="docutils literal notranslate"><span class="pre">help</span></code> 命令。</p>
+<p>其中，<code class="docutils literal notranslate"><span class="pre">positional_arguments</span></code> 为需要调度的脚本名称，可选参数请在项目根目录下执行 <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">crontab.py</span> <span class="pre">-h</span></code> 查看；
+<code class="docutils literal notranslate"><span class="pre">options</span></code> 为调度脚本的执行参数，可选参数请参考各个脚本的 <code class="docutils literal notranslate"><span class="pre">-h</span></code> 命令。</p>
 <div class="admonition note">
-<p class="admonition-title">备注</p>
+<p class="admonition-title">Note</p>
 <p>运行 <code class="docutils literal notranslate"><span class="pre">crontab.py</span></code> 时确保python版本大于3.6即可，且对于运行目录并无要求；但需要再 <code class="docutils literal notranslate"><span class="pre">crontab.py</span></code>
 脚本中配置正确的解释器的路径。</p>
 </div>
+<ol class="arabic simple" start="4">
+<li><p>Auto run</p></li>
+</ol>
+<p>For medium and long term trading, I provide an auto run script to execute algorithms automatically: <code class="docutils literal notranslate"><span class="pre">auto_run.py</span></code>.
+It use <code class="docutils literal notranslate"><span class="pre">cron</span></code> to check periodically that if tomorrow is a trading day. If so, the corresponding algorithm will be executed.</p>
 </section>
 </section>
 
@@ -337,10 +337,9 @@ conda<span class="w"> </span>activate<span class="w"> </span>pfam
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8930e309"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=359c27e9"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="_static/translations.js?v=beaddf03"></script>
     </body>
 </html>

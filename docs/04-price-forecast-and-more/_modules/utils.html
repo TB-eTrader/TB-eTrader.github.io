@@ -1,0 +1,848 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
+
+    <link rel="shortcut icon" href="../_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
+        <title>utils - price forecast and more 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=87c5882b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">price forecast and more 1.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">price forecast and more 1.0 documentation</span>
+  
+</a><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">文档与接口</a></li>
+</ul>
+
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Author: Sun Jiawei</span>
+<span class="c1"># E-mail: sunjiawei@tbea.com</span>
+<span class="c1">#</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. mod-doc::</span>
+
+<span class="sd">    本module提供了公共的工具函数。</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">calendar</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">logging.handlers</span> <span class="kn">import</span> <span class="n">RotatingFileHandler</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">MetaData</span><span class="p">,</span> <span class="n">Table</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">distinct</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">savgol_filter</span>
+
+
+<div class="viewcode-block" id="init_logger"><a class="viewcode-back" href="../api.html#utils.init_logger">[docs]</a><span class="k">def</span> <span class="nf">init_logger</span><span class="p">(</span><span class="n">call_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;初始化一个日志记录器对象。</span>
+
+<span class="sd">    :param call_file_path: 调用本函数的文件的绝对路径</span>
+<span class="sd">    :param debug: 是否开启调试模式，默认为 ``False``，开启则将日志打印至控制台而非写入文件</span>
+<span class="sd">    :return: ``logging.Logger`` 对象</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">base_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">call_file_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">sub_pkg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">call_file_path</span><span class="p">)</span>
+    <span class="n">sub_pkg_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">sub_pkg_path</span><span class="p">)</span>
+    <span class="n">pkg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">sub_pkg_path</span><span class="p">)</span>
+
+    <span class="n">log_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pkg_path</span><span class="p">,</span> <span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="n">sub_pkg_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">)</span>
+
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(levelname)7s</span><span class="s1"> </span><span class="si">%(filename)8s</span><span class="s1"> line </span><span class="si">%(lineno)4d</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1"> &#39;</span><span class="p">,</span>
+                                  <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+    <span class="n">logger_</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">base_name</span><span class="p">)</span>
+    <span class="n">logger_</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+    <span class="c1"># info handler</span>
+    <span class="n">info_file_handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_name</span><span class="si">}</span><span class="s1">-info.log&#39;</span><span class="p">),</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+                                            <span class="n">backupCount</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="n">info_file_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">info_file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+
+    <span class="c1"># debug handler</span>
+    <span class="c1"># debug_file_handler = RotatingFileHandler(os.path.join(log_file_path, f&#39;{base_name}-debug.log&#39;), maxBytes=10 * 1024 * 1024,</span>
+    <span class="c1">#                                          backupCount=5, encoding=&#39;utf-8&#39;)</span>
+    <span class="c1"># debug_file_handler.setLevel(logging.DEBUG)</span>
+    <span class="c1"># debug_file_handler.setFormatter(formatter)</span>
+
+    <span class="c1"># debug mode handler</span>
+    <span class="n">debug_stream_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+    <span class="n">debug_stream_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">debug_stream_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">logger_</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">info_file_handler</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger_</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">debug_stream_handler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logger_</span></div>
+
+
+<div class="viewcode-block" id="valid_date"><a class="viewcode-back" href="../api.html#utils.valid_date">[docs]</a><span class="k">def</span> <span class="nf">valid_date</span><span class="p">(</span><span class="n">date_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;验证日期字符串是否合法.</span>
+
+<span class="sd">    :param date_: 待验证的字符串</span>
+<span class="sd">    :raise ValueError: 日期格式不合法</span>
+<span class="sd">    :return: 格式化后的日期字符串</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">date_str</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">date_str</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid date: </span><span class="si">{</span><span class="n">date_</span><span class="si">}</span><span class="s1">, format should be YYYY-mm-dd&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="valid_month"><a class="viewcode-back" href="../api.html#utils.valid_month">[docs]</a><span class="k">def</span> <span class="nf">valid_month</span><span class="p">(</span><span class="n">month</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;验证日期字符串是否合法。</span>
+
+<span class="sd">    :param month: 待验证的字符串</span>
+<span class="sd">    :raise ValueError: 日期格式不合法</span>
+<span class="sd">    :return: 格式化后的日期字符串。</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">month</span><span class="p">,</span> <span class="s1">&#39;%Y-%m&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">month</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid month: </span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">, format should be YYYY-mm&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_get_db_url"><a class="viewcode-back" href="../api.html#utils._get_db_url">[docs]</a><span class="k">def</span> <span class="nf">_get_db_url</span><span class="p">(</span><span class="n">remote_control</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;获取数据库的连接信息.</span>
+
+<span class="sd">    :param remote_control: 是否使用私有云数据库的外部接口</span>
+<span class="sd">    :return: 数据库连接字符串</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">DATABASE_CONF</span> <span class="kn">import</span> <span class="n">local_prod_url</span><span class="p">,</span> <span class="n">dev_url</span><span class="p">,</span> <span class="n">prod_url</span>
+    <span class="k">if</span> <span class="n">remote_control</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">local_prod_url</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">ip</span> <span class="o">==</span> <span class="s1">&#39;10.97.6.3&#39;</span><span class="p">:</span>  <span class="c1"># 私有云</span>
+            <span class="k">return</span> <span class="n">prod_url</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dev_url</span></div>
+
+
+<div class="viewcode-block" id="_15min_2_hour"><a class="viewcode-back" href="../api.html#utils._15min_2_hour">[docs]</a><span class="k">def</span> <span class="nf">_15min_2_hour</span><span class="p">(</span><span class="n">time_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;将15分钟的时间戳转化为小时。</span>
+
+<span class="sd">    :param time_str: 时间字符串</span>
+<span class="sd">    :return: 转换后的小时字符串</span>
+
+<span class="sd">    .. testsetup::</span>
+
+<span class="sd">        from utils import _15min_2_hour</span>
+
+<span class="sd">    调用示例如下：</span>
+
+<span class="sd">    &gt;&gt;&gt; print(_15min_2_hour(&#39;00:15&#39;))</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; print(_15min_2_hour(&#39;02:00&#39;))</span>
+<span class="sd">    1</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">time_str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time_str</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time_str</span><span class="p">[:</span><span class="mi">2</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="_date_2_tdo"><a class="viewcode-back" href="../api.html#utils._date_2_tdo">[docs]</a><span class="k">def</span> <span class="nf">_date_2_tdo</span><span class="p">(</span><span class="n">date_</span><span class="p">:</span> <span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;根据给定的日期，判断其是哪个旬，并以“年月旬”的形式返回。</span>
+
+<span class="sd">    :param date_: 日期对象</span>
+<span class="sd">    :return: 旬字符串</span>
+
+<span class="sd">    .. testsetup::</span>
+
+<span class="sd">        from utils import _date_2_tdo</span>
+<span class="sd">        from datetime import date</span>
+
+<span class="sd">    调用示例如下：</span>
+
+<span class="sd">    &gt;&gt;&gt; print(_date_2_tdo(date(2021, 1, 1)))</span>
+<span class="sd">    2021-01-1</span>
+<span class="sd">    &gt;&gt;&gt; print(_date_2_tdo(date(2021, 1, 10)))</span>
+<span class="sd">    2021-01-1</span>
+<span class="sd">    &gt;&gt;&gt; print(_date_2_tdo(date(2021, 1, 21)))</span>
+<span class="sd">    2021-01-3</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span> <span class="o">=</span> <span class="n">date_</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">date_</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">date_</span><span class="o">.</span><span class="n">day</span>
+    <span class="n">month_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">month</span><span class="p">)</span> <span class="k">if</span> <span class="n">month</span> <span class="o">&gt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">month</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">day</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month_str</span><span class="si">}</span><span class="s1">-1&#39;</span>
+    <span class="k">elif</span> <span class="n">day</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month_str</span><span class="si">}</span><span class="s1">-2&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month_str</span><span class="si">}</span><span class="s1">-3&#39;</span></div>
+
+
+<div class="viewcode-block" id="create_engine_and_tabs"><a class="viewcode-back" href="../api.html#utils.create_engine_and_tabs">[docs]</a><span class="k">def</span> <span class="nf">create_engine_and_tabs</span><span class="p">(</span><span class="n">remote_control</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">tab_name_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;创建数据库引擎, 并生成表对象.</span>
+
+<span class="sd">    :param remote_control: 是否使用私有云数据库的外部接口</span>
+<span class="sd">    :param tab_name_list: 需要创建的表名列表</span>
+<span class="sd">    :return: 算法用到的表对象, 引擎</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">_get_db_url</span><span class="p">(</span><span class="n">remote_control</span><span class="p">)</span>
+    <span class="n">engine_</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">MetaData</span><span class="p">()</span>
+
+    <span class="n">tabs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">Table</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">autoload_with</span><span class="o">=</span><span class="n">engine_</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tab_name_list</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">tabs</span><span class="p">,</span> <span class="n">engine_</span></div>
+
+
+<div class="viewcode-block" id="smooth_data"><a class="viewcode-back" href="../api.html#utils.smooth_data">[docs]</a><span class="k">def</span> <span class="nf">smooth_data</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;根据设置的不同的method对序列y进行平滑处理。支持的平滑方法如下：</span>
+
+<span class="sd">    savgol：Savitzky-Golay filter</span>
+
+<span class="sd">    ma：Moving Average方法</span>
+
+<span class="sd">    对于每一种方法，还可以传入对应的关键词参数来定制平滑内容。</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;savgol&#39;</span><span class="p">,</span> <span class="s1">&#39;ma&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;savgol&#39;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="s1">&#39;window_length&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span>
+        <span class="k">assert</span> <span class="s1">&#39;polyorder&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span>
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y_hat</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;ma&#39;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="s1">&#39;window_length&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span>
+
+        <span class="n">center</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">window</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;window_length&#39;</span><span class="p">])</span>
+
+        <span class="n">maed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">maed</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">maed</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                <span class="n">maed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;triangular&#39;</span><span class="p">):</span>
+            <span class="n">triangular</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">triangular</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;triangular&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">triangular</span><span class="p">:</span>
+            <span class="c1"># ref:https://plotly.com/python/smoothing/#:~:text=Savitzky%2DGolay-,Triangular%20Moving%20Average,-Another%20method%20for</span>
+            <span class="n">tri_smoothed</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">maed</span><span class="p">)</span> <span class="o">-</span> <span class="n">window</span><span class="p">):</span>
+                <span class="n">tri_smoothed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">maed</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">window</span><span class="p">]))</span>
+            <span class="n">tri_smoothed</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">maed</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:])</span>  <span class="c1"># noqa</span>
+            <span class="k">return</span> <span class="n">tri_smoothed</span>
+
+        <span class="k">return</span> <span class="n">maed</span></div>
+
+
+<div class="viewcode-block" id="is_leap_year"><a class="viewcode-back" href="../api.html#utils.is_leap_year">[docs]</a><span class="k">def</span> <span class="nf">is_leap_year</span><span class="p">(</span><span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;判断一个年份是否是闰年。</span>
+
+<span class="sd">    :param year: 待判断的年份</span>
+<span class="sd">    :return: ``True``：闰年；``False``：平年。</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 闰年的条件是：年份能被4整除，但不能被100整除，或者能被400整除</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">year</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">year</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">year</span> <span class="o">%</span> <span class="mi">400</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_date_range"><a class="viewcode-back" href="../api.html#utils.get_date_range">[docs]</a><span class="k">def</span> <span class="nf">get_date_range</span><span class="p">(</span><span class="n">month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ten_days_order</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;根据给出的月份及旬编号，确定旬的起止日期。</span>
+
+<span class="sd">    .. example:</span>
+
+<span class="sd">        &gt;&gt;&gt; get_date_range(&#39;2024-1&#39;, 1)</span>
+<span class="sd">        (datetime.date(2024, 1, 1), datetime.date(2024, 1, 10))</span>
+
+<span class="sd">    :param month: 年月数据，年和月之间必须用 ``-`` 连接，如“2024-1”、“2023-04”等</span>
+<span class="sd">    :param ten_days_order: 旬编号</span>
+<span class="sd">    :return: 起止日期组成的数组。</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">month</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">year_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">month_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">month_int</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">]:</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="k">elif</span> <span class="n">month_int</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">]:</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># month_int == 2</span>
+        <span class="k">if</span> <span class="n">is_leap_year</span><span class="p">(</span><span class="n">year_int</span><span class="p">):</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="mi">29</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="mi">28</span>
+
+    <span class="k">if</span> <span class="n">ten_days_order</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">-01&#39;</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">-10&#39;</span>
+    <span class="k">elif</span> <span class="n">ten_days_order</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">-11&#39;</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">-20&#39;</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># ten_days_order == 3</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">-21&#39;</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">start_date</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">end_date</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DBDataLoad"><a class="viewcode-back" href="../api.html#utils.DBDataLoad">[docs]</a><span class="k">class</span> <span class="nc">DBDataLoad</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;从数据库获取数据的类。&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">province_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">tab_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span> <span class="o">=</span> <span class="n">province_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span> <span class="o">=</span> <span class="n">tab_dict</span>
+
+<div class="viewcode-block" id="DBDataLoad._is_valid_nid"><a class="viewcode-back" href="../api.html#utils.DBDataLoad._is_valid_nid">[docs]</a>    <span class="k">def</span> <span class="nf">_is_valid_nid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;验证节点id是否属于该省份。</span>
+
+<span class="sd">        :param node_id: 节点id</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;select province_id from pt_node where id=</span><span class="si">{</span><span class="n">node_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ret</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DBDataLoad.get_price"><a class="viewcode-back" href="../api.html#utils.DBDataLoad.get_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span>
+                  <span class="n">is_clear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+                  <span class="n">node_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zone_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取价格数据。</span>
+
+<span class="sd">        可以获取包括日前市场与实时市场的统一出清价格和节点价格数据。</span>
+
+<span class="sd">        :param start_date: 数据开始日期</span>
+<span class="sd">        :param end_date: 数据结束日期</span>
+<span class="sd">        :param is_clear: 是否为统一出清价格，默认为 ``True``，即为统一出清价格</span>
+<span class="sd">        :param market_id: 日前（3）、实时（1）或者两者都获取（0），默认为3</span>
+<span class="sd">        :param node_id: 节点id，在 ``is_clear=False`` 时生效且必须指定</span>
+<span class="sd">        :param zone_id: 区域id，在 ``is_clear=True`` 且 ``self.province_id=2`` 时生效且必须指定</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">market_id</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;`market_id` 只能为 0、1 或 3&#39;</span>
+        <span class="k">assert</span> <span class="n">end_date</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;`end_date` 必须大于等于 `start_date`&#39;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_clearing_price&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">is_clear</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_node_price&#39;</span><span class="p">]</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)]</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_clear</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">node_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;当 `is_clear=False` 时，`node_id` 必须指定&#39;</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_valid_nid</span><span class="p">(</span><span class="n">node_id</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;`node_id` </span><span class="si">{</span><span class="n">node_id</span><span class="si">}</span><span class="s1"> 不属于该省份（</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">province_id</span><span class="si">}</span><span class="s1">）&#39;</span>
+            <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">node_id</span> <span class="o">==</span> <span class="n">node_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">market_id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">ahead_day_price</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">market_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">real_time_price</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">ahead_day_price</span><span class="p">)</span>
+                <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">real_time_price</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span><span class="p">)</span>
+            <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">market_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span><span class="p">)</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span><span class="o">.</span><span class="n">in_</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># 甘肃省</span>
+                <span class="k">assert</span> <span class="n">zone_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;在获取甘肃的统一出清价格时，`zone_id` 必须指定&#39;</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">zone_id</span> <span class="o">==</span> <span class="n">zone_id</span><span class="p">)</span>
+
+        <span class="n">sql</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="o">*</span><span class="n">conditions</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_clear</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">market_id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;da_price&#39;</span> <span class="k">if</span> <span class="n">market_id</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="s1">&#39;rt_price&#39;</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">col</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;market_id&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;rt_price&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;da_price&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ahead_day_price&#39;</span><span class="p">:</span> <span class="s1">&#39;da_price&#39;</span><span class="p">,</span> <span class="s1">&#39;real_time_price&#39;</span><span class="p">:</span> <span class="s1">&#39;rt_price&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="DBDataLoad.get_load"><a class="viewcode-back" href="../api.html#utils.DBDataLoad.get_load">[docs]</a>    <span class="k">def</span> <span class="nf">get_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span>
+                 <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">power_type_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;从 ``pt_load`` 表中获取负荷类的数据。</span>
+
+<span class="sd">        几种常见的 ``power_type_id`` 及其对应的含义如下：</span>
+
+<span class="sd">        - 1：省调负荷</span>
+<span class="sd">        - 2：新能源出力</span>
+<span class="sd">        - 3：非市场化机组出力</span>
+<span class="sd">        - 4：水电出力</span>
+<span class="sd">        - 6：风电出力</span>
+<span class="sd">        - 7：光伏出力</span>
+
+<span class="sd">        完整的 ``power_type_id`` 的解释详见 ``pt_power_type`` 表。</span>
+
+<span class="sd">        获取后的数据将被转换为宽表，除去 ``date`` 和 ``time`` 列外，</span>
+<span class="sd">        其余列的命名规则为：``value_&lt;power_type_id&gt;_&lt;market_id&gt;``。</span>
+
+<span class="sd">        :param start_date: 数据开始日期</span>
+<span class="sd">        :param end_date: 数据结束日期</span>
+<span class="sd">        :param market_id: 日前（3）、实时（1）或者两者都获取（0），默认为3</span>
+<span class="sd">        :param power_type_ids: power类型id组成的列表，默认情况下为省调负荷</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">power_type_ids</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">power_type_ids</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">power_type_ids</span>
+        <span class="k">assert</span> <span class="n">market_id</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;`market_id` 只能为 0、1 或 3&#39;</span>
+        <span class="k">assert</span> <span class="n">end_date</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;`end_date` 必须大于等于 `start_date`&#39;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_load&#39;</span><span class="p">]</span>
+
+        <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                      <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                      <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span><span class="p">,</span>
+                      <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">power_type_id</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">power_type_ids</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">market_id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
+
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">power_type_id</span><span class="p">]</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="o">*</span><span class="n">conditions</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;market_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;market_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;power_type_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;power_type_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;power_type_id&#39;</span><span class="p">,</span> <span class="s1">&#39;market_id&#39;</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">mul_idx</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">new_cols</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">mul_idx</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="n">new_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;value_&#39;</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">new_cols</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="DBDataLoad._pivot_df"><a class="viewcode-back" href="../api.html#utils.DBDataLoad._pivot_df">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_pivot_df</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">val_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;将长表转换为宽表。&quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;county_code&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">val_name</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">ffill</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="DBDataLoad._count_month"><a class="viewcode-back" href="../api.html#utils.DBDataLoad._count_month">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_count_month</span><span class="p">(</span><span class="n">start_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate how many months between ``start_mont`` and ``end_month``.&quot;&quot;&quot;</span>
+        <span class="n">start_month</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">start_month</span><span class="p">,</span> <span class="s1">&#39;%Y-%m&#39;</span><span class="p">)</span>
+        <span class="n">end_month</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">end_month</span><span class="p">,</span> <span class="s1">&#39;%Y-%m&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">end_month</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">start_month</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="p">(</span><span class="n">end_month</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="n">start_month</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="DBDataLoad.get_data_from_tj"><a class="viewcode-back" href="../api.html#utils.DBDataLoad.get_data_from_tj">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_from_tj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取百米风速数据或辐照度数据。</span>
+
+<span class="sd">        该数据来源与天机推送的天气预报。</span>
+
+<span class="sd">        :param start_date: 数据开始日期</span>
+<span class="sd">        :param end_date: 数据结束日期</span>
+<span class="sd">        :param data_type: 数据类型，``w`` 表示风速，``i`` 表示辐照度</span>
+<span class="sd">        :return: 一个表示风速的DataFrame，由时间戳、county_code和风速值/辐照值三列构成。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plant_type</span> <span class="o">=</span> <span class="s1">&#39;30003&#39;</span> <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;w&#39;</span> <span class="k">else</span> <span class="s1">&#39;30002&#39;</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;wind_speed_100m&#39;</span> <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;w&#39;</span> <span class="k">else</span> <span class="s1">&#39;irradiance&#39;</span>
+        <span class="n">plant_tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_plant_info&#39;</span><span class="p">]</span>
+        <span class="n">county_codes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">plant_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">county_code</span><span class="p">))</span>
+                                   <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">plant_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">plant_type</span> <span class="o">==</span> <span class="n">plant_type</span><span class="p">,</span>
+                                               <span class="n">plant_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">county_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)),</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)[</span><span class="s1">&#39;county_code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">all_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_tj_45d_1h_weather__partition_month&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">county_codes</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fx_date</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fx_time</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">col</span><span class="p">])</span><span class="o">.</span>
+                   <span class="n">where</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fx_date</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                              <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fx_date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                              <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">area_code</span> <span class="o">==</span> <span class="n">cc</span><span class="p">)))</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;county_code&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cc</span>
+            <span class="n">all_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">all_df</span><span class="p">,</span> <span class="n">df</span><span class="p">])</span>
+        <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;fx_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;fx_time&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:00&#39;</span>
+        <span class="k">del</span> <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;fx_date&#39;</span><span class="p">],</span> <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;fx_time&#39;</span><span class="p">]</span>
+        <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pivot_df</span><span class="p">(</span><span class="n">all_df</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="DBDataLoad.get_hourly_transaction_price_m"><a class="viewcode-back" href="../api.html#utils.DBDataLoad.get_hourly_transaction_price_m">[docs]</a>    <span class="k">def</span> <span class="nf">get_hourly_transaction_price_m</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get hourly transaction price of specific months.</span>
+
+<span class="sd">        :param start_month: Start month(included)</span>
+<span class="sd">        :param end_month: End month(included)</span>
+<span class="sd">        :return: A dataframe with one column named &#39;price&#39; and its index represents month and hour.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s1">&#39;pt_market_trade_pc&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_market_trade_pc&#39;</span><span class="p">]</span>
+        <span class="n">num_months</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_month</span><span class="p">(</span><span class="n">start_month</span><span class="p">,</span> <span class="n">end_month</span><span class="p">)</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">select</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">period</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">month</span> <span class="o">&gt;=</span> <span class="n">start_month</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">month</span> <span class="o">&lt;=</span> <span class="n">end_month</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">num_months</span> <span class="o">*</span> <span class="mi">24</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;There are </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> rows in the result, but </span><span class="si">{</span><span class="n">num_months</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">24</span><span class="si">}</span><span class="s1"> rows are expected.&#39;</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;period&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">])))</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;period&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="DBDataLoad.get_hourly_transaction_price_t"><a class="viewcode-back" href="../api.html#utils.DBDataLoad.get_hourly_transaction_price_t">[docs]</a>    <span class="k">def</span> <span class="nf">get_hourly_transaction_price_t</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ten_days_order</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get hourly transaction price of specific ten-days.</span>
+
+<span class="sd">        :param start_month: Start month(included)</span>
+<span class="sd">        :param end_month: End month(included)</span>
+<span class="sd">        :param ten_days_order: Ten days&#39; order</span>
+<span class="sd">        :return: A dataframe with one column named &#39;price&#39; and its index represents month and hour.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s1">&#39;pt_dp_general&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_dp_general&#39;</span><span class="p">]</span>
+        <span class="n">num_months</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_month</span><span class="p">(</span><span class="n">start_month</span><span class="p">,</span> <span class="n">end_month</span><span class="p">)</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">select</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">month</span> <span class="o">&gt;=</span> <span class="n">start_month</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">month</span> <span class="o">&lt;=</span> <span class="n">end_month</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">ten_days</span> <span class="o">==</span> <span class="n">ten_days_order</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">num_months</span> <span class="o">*</span> <span class="mi">24</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;There are </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> rows in the result, but </span><span class="si">{</span><span class="n">num_months</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">24</span><span class="si">}</span><span class="s1"> rows are expected.&#39;</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">])))</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="DBDataLoad.get_hourly_ne_load"><a class="viewcode-back" href="../api.html#utils.DBDataLoad.get_hourly_ne_load">[docs]</a>    <span class="k">def</span> <span class="nf">get_hourly_ne_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ten_days_order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取分时的新能源出力数据。</span>
+
+<span class="sd">        :param start_month: 开始月</span>
+<span class="sd">        :param end_month: 结束月</span>
+<span class="sd">        :param ten_days_order: 旬编号，如不指定，则默认是整月</span>
+<span class="sd">        :return: 一个表示新能源出力的DataFrame，列名为：[&#39;value&#39;]。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ten_days_order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">ten_days_order</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># 确定数据的起止日期</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">start_month</span> <span class="o">+</span> <span class="s1">&#39;-01&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">end_year</span><span class="p">,</span> <span class="n">end_month_</span> <span class="o">=</span> <span class="n">end_month</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">end_day</span> <span class="o">=</span> <span class="n">calendar</span><span class="o">.</span><span class="n">monthrange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">end_year</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_month_</span><span class="p">))</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">end_month</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_day</span><span class="p">))</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+
+        <span class="c1"># 获取日期范围内的全部逐15分钟数据</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_load</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">power_type_ids</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="c1"># 按小时进行聚合</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_15min_2_hour</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value_2_3&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">])[[</span><span class="s1">&#39;value&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">ten_days_order</span><span class="p">:</span>
+            <span class="c1"># 选出目标旬的数据</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ten_days&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_date_2_tdo</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ten_days&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">ten_days_order</span><span class="p">))]</span>
+
+            <span class="c1"># 每个旬的每个小时，只保留一个值</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;ten_days&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">])[[</span><span class="s1">&#39;value&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ten_days&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="mi">7</span><span class="p">])</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="s1">&#39;ten_days&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m&#39;</span><span class="p">))</span>
+            <span class="c1"># 每个月的每个小时，只保留一个值</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">])[[</span><span class="s1">&#39;value&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="DBDataLoad.get_hourly_da_price"><a class="viewcode-back" href="../api.html#utils.DBDataLoad.get_hourly_da_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_hourly_da_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ten_days_order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get hourly price of specified month-range.</span>
+
+<span class="sd">        The returned dataframe has one column(``price``) and one index, which represent</span>
+<span class="sd">        average price and the hour of the month, separately.</span>
+
+<span class="sd">        If ``ten_days_order`` is specified, only the data of the specified ten-days-order will be returned.</span>
+
+<span class="sd">        :param start_month: Start month(included)</span>
+<span class="sd">        :param end_month:  End month(included)</span>
+<span class="sd">        :param ten_days_order: Ten days order. Default is ``None``, which means all data of the specified month-range will be returned.</span>
+<span class="sd">        :param node_id: Node id. If specified, only the data of the specified node will be returned.</span>
+<span class="sd">            Default is ``None``, which means clearing price will be returned.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ten_days_order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">ten_days_order</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="n">is_clear</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">node_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">False</span>
+
+        <span class="n">start_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">start_month</span> <span class="o">+</span> <span class="s1">&#39;-01&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">end_year</span><span class="p">,</span> <span class="n">end_month_</span> <span class="o">=</span> <span class="n">end_month</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">end_day</span> <span class="o">=</span> <span class="n">calendar</span><span class="o">.</span><span class="n">monthrange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">end_year</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_month_</span><span class="p">))</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">end_month</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_day</span><span class="p">))</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span>
+                            <span class="n">is_clear</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">node_id</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_15min_2_hour</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m&#39;</span><span class="p">))</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gp</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">gp</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;da_price&#39;</span><span class="p">:</span> <span class="s1">&#39;price&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gp</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gp</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">gp</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span>
+        <span class="n">gp</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gp</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gp</span></div>
+
+<div class="viewcode-block" id="DBDataLoad.get_limited_price"><a class="viewcode-back" href="../api.html#utils.DBDataLoad.get_limited_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_limited_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">month</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取月度的限价数据。</span>
+
+<span class="sd">        :param month: 月份，格式：YYYY-mm</span>
+<span class="sd">        :return: 一个表示限价信息的DataFrame，列名为：[&#39;hour&#39;, &#39;up&#39;, &#39;down&#39;]。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_limited_price&#39;</span><span class="p">]</span>
+        <span class="n">year</span><span class="p">,</span> <span class="n">month</span> <span class="o">=</span> <span class="n">month</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">month</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">quarter</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">quarter</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="n">quarter</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">quarter</span> <span class="o">=</span> <span class="mi">4</span>
+
+        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">up</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">down</span><span class="p">)</span>
+               <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span><span class="p">)</span>
+               <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">year</span><span class="p">)</span>
+               <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">quarter</span> <span class="o">==</span> <span class="n">quarter</span><span class="p">)</span>
+               <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">])))</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, sunjiawei
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=359c27e9"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+    </body>
+</html>

@@ -8,6 +8,7 @@
 ============================
 .. automodule:: utils
     :members:
+    :private-members:
 
 
 1. 山西
@@ -33,8 +34,19 @@
 .. automodule:: shanxi.ten_days_forecast
     :members:
 
+1.4 月分时电价预测
+--------------------------------------------
 
-1.4 现货辅助申报
+.. automodule:: shanxi.month_forecast
+    :members:
+
+1.5 现货价差预测
+--------------------------------------------
+
+.. automodule:: shanxi.price_diff_forecast
+    :members:
+
+1.6 现货辅助申报
 --------------------------------------------
 
 .. automodule:: shanxi.spot_support

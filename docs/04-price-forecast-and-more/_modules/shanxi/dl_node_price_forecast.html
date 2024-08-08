@@ -1,11 +1,11 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN" data-content_root="">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
-        <title>shanxi.dl_node_price_forecast - price forecast and more 1.0 文档</title>
+        <title>shanxi.dl_node_price_forecast - price forecast and more 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=87c5882b" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">price forecast and more 1.0 文档</div></a>
+      <a href="../../index.html"><div class="brand">price forecast and more 1.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">price forecast and more 1.0 文档</span>
+  <span class="sidebar-brand-text">price forecast and more 1.0 documentation</span>
   
 </a><div class="sidebar-tree">
   <ul>
@@ -184,7 +184,7 @@
           </label>
         </div>
         <article role="main">
-          <h1>shanxi.dl_node_price_forecast 源代码</h1><div class="highlight"><pre>
+          <h1>Source code for shanxi.dl_node_price_forecast</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># Author: Sun Jiawei</span>
 <span class="c1"># E-mail: sunjiawei@tbea.com</span>
@@ -327,7 +327,7 @@
         <span class="k">return</span> <span class="n">x</span>
 
 
-<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.run">[文档]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;执行深度学习预测算法。</span>
 
 <span class="sd">    :param node_id: 节点唯一标识</span>
@@ -352,7 +352,7 @@
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;完成&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="save_result"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.save_result">[文档]</a><span class="k">def</span> <span class="nf">save_result</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="save_result"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.save_result">[docs]</a><span class="k">def</span> <span class="nf">save_result</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;保存结果的函数。&quot;&quot;&quot;</span>
     <span class="n">pt_prediction_node_price</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_prediction_node_price&#39;</span><span class="p">]</span>
     <span class="n">pt_prediction_node_price_detail</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_prediction_node_price_detail&#39;</span><span class="p">]</span>
@@ -403,7 +403,7 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;入库完成&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="run_model"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.run_model">[文档]</a><span class="k">def</span> <span class="nf">run_model</span><span class="p">(</span><span class="n">train_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pred_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="run_model"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.run_model">[docs]</a><span class="k">def</span> <span class="nf">run_model</span><span class="p">(</span><span class="n">train_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pred_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;训练模型，并预测结果。</span>
 
 <span class="sd">    :param train_df: 训练集</span>
@@ -490,7 +490,7 @@
     <span class="k">return</span> <span class="n">pred_df</span></div>
 
 
-<div class="viewcode-block" id="infer_date"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.infer_date">[文档]</a><span class="k">def</span> <span class="nf">infer_date</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<div class="viewcode-block" id="infer_date"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.infer_date">[docs]</a><span class="k">def</span> <span class="nf">infer_date</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;根据 ``date`` 推断出训练数据的起止日期和用于预测的数据的起止日期。</span>
 
 <span class="sd">    :param date: 基准日期，也是训练数据的结束日期</span>
@@ -505,7 +505,7 @@
     <span class="k">return</span> <span class="n">train_start_date</span><span class="p">,</span> <span class="n">train_end_date</span><span class="p">,</span> <span class="n">pred_start_date</span><span class="p">,</span> <span class="n">pred_end_date</span></div>
 
 
-<div class="viewcode-block" id="load_train_data"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.load_train_data">[文档]</a><span class="k">def</span> <span class="nf">load_train_data</span><span class="p">(</span><span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="load_train_data"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.load_train_data">[docs]</a><span class="k">def</span> <span class="nf">load_train_data</span><span class="p">(</span><span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;加载训练数据。</span>
 
 <span class="sd">    :param start_date: 训练数据的开始日期</span>
@@ -550,7 +550,7 @@
         <span class="n">and_</span><span class="p">(</span>
             <span class="n">pt_node_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
             <span class="n">pt_node_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
-            <span class="n">pt_node_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">nid</span> <span class="o">==</span> <span class="n">node_id</span>
+            <span class="n">pt_node_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">node_id</span> <span class="o">==</span> <span class="n">node_id</span>
         <span class="p">)</span>
     <span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_node_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">pt_node_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
     <span class="n">_df_price</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
@@ -560,7 +560,7 @@
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">_df_load</span><span class="p">,</span> <span class="n">_df_conn</span><span class="p">,</span> <span class="n">_df_expan</span><span class="p">,</span> <span class="n">_df_price</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="load_pred_data"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.load_pred_data">[文档]</a><span class="k">def</span> <span class="nf">load_pred_data</span><span class="p">(</span><span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="load_pred_data"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.load_pred_data">[docs]</a><span class="k">def</span> <span class="nf">load_pred_data</span><span class="p">(</span><span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;加载用于预测的数据。</span>
 
 <span class="sd">    :param start_date: 训练数据的开始日期</span>
@@ -648,7 +648,7 @@
     <span class="k">return</span> <span class="n">df</span>
 
 
-<div class="viewcode-block" id="set_datetime_col"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.set_datetime_col">[文档]</a><span class="k">def</span> <span class="nf">set_datetime_col</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">set_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="set_datetime_col"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.set_datetime_col">[docs]</a><span class="k">def</span> <span class="nf">set_datetime_col</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">set_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;将 ``df`` 中的 ``date`` 列和 ``time`` 列进行合并，生成新列 ``datetime``。</span>
 
 <span class="sd">    :param df: 原始数据</span>
@@ -665,7 +665,7 @@
         <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="calc_th_ratio"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.calc_th_ratio">[文档]</a><span class="k">def</span> <span class="nf">calc_th_ratio</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="calc_th_ratio"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.calc_th_ratio">[docs]</a><span class="k">def</span> <span class="nf">calc_th_ratio</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;计算 ``th_ratio``。&quot;&quot;&quot;</span>
     <span class="n">need_float_column</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;province_dispatch_load_power&#39;</span><span class="p">,</span> <span class="s1">&#39;exported_power&#39;</span><span class="p">,</span> <span class="s1">&#39;grid_capacity&#39;</span><span class="p">,</span>
                          <span class="s1">&#39;new_energy_load_forecast_power&#39;</span><span class="p">,</span> <span class="s1">&#39;not_market_gene_power_value&#39;</span><span class="p">]</span>
@@ -680,7 +680,7 @@
         <span class="n">df</span><span class="p">[</span><span class="s1">&#39;y_value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
 
-<div class="viewcode-block" id="rectify_result"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.rectify_result">[文档]</a><span class="k">def</span> <span class="nf">rectify_result</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+<div class="viewcode-block" id="rectify_result"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.rectify_result">[docs]</a><span class="k">def</span> <span class="nf">rectify_result</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;对预测结果进行修正。&quot;&quot;&quot;</span>
     <span class="n">rec_flag</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;minimal&#39;</span><span class="p">,</span> <span class="s1">&#39;maximum&#39;</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">rec_flag</span><span class="p">:</span>
@@ -726,7 +726,7 @@
             <span class="n">df_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">edge_val</span><span class="p">,</span> <span class="s1">&#39;y_value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rec_value</span>
 
 
-<div class="viewcode-block" id="get_forecast_cap"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.get_forecast_cap">[文档]</a><span class="k">def</span> <span class="nf">get_forecast_cap</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="get_forecast_cap"><a class="viewcode-back" href="../../api.html#shanxi.dl_node_price_forecast.get_forecast_cap">[docs]</a><span class="k">def</span> <span class="nf">get_forecast_cap</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;本算法的执行需要依赖一个非常重要的参数，即：全网开机容量。这个参数需要进行预估，</span>
 <span class="sd">    目前是人工每天更新，然后存储在服务器中。本函数的作用就是从数据库中获取该参数。</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -809,10 +809,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=8930e309"></script>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=359c27e9"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="../../_static/translations.js?v=beaddf03"></script>
     </body>
 </html>

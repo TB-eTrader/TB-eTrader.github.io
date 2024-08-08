@@ -1,11 +1,11 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN" data-content_root="">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
-        <title>gansu.price_forecast - price forecast and more 1.0 文档</title>
+        <title>gansu.price_forecast - price forecast and more 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=87c5882b" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">price forecast and more 1.0 文档</div></a>
+      <a href="../../index.html"><div class="brand">price forecast and more 1.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">price forecast and more 1.0 文档</span>
+  <span class="sidebar-brand-text">price forecast and more 1.0 documentation</span>
   
 </a><div class="sidebar-tree">
   <ul>
@@ -184,7 +184,7 @@
           </label>
         </div>
         <article role="main">
-          <h1>gansu.price_forecast 源代码</h1><div class="highlight"><pre>
+          <h1>Source code for gansu.price_forecast</h1><div class="highlight"><pre>
 <span></span><span class="ch">#! /root/miniconda3/bin/python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># Author: Sun Jiawei</span>
@@ -281,7 +281,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="correct"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.correct">[文档]</a><span class="k">def</span> <span class="nf">correct</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="correct"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.correct">[docs]</a><span class="k">def</span> <span class="nf">correct</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;修正价格数据.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
@@ -291,7 +291,7 @@
         <span class="k">return</span> <span class="n">val</span></div>
 
 
-<div class="viewcode-block" id="gen_raw_sql"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.gen_raw_sql">[文档]</a><span class="k">def</span> <span class="nf">gen_raw_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="gen_raw_sql"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.gen_raw_sql">[docs]</a><span class="k">def</span> <span class="nf">gen_raw_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;生成原生SQL, 要求 ``sql`` 中只能包含数字与字符串等基本数据类型.</span>
 
 <span class="sd">    :param sql: 待编译的语句</span>
@@ -301,7 +301,7 @@
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">compile_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;literal_binds&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}))</span></div>
 
 
-<div class="viewcode-block" id="PriceForecast"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast">[文档]</a><span class="k">class</span> <span class="nc">PriceForecast</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast">[docs]</a><span class="k">class</span> <span class="nc">PriceForecast</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;预测电价的类.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
                  <span class="n">province_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">remote_ctrl</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">model_dt</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
@@ -352,7 +352,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">indentation</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
-<div class="viewcode-block" id="PriceForecast.post_process"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.post_process">[文档]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="PriceForecast.post_process"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.post_process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">post_process</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;对预测的结果进行后处理.</span>
 
@@ -369,7 +369,7 @@
                 <span class="n">post_vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">post_vals</span></div>
 
-<div class="viewcode-block" id="PriceForecast.fill_weather_data"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.fill_weather_data">[文档]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="PriceForecast.fill_weather_data"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.fill_weather_data">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fill_weather_data</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;For unknown reasons, some weather data is missing, this function is used</span>
 <span class="sd">        to find missing values&#39; indexes and fill them simply.</span>
@@ -417,7 +417,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="PriceForecast.handle_nan"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.handle_nan">[文档]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="PriceForecast.handle_nan"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.handle_nan">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">handle_nan</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;处理nan值&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;value_&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
@@ -440,7 +440,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">continue</span></div>
 
-<div class="viewcode-block" id="PriceForecast.get_oneday_price"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_oneday_price">[文档]</a>    <span class="k">def</span> <span class="nf">get_oneday_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.get_oneday_price"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_oneday_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_oneday_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;获取指定日期的日前或实时价格数据.</span>
 
 <span class="sd">        :param single_day: 日期</span>
@@ -480,7 +480,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="PriceForecast.get_1day_load"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_1day_load">[文档]</a>    <span class="k">def</span> <span class="nf">get_1day_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">power_type_ids</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.get_1day_load"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_1day_load">[docs]</a>    <span class="k">def</span> <span class="nf">get_1day_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">power_type_ids</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;获取指定日期的甘肃省的日前省调负荷/新能源出力/水电出力数据.</span>
 
 <span class="sd">        :param single_day: 日期</span>
@@ -515,7 +515,7 @@
         <span class="n">pivot_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;value_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">pivot_df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">pivot_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="PriceForecast.get_1day_conn"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_1day_conn">[文档]</a>    <span class="k">def</span> <span class="nf">get_1day_conn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.get_1day_conn"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_1day_conn">[docs]</a>    <span class="k">def</span> <span class="nf">get_1day_conn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;获取指定日期的甘肃省的日前联络线总加数据</span>
 
 <span class="sd">        :param single_day: 日期</span>
@@ -544,7 +544,7 @@
         <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;value_30&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="PriceForecast.get_oneday_load"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_oneday_load">[文档]</a>    <span class="k">def</span> <span class="nf">get_oneday_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">power_type_ids</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.get_oneday_load"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_oneday_load">[docs]</a>    <span class="k">def</span> <span class="nf">get_oneday_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">power_type_ids</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;获取指定日期的负荷, 出力及总加联络线数据.</span>
 
 <span class="sd">        :param single_day: 指定日期</span>
@@ -559,7 +559,7 @@
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="PriceForecast.smooth_data"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.smooth_data">[文档]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="PriceForecast.smooth_data"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.smooth_data">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">smooth_data</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Smooth the data.&quot;&quot;&quot;</span>
         <span class="n">maed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -593,7 +593,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;根据天气数据来构造新的特征&quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="PriceForecast.add_feature"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.add_feature">[文档]</a>    <span class="k">def</span> <span class="nf">add_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<div class="viewcode-block" id="PriceForecast.add_feature"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.add_feature">[docs]</a>    <span class="k">def</span> <span class="nf">add_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;添加特征&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ori_fea_cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ori_fea_cols</span> <span class="o">=</span> <span class="p">[]</span>
@@ -616,7 +616,7 @@
 
         <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ori_fea_cols</span> <span class="o">+</span> <span class="n">ts_fts</span></div>
 
-<div class="viewcode-block" id="PriceForecast.train_for_predict"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.train_for_predict">[文档]</a>    <span class="k">def</span> <span class="nf">train_for_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.train_for_predict"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.train_for_predict">[docs]</a>    <span class="k">def</span> <span class="nf">train_for_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;为了预测较长时间的价格, 需要先对相应的负荷数据进行预测.</span>
 
 <span class="sd">        需要预测的负荷共有4种: 省调负荷, 新能源出力, 水电出力以及联络线数据.</span>
@@ -687,7 +687,7 @@
         <span class="n">fea_df</span><span class="p">[</span><span class="s1">&#39;value_100&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fea_df</span><span class="p">[</span><span class="s1">&#39;value_1&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">fea_df</span><span class="p">[</span><span class="s1">&#39;value_2&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">fea_df</span><span class="p">[</span><span class="s1">&#39;value_4&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">fea_df</span><span class="p">[</span><span class="s1">&#39;value_30&#39;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">fea_df</span></div>
 
-<div class="viewcode-block" id="PriceForecast.predict_new_energy"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.predict_new_energy">[文档]</a>    <span class="k">def</span> <span class="nf">predict_new_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.predict_new_energy"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.predict_new_energy">[docs]</a>    <span class="k">def</span> <span class="nf">predict_new_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;利用天气预报数据, 对指定日期的新能源出力数据进行预测.</span>
 
 <span class="sd">        Args:</span>
@@ -762,7 +762,7 @@
         <span class="n">y_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
         <span class="k">return</span> <span class="n">y_df</span></div>
 
-<div class="viewcode-block" id="PriceForecast.get_one_day_data_for_train"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_one_day_data_for_train">[文档]</a>    <span class="k">def</span> <span class="nf">get_one_day_data_for_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.get_one_day_data_for_train"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.get_one_day_data_for_train">[docs]</a>    <span class="k">def</span> <span class="nf">get_one_day_data_for_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">single_day</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;获取指定日期下的用于训练的数据, 包括负荷类数据(``X``)和价格数据(``y``).</span>
 
 <span class="sd">        :param single_day: 指定的日期</span>
@@ -785,7 +785,7 @@
             <span class="n">df_load</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_price</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">j</span><span class="p">:</span> <span class="n">correct</span><span class="p">(</span><span class="n">j</span><span class="p">))</span><span class="o">.</span><span class="n">values</span>
             <span class="k">return</span> <span class="n">df_load</span></div>
 
-<div class="viewcode-block" id="PriceForecast.read_data"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.read_data">[文档]</a>    <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<div class="viewcode-block" id="PriceForecast.read_data"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.read_data">[docs]</a>    <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
                   <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;逐日读取数据.</span>
 
@@ -911,7 +911,7 @@
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df3</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df4</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df30</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span> <span class="o">=</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="PriceForecast.train_model"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.train_model">[文档]</a>    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.train_model"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.train_model">[docs]</a>    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;基于训练集, 增加特征并进行训练.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;增加特征...&#39;</span><span class="p">)</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">)</span>
@@ -921,7 +921,7 @@
         <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">HistGradientBoostingRegressor</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PriceForecast.predict"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.predict">[文档]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predict_start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">predict_end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
+<div class="viewcode-block" id="PriceForecast.predict"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predict_start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">predict_end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
                 <span class="n">nid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;预测价格.</span>
 
@@ -1040,14 +1040,14 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;写入数据库失败&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PriceForecast.save_results"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.save_results">[文档]</a>    <span class="k">def</span> <span class="nf">save_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predict_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.save_results"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.save_results">[docs]</a>    <span class="k">def</span> <span class="nf">save_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predict_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;保存预测结果.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_clear</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_save_clear</span><span class="p">(</span><span class="n">predict_values</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_save_node</span><span class="p">(</span><span class="n">predict_values</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PriceForecast.run"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.run">[文档]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="PriceForecast.run"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;预测程序主入口.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;读取训练数据...&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_end_date</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">market_id</span><span class="p">)</span>
@@ -1166,10 +1166,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=8930e309"></script>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=359c27e9"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="../../_static/translations.js?v=beaddf03"></script>
     </body>
 </html>

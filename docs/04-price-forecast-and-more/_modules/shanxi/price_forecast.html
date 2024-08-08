@@ -1,11 +1,11 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN" data-content_root="">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
-        <title>shanxi.price_forecast - price forecast and more 1.0 文档</title>
+        <title>shanxi.price_forecast - price forecast and more 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=87c5882b" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">price forecast and more 1.0 文档</div></a>
+      <a href="../../index.html"><div class="brand">price forecast and more 1.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">price forecast and more 1.0 文档</span>
+  <span class="sidebar-brand-text">price forecast and more 1.0 documentation</span>
   
 </a><div class="sidebar-tree">
   <ul>
@@ -184,7 +184,7 @@
           </label>
         </div>
         <article role="main">
-          <h1>shanxi.price_forecast 源代码</h1><div class="highlight"><pre>
+          <h1>Source code for shanxi.price_forecast</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># Author: Sun Jiawei</span>
 <span class="c1"># E-mail: sunjiawei@tbea.com</span>
@@ -265,7 +265,7 @@
 <span class="c1"># ====================================================================</span>
 
 
-<div class="viewcode-block" id="parse_args"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.parse_args">[文档]</a><span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
+<div class="viewcode-block" id="parse_args"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.parse_args">[docs]</a><span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">formatter_class</span><span class="o">=</span><span class="n">RawTextHelpFormatter</span><span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-R&#39;</span><span class="p">,</span> <span class="s1">&#39;--remote_control&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;使用私有云数据库的外部接口&#39;</span><span class="p">)</span>
@@ -285,7 +285,7 @@
     <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="fill_weather_data"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.fill_weather_data">[文档]</a><span class="k">def</span> <span class="nf">fill_weather_data</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+<div class="viewcode-block" id="fill_weather_data"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.fill_weather_data">[docs]</a><span class="k">def</span> <span class="nf">fill_weather_data</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;分时天气预测数据可能会存在缺失的记录，此函数的功能是对其进行简单填充&quot;&quot;&quot;</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2022-1-1&#39;</span><span class="p">,</span> <span class="s1">&#39;2022-1-2&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;1H&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:00&#39;</span><span class="p">))[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
     <span class="n">fill_value</span> <span class="o">=</span> <span class="kc">None</span>
@@ -372,7 +372,7 @@
     <span class="k">return</span> <span class="n">df</span>
 
 
-<div class="viewcode-block" id="get_wea_data_and_feature"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.get_wea_data_and_feature">[文档]</a><span class="k">def</span> <span class="nf">get_wea_data_and_feature</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="get_wea_data_and_feature"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.get_wea_data_and_feature">[docs]</a><span class="k">def</span> <span class="nf">get_wea_data_and_feature</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;获取天气数据并特征化。</span>
 
 <span class="sd">    :param df: 原始数据</span>
@@ -433,7 +433,7 @@
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">wea_fea</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseRollPrediction"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction">[文档]</a><span class="k">class</span> <span class="nc">BaseRollPrediction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseRollPrediction"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction">[docs]</a><span class="k">class</span> <span class="nc">BaseRollPrediction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span> <span class="o">=</span> <span class="kc">None</span>
@@ -447,7 +447,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">model_id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="BaseRollPrediction.read_oneday_price"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.read_oneday_price">[文档]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="BaseRollPrediction.read_oneday_price"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.read_oneday_price">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_oneday_price</span><span class="p">(</span><span class="n">single_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;获取指定日期的价格数据。</span>
 
@@ -602,7 +602,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span>
 
-<div class="viewcode-block" id="BaseRollPrediction.read_oneday_load"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.read_oneday_load">[文档]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="BaseRollPrediction.read_oneday_load"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.read_oneday_load">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_oneday_load</span><span class="p">(</span><span class="n">single_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;获取指定日期的负荷（包括省调负荷，联络线计划和新能源出力三类）数据。</span>
 
@@ -754,7 +754,7 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;特征增加完成&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span>
 
-<div class="viewcode-block" id="BaseRollPrediction.read_data"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.read_data">[文档]</a>    <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseRollPrediction.read_data"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.read_data">[docs]</a>    <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;读取数据的函数。</span>
 
 <span class="sd">        .. note::</span>
@@ -916,7 +916,7 @@
         <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month_no&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">months</span>
         <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;is_peak&#39;</span><span class="p">,</span> <span class="s1">&#39;is_weekend&#39;</span><span class="p">,</span> <span class="s1">&#39;hour_no&#39;</span><span class="p">,</span> <span class="s1">&#39;weekday_no&#39;</span><span class="p">,</span> <span class="s1">&#39;month_no&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="BaseRollPrediction.train_model"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.train_model">[文档]</a>    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;da&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseRollPrediction.train_model"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.train_model">[docs]</a>    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;da&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;训练一个模型。&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;增加特征...&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_feature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">,</span> <span class="n">for_train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">price_type</span><span class="o">=</span><span class="n">price_type</span><span class="p">)</span>
@@ -927,7 +927,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">HistGradientBoostingRegressor</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseRollPrediction.predict"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.predict">[文档]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="BaseRollPrediction.predict"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                 <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">do_smooth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -1067,7 +1067,7 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;写入数据库失败&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BaseRollPrediction.save_results"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.save_results">[文档]</a>    <span class="k">def</span> <span class="nf">save_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predict_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseRollPrediction.save_results"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.save_results">[docs]</a>    <span class="k">def</span> <span class="nf">save_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predict_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;保存预测结果。&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">Clear</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_save_clear</span><span class="p">(</span><span class="n">predict_values</span><span class="p">)</span>
@@ -1075,7 +1075,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_save_node</span><span class="p">(</span><span class="n">predict_values</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="DayAheadPricePrediction"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.DayAheadPricePrediction">[文档]</a><span class="k">class</span> <span class="nc">DayAheadPricePrediction</span><span class="p">(</span><span class="n">BaseRollPrediction</span><span class="p">):</span>
+<div class="viewcode-block" id="DayAheadPricePrediction"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.DayAheadPricePrediction">[docs]</a><span class="k">class</span> <span class="nc">DayAheadPricePrediction</span><span class="p">(</span><span class="n">BaseRollPrediction</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base_date</span><span class="p">:</span> <span class="n">date</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -1095,7 +1095,7 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;训练数据的起止日期: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_start_date</span><span class="si">}</span><span class="s1">~</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_end_date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;预测数据的起止日期: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_start_date</span><span class="si">}</span><span class="s1">~</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_end_date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DayAheadPricePrediction.run"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.DayAheadPricePrediction.run">[文档]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">do_smooth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="DayAheadPricePrediction.run"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.DayAheadPricePrediction.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">do_smooth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;执行预测日前电价的入口函数。&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;读取训练数据...&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_end_date</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="p">)</span>
@@ -1111,7 +1111,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="n">fore_values</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="RealTimePriceRollPrediction"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.RealTimePriceRollPrediction">[文档]</a><span class="k">class</span> <span class="nc">RealTimePriceRollPrediction</span><span class="p">(</span><span class="n">BaseRollPrediction</span><span class="p">):</span>
+<div class="viewcode-block" id="RealTimePriceRollPrediction"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.RealTimePriceRollPrediction">[docs]</a><span class="k">class</span> <span class="nc">RealTimePriceRollPrediction</span><span class="p">(</span><span class="n">BaseRollPrediction</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base_date</span><span class="p">:</span> <span class="n">date</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -1130,7 +1130,7 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;训练数据的起止日期: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_start_date</span><span class="si">}</span><span class="s1">~</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_end_date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;预测数据的起止日期: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_start_date</span><span class="si">}</span><span class="s1">~</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_end_date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RealTimePriceRollPrediction.run"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.RealTimePriceRollPrediction.run">[文档]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RealTimePriceRollPrediction.run"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.RealTimePriceRollPrediction.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;执行预测实时电价的入口函数。&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;读取训练数据...&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_end_date</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="p">)</span>
@@ -1238,10 +1238,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=8930e309"></script>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=359c27e9"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="../../_static/translations.js?v=beaddf03"></script>
     </body>
 </html>

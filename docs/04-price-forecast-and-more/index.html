@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN" data-content_root="">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="索引" href="genindex.html" /><link rel="search" title="搜索" href="search.html" /><link rel="next" title="快速开始" href="quickstart.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="快速开始" href="quickstart.html" />
 
     <link rel="shortcut icon" href="_static/favicon.svg"/><!-- Generated with Sphinx 7.1.2 and Furo 2024.01.29 -->
-        <title>price forecast and more 1.0 文档</title>
+        <title>price forecast and more 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=87c5882b" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">price forecast and more 1.0 文档</div></a>
+      <a href="#"><div class="brand">price forecast and more 1.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="#">
   
   
-  <span class="sidebar-brand-text">price forecast and more 1.0 文档</span>
+  <span class="sidebar-brand-text">price forecast and more 1.0 documentation</span>
   
 </a><div class="sidebar-tree">
   <ul>
@@ -187,7 +187,7 @@
         </div>
         <article role="main">
           <section id="id1">
-<h1>价格预测及相关应用<a class="headerlink" href="#id1" title="此标题的永久链接">#</a></h1>
+<h1>价格预测及相关应用<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
 <p>本项目包含了对各个电力市场的价格预测模型，以及在价格预测基础上开展的相关应用（如：
 现货辅助申报、旬分时辅助申报等）。</p>
 <p>不同的电力市场（省份）的脚本分别存储于不同的package中，具体如下：</p>
@@ -195,18 +195,20 @@
 <li><p><strong>山西</strong></p></li>
 </ul>
 <p>山西是第一批电力现货市场试点省份，其市场建设也较为成熟，因此对应的算法也最多。主要为现货电价预测、
-旬分时电价预测以及现货辅助申报三大类。</p>
+中长期分时电价预测、价差预测以及现货辅助申报三大类。</p>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="api.html#module-shanxi.price_forecast"><span class="std std-ref">现货电价(包含节点与统一出清)预测</span></a></p></li>
 <li><p><a class="reference internal" href="api.html#module-shanxi.dl_node_price_forecast"><span class="std std-ref">节点电价预测(基于深度学习)</span></a></p></li>
 <li><p><a class="reference internal" href="api.html#module-shanxi.ten_days_forecast"><span class="std std-ref">旬分时电价预测</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#module-shanxi.month_forecast"><span class="std std-ref">月分时电价预测</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#module-shanxi.price_diff_forecast"><span class="std std-ref">现货价差预测</span></a></p></li>
 <li><p><a class="reference internal" href="api.html#module-shanxi.spot_support"><span class="std std-ref">现货辅助申报</span></a></p></li>
 </ol>
 <ul class="simple">
 <li><p><strong>甘肃</strong></p></li>
 </ul>
 <p>针对甘肃市场，开发了现货电价预测算法，其中包括针对河东与河西的统一出清价格预测和节点价格预测。
-根据甘肃市场的特点，还针对性地开发了竞价日优化预测算法，目的是在提高竞价日的预测精度。</p>
+根据甘肃市场的特点，还针对性地开发了竞价日优化预测算法，目的是提高竞价日的预测精度。</p>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="api.html#module-gansu.price_forecast"><span class="std std-ref">现货电价预测</span></a></p></li>
 <li><p><a class="reference internal" href="api.html#module-gansu.opt_1d_node_price"><span class="std std-ref">竞价日优化预测</span></a></p></li>
@@ -219,7 +221,7 @@
 <li><p><a class="reference internal" href="api.html#module-mengxi.node_price_forecast"><span class="std std-ref">现货节点电价预测</span></a></p></li>
 </ol>
 <section id="id2">
-<h2>目录<a class="headerlink" href="#id2" title="此标题的永久链接">#</a></h2>
+<h2>目录<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a><ul>
@@ -231,8 +233,8 @@
 <li class="toctree-l1"><a class="reference internal" href="api.html">文档与接口</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-utils">0. 项目共用函数</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#id3">1. 山西</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#id9">2. 甘肃</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#id12">3. 蒙西</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#id11">2. 甘肃</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#id14">3. 蒙西</a></li>
 </ul>
 </li>
 </ul>
@@ -298,10 +300,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8930e309"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=359c27e9"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="_static/translations.js?v=beaddf03"></script>
     </body>
 </html>

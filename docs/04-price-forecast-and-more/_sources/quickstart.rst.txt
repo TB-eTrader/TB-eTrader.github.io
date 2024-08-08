@@ -62,15 +62,7 @@
     (pfam)python -m <package_name>.<script_name> [options]
 
 
-不同的脚本所需要的命令行参数是不同的，可以通过 ``-h`` 查看相关命令行参数。完整的用法说明参考各模块的 :ref:`doc <doc-and-api>` 内容。
-
-
-在 :ref:`doc <doc-and-api>` 中，如果一段文本在如下的格式范围内，
-则说明该文本是模块的说明文档。
-
-.. mod-doc::
-
-    一个模块说明文档的示例。
+不同的脚本所需要的命令行参数是不同的，可以通过指定脚本的 ``-h`` 查看帮助。
 
 3. 便捷调用
 
@@ -81,10 +73,15 @@
 
     python crontab.py <positional_arguments> [options]
 
-其中，``positional_arguments`` 为需要调度的脚本名称，可选参数请参考 ``crontab.py`` 的 ``help`` 命令；
-``options`` 为调度脚本的执行参数，可选参数请参考各个脚本的 ``help`` 命令。
+其中，``positional_arguments`` 为需要调度的脚本名称，可选参数请在项目根目录下执行 ``python crontab.py -h`` 查看；
+``options`` 为调度脚本的执行参数，可选参数请参考各个脚本的 ``-h`` 命令。
 
 .. note::
 
     运行 ``crontab.py`` 时确保python版本大于3.6即可，且对于运行目录并无要求；但需要再 ``crontab.py``
     脚本中配置正确的解释器的路径。
+
+4. Auto run
+
+For medium and long term trading, I provide an auto run script to execute algorithms automatically: ``auto_run.py``.
+It use ``cron`` to check periodically that if tomorrow is a trading day. If so, the corresponding algorithm will be executed.
