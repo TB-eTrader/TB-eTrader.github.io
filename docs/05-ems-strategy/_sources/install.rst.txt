@@ -2,33 +2,44 @@
 安装与部署
 ===========
 
-项目的部署依赖Python环境, 首先需要安装基础环境和第三方依赖库.
-安装所需要的软件已经全部打包在 ``software`` 文件夹中.
+项目的部署依赖Python环境，首先需要安装基础环境和第三方依赖库。
+安装所需要的软件已经全部打包在 ``software`` 文件夹中。
 
-1. 将 ``software`` 文件夹中的 **所有内容** 拷贝至目标服务器的特定路径下(推荐路径 ``/home/ems-strategy``);
+1、将 ``software`` 文件夹中的 **所有内容** 拷贝至目标服务器的特定路径下；
 
-2. 切换至该目录(``cd /home/ems-strategy``), 以下所有操作均在该目录下执行;
+    .. note::
 
-3. 执行 ``sh deploy_python.sh`` 来安装Python环境和第三方依赖库, 成功后, 屏幕会打印"All done!";
+        推荐路径 ``/home/ems-strategy``。
 
-.. note::
 
-    可能需要修改 ``deploy_python.sh`` 的权限以使其可以被执行.
+2、切换至该目录（``cd /home/ems-strategy``），以下所有操作均在该目录下执行；
 
-4. 执行 ``source ~/.bashrc`` 来使Python环境生效;
+3、执行 ``sh deploy_python.sh`` 来安装Python环境和第三方依赖库，成功后，屏幕会打印"All done!"；
 
-至此, 策略运行所依赖的环境已经安装完成, 接下来需要部署策略代码.
+    .. note::
 
-5. 执行 ``unzip -d code code.zip`` 解压源代码压缩包;
+        可能需要修改 ``deploy_python.sh`` 的权限以使其可以被执行。
 
-6. 执行 ``cd code && sh start.sh`` 来启动策略;
 
-.. note::
+4、执行 ``source ~/.bashrc`` 来使Python环境生效；
 
-    可能需要修改 ``start.sh`` 的权限以使其可以被执行.
+至此，策略运行所依赖的环境已经安装完成，接下来需要部署策略代码。
 
-7. (可选)正常情况下, 策略启动后没有任何输出, 可以通过 ``ps -ef | grep gunicorn`` 来查看进程是否启动;
+5、执行 ``unzip -d code code.zip`` 解压源代码压缩包；
 
-8. (可选)执行 ``sh stop.sh`` 来停止策略.
+6、执行 ``cd code && sh start.sh`` 来启动策略；
 
-至此, 策略服务已经部署完成.
+    .. note::
+
+        可能需要修改 ``start.sh`` 的权限以使其可以被执行。
+
+    .. note::
+
+        在默认情况下，服务会在 ``8008`` 端口进行监听，如果需要修改该设置或其他设置，请修改 ``gunicorn_cfg.py`` 文件。
+
+
+7、（可选）正常情况下, 策略启动后没有任何输出，可以通过 ``ps -ef | grep gunicorn`` 来查看进程是否启动；
+
+8、（可选）执行 ``sh stop.sh`` 来停止策略。
+
+至此，策略服务已经部署完成。

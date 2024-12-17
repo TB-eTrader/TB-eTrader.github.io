@@ -191,12 +191,12 @@
 <h1>modules’ API<a class="headerlink" href="#modules-api" title="Link to this heading">#</a></h1>
 <section id="module-ems_app">
 <span id="ems-app-py"></span><h2>ems_app.py<a class="headerlink" href="#module-ems_app" title="Link to this heading">#</a></h2>
-<p>API定义模块.</p>
-<p>各个策略的API在本模块进行定义.</p>
+<p>API定义模块。</p>
+<p>各个策略的API在本模块进行定义。</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ems_app.distribute">
 <span class="sig-name descname"><span class="pre">distribute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ems_app.distribute" title="Link to this definition">#</a></dt>
-<dd><p>功率分配API的入口函数.</p>
+<dd><p>功率分配API的入口函数。</p>
 <details class="summary-">
 <summary>入参示例</summary><div class="highlight-json notranslate" id="pd-input-param"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-100</span><span class="p">,</span>
@@ -236,7 +236,7 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-</details><p>各参数的含义如下:</p>
+</details><p>各参数的含义如下：</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-left">
 <thead>
@@ -247,39 +247,39 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">value</span></code></p></td>
-<td><p>下发的功率, 单位: kW, 正数表示放电, 负数表示充电.</p></td>
+<td><p>下发的功率，单位：kW，正数表示放电，负数表示充电。</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">duration</span></code></p></td>
-<td><p>下发功率的持续时间, 单位: 分钟</p></td>
+<td><p>下发功率的持续时间，单位： 秒</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">min_soc</span></code></p></td>
-<td><p>储能系统的最小SOC, 百分比值, 取值为0-100</p></td>
+<td><p>储能系统的最小SOC，百分比值，取值为0-100</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_soc</span></code></p></td>
-<td><p>储能系统的最大SOC, 百分比值, 取值为0-100</p></td>
+<td><p>储能系统的最大SOC，百分比值，取值为0-100</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code></p></td>
-<td><p>各PCS的状态组成的json, 0表示不可对其分配功率, 其他表示可以对其分配功率</p></td>
+<td><p>各PCS的状态组成的json，0表示不可对其分配功率，其他表示可以对其分配功率</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">json</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">init_soc</span></code></p></td>
-<td><p>各PCS的初始SOC组成的json, 单位: %</p></td>
+<td><p>各PCS的初始SOC组成的json，百分比值</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">json</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_charge_power</span></code></p></td>
-<td><p>各PCS的最大充电功率组成的json, 功率单位为kW, 其值均为正数</p></td>
+<td><p>各PCS的最大充电功率组成的json，功率单位为kW，其值均为正数</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">json</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_discharge_power</span></code></p></td>
-<td><p>各PCS的最大放电功率组成的json, 功率单位为kW, 其值均为正数</p></td>
+<td><p>各PCS的最大放电功率组成的json，功率单位为kW，其值均为正数</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">json</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cap</span></code></p></td>
-<td><p>各PCS的容量组成的json, 单位: kWh</p></td>
+<td><p>各PCS的容量组成的json，单位：kWh</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">json</span></code></p></td>
 </tr>
 </tbody>
@@ -308,13 +308,12 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
-<td><p>运行状态标识, 可能的值包括:<code class="docutils literal notranslate"><span class="pre">success</span></code>, <code class="docutils literal notranslate"><span class="pre">done</span></code> 和 <code class="docutils literal notranslate"><span class="pre">fail</span></code>. 其中, <code class="docutils literal notranslate"><span class="pre">success</span></code> 表示分配成功; <code class="docutils literal notranslate"><span class="pre">done</span></code>
-表示分配成功且各PCS分配到的功率为0, 即完成分配; <code class="docutils literal notranslate"><span class="pre">fail</span></code> 表示分配失败.</p></td>
+<td><p>运行状态标识，可能的值包括：<code class="docutils literal notranslate"><span class="pre">success</span></code>，和 <code class="docutils literal notranslate"><span class="pre">fail</span></code>。其中，<code class="docutils literal notranslate"><span class="pre">success</span></code> 表示分配成功；<code class="docutils literal notranslate"><span class="pre">fail</span></code> 表示分配失败。</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">data</span></code></p></td>
-<td><p>如果分配成功, 则为各PCS的功率分配结果组成的json, 功率单位为kW;
-如果分配失败, 则为错误信息的str.</p></td>
+<td><p>如果分配成功，则该值为各PCS的功率分配结果组成的json， 功率单位为kW；
+如果分配失败，则该值为错误信息的描述。</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">json</span></code>/<code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
 </tr>
 </tbody>
@@ -325,25 +324,24 @@
 </section>
 <section id="module-main.pd_main">
 <span id="main-pd-main-py"></span><h2>main.pd_main.py<a class="headerlink" href="#module-main.pd_main" title="Link to this heading">#</a></h2>
-<p>功率分配实现模块.</p>
+<p>功率分配实现模块。</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="main.pd_main.PowerDistribution">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PowerDistribution</span></span><a class="headerlink" href="#main.pd_main.PowerDistribution" title="Link to this definition">#</a></dt>
-<dd><p>执行功率分配的类.</p>
+<dd><p>执行功率分配的类。</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="main.pd_main.PowerDistribution._distribute">
 <span class="sig-name descname"><span class="pre">_distribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#main.pd_main.PowerDistribution._distribute" title="Link to this definition">#</a></dt>
-<dd><p>实际上执行功率分配的递归函数.</p>
+<dd><p>实际上执行功率分配的递归函数。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>power</strong> – 待分配的功率, 单位是kW, 正值表示放电, 负值表示充电</p></li>
+<li><p><strong>power</strong> – 待分配的功率，单位是kW，正值表示放电，负值表示充电</p></li>
 <li><p><strong>units_obj</strong> – 用于承接 <code class="docutils literal notranslate"><span class="pre">power</span></code> 的候选储能单元</p></li>
 </ul>
 </dd>
 <dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, 但会更新 <code class="docutils literal notranslate"><span class="pre">self.final_units_obj</span></code> 对象,
-该对象存储了各储能单元的最终功率和SOC值.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,14 +349,14 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="main.pd_main.PowerDistribution.distribute">
 <span class="sig-name descname"><span class="pre">distribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.pd_main.PowerDistribution.distribute" title="Link to this definition">#</a></dt>
-<dd><p>根据传入的数据进行功率分配的主函数.</p>
+<dd><p>根据传入的数据进行功率分配的主函数。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>json_data</strong> – 入参, <a class="reference internal" href="#pd-input-param"><span class="std std-ref">参数格式</span></a>.</p>
+<dd class="field-odd"><p><strong>json_data</strong> – 入参，<a class="reference internal" href="#pd-input-param"><span class="std std-ref">参数格式</span></a></p>
 </dd>
 <dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p>返回各储能单元的功率分配情况, 格式为: <code class="docutils literal notranslate"><span class="pre">{pcs编号:</span> <span class="pre">分配功率}</span></code>,
-参考 <a class="reference internal" href="#pd-output-param"><span class="std std-ref">接口返回值的”data”部分</span></a>.</p>
+<dd class="field-even"><p>返回各储能单元的功率分配情况，格式为：<code class="docutils literal notranslate"><span class="pre">{pcs编号:</span> <span class="pre">分配功率}</span></code>
+参考 <a class="reference internal" href="#pd-output-param"><span class="std std-ref">接口返回值的“data”部分</span></a>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -366,12 +364,12 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="main.pd_main.PowerDistribution.every_pcs_is_full">
 <span class="sig-name descname"><span class="pre">every_pcs_is_full</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#main.pd_main.PowerDistribution.every_pcs_is_full" title="Link to this definition">#</a></dt>
-<dd><p>经过功率分配后, 检验是否每个pcs均达到了最大功率或其SOC达到限制.</p>
-<p>如果是, 则返回``True``; 否则返回那些没有达到最大功率或SOC限制的pcs的编号.</p>
+<dd><p>经过功率分配后，检验是否每个pcs均达到了最大功率或其SOC达到限制。</p>
+<p>如果是，则返回``True``；否则返回那些没有达到最大功率或SOC限制的pcs的编号。</p>
 <dl class="field-list simple">
 <dt class="field-odd">返回<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: 如果所有pcs均已达到最大功率或SOC限制
-<code class="docutils literal notranslate"><span class="pre">UnitsObj</span></code>: 如果有pcs没有达到最大功率或SOC限制, 则返回这些储能单元对象.</p>
+<code class="docutils literal notranslate"><span class="pre">UnitsObj</span></code>: 如果有pcs没有达到最大功率或SOC限制，则返回这些储能单元对象</p>
 </dd>
 </dl>
 </dd></dl>
@@ -379,20 +377,20 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="main.pd_main.PowerDistribution.get_power_lack">
 <span class="sig-name descname"><span class="pre">get_power_lack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#main.pd_main.PowerDistribution.get_power_lack" title="Link to this definition">#</a></dt>
-<dd><p>计算各储能单元对象的总功率是否满足待分配功率的要求.</p>
+<dd><p>计算各储能单元对象的总功率是否满足待分配功率的要求。</p>
 <div class="admonition note">
 <p class="admonition-title">备注</p>
-<p>在本应用中, 假设待分配的功率及各储能单元分配到的功率均为整数.
-由于四舍五入的原因, 可能会出现分配后的总功率与待分配功率不一致的情况,
-按照调度要求, 允许多充/多放, 但不允许少充/少放.</p>
+<p>在本应用中，假设待分配的功率及各储能单元分配到的功率均为整数。
+由于四舍五入的原因，可能会出现分配后的总功率与待分配功率不一致的情况，
+按照调度要求，允许多充/多放，但不允许少充/少放。</p>
 </div>
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">待处理</p>
-<p>对于浮点数的情况, 需要进一步处理.</p>
+<p>对于浮点数的情况，需要进一步处理。</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">返回<span class="colon">:</span></dt>
-<dd class="field-odd"><p>如果功率缺额, 返回缺额的功率值; 否则返回0.</p>
+<dd class="field-odd"><p>如果功率缺额，返回缺额的功率值；否则返回0</p>
 </dd>
 </dl>
 </dd></dl>
@@ -400,13 +398,13 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="main.pd_main.PowerDistribution.update_final_units_obj">
 <span class="sig-name descname"><span class="pre">update_final_units_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#main.pd_main.PowerDistribution.update_final_units_obj" title="Link to this definition">#</a></dt>
-<dd><p>更新最终的储能单元对象的状态值.</p>
+<dd><p>更新最终的储能单元对象（<code class="docutils literal notranslate"><span class="pre">self.final_units_obj</span></code>）的状态值。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>units_obj</strong> – 待更新的储能单元对象</p>
 </dd>
 <dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, 但会更新 <code class="docutils literal notranslate"><span class="pre">self.final_units_obj</span></code> 对象.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -416,16 +414,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="main.pd_main.para_verify">
 <span class="sig-name descname"><span class="pre">para_verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#main.pd_main.para_verify" title="Link to this definition">#</a></dt>
-<dd><p>对请求参数的合法性进行校验.</p>
+<dd><p>对请求参数的合法性进行校验。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>json_data</strong> – 请求的参数, <a class="reference internal" href="#pd-input-param"><span class="std std-ref">格式</span></a>.</p>
+<dd class="field-odd"><p><strong>json_data</strong> – 请求的参数，<a class="reference internal" href="#pd-input-param"><span class="std std-ref">格式</span></a></p>
 </dd>
 <dt class="field-even">抛出<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – 如果参数不合法, 则抛出异常.</p>
+<dd class="field-even"><p><strong>ValueError</strong> – 如果参数不合法，则抛出异常</p>
 </dd>
 <dt class="field-odd">返回<span class="colon">:</span></dt>
-<dd class="field-odd"><p>如果合法则返回 <code class="docutils literal notranslate"><span class="pre">True</span></code>, 否则抛出 <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> 异常.</p>
+<dd class="field-odd"><p>如果合法则返回 <code class="docutils literal notranslate"><span class="pre">True</span></code>，否则抛出 <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> 异常</p>
 </dd>
 </dl>
 </dd></dl>
