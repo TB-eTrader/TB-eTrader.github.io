@@ -200,6 +200,7 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">RawTextHelpFormatter</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -207,7 +208,7 @@
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">select</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">insert</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">HistGradientBoostingRegressor</span>
 
-<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">init_logger</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">init_log</span>
 <span class="c1"># ====================================================================</span>
 <span class="c1"># Setting zone start</span>
 <span class="c1"># ====================================================================</span>
@@ -250,7 +251,7 @@
 
 <span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">formatter_class</span><span class="o">=</span><span class="n">RawTextHelpFormatter</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-R&#39;</span><span class="p">,</span> <span class="s1">&#39;--remote_control&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;使用私有云数据库的外部接口&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-P&#39;</span><span class="p">,</span> <span class="s1">&#39;--prod_env&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;写入生产环境数据库&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--node&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;123,124,129&#39;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;需要预测的节点id. 如果有多个节点, 则它们之间用英文逗号分割.&#39;</span><span class="p">)</span>
 
@@ -544,19 +545,22 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">init_log</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;开始执行程序&#39;</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
 
     <span class="n">Date</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">date</span>
-    <span class="n">RemoteControl</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">remote_control</span>
+    <span class="n">ProdEnv</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">prod_env</span>
     <span class="n">Nodes</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">node</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;参数:</span>
 <span class="s2">    Date: </span><span class="si">{</span><span class="n">Date</span><span class="si">}</span>
 <span class="s2">    Nodes: </span><span class="si">{</span><span class="n">Nodes</span><span class="si">}</span>
-<span class="s2">    RemoteControl: </span><span class="si">{</span><span class="n">RemoteControl</span><span class="si">}</span>
+<span class="s2">    ProdEnv: </span><span class="si">{</span><span class="n">ProdEnv</span><span class="si">}</span>
 <span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">use_dev_db</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">ProdEnv</span>
+
     <span class="k">if</span> <span class="n">Date</span><span class="p">:</span>
         <span class="n">BASE_DATE</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">Date</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -565,7 +569,7 @@
     <span class="n">NodeIds</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">Nodes</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;创建表及连接engine...&#39;</span><span class="p">)</span>
-    <span class="n">tab_dict</span><span class="p">,</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">RemoteControl</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">)</span>
+    <span class="n">tab_dict</span><span class="p">,</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">use_dev_db</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;完成&#39;</span><span class="p">)</span>
 
     <span class="c1"># 日前价格和实时价格同时预测</span>

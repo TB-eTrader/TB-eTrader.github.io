@@ -433,11 +433,11 @@ Default is <code class="docutils literal notranslate"><span class="pre">None</sp
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils._get_db_url">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">_get_db_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/utils.html#_get_db_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils._get_db_url" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">_get_db_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_dev_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/utils.html#_get_db_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils._get_db_url" title="Permalink to this definition">#</a></dt>
 <dd><p>获取数据库的连接信息.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>remote_control</strong> – 是否使用私有云数据库的外部接口</p>
+<dd class="field-odd"><p><strong>use_dev_db</strong> – 是否使用测试环境数据库</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>数据库连接字符串</p>
@@ -447,12 +447,12 @@ Default is <code class="docutils literal notranslate"><span class="pre">None</sp
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.create_engine_and_tabs">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">create_engine_and_tabs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab_name_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/utils.html#create_engine_and_tabs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.create_engine_and_tabs" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">create_engine_and_tabs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_dev_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab_name_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/utils.html#create_engine_and_tabs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.create_engine_and_tabs" title="Permalink to this definition">#</a></dt>
 <dd><p>创建数据库引擎, 并生成表对象.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>remote_control</strong> – 是否使用私有云数据库的外部接口</p></li>
+<li><p><strong>use_dev_db</strong> – 是否使用测试环境数据库</p></li>
 <li><p><strong>tab_name_list</strong> – 需要创建的表名列表</p></li>
 </ul>
 </dd>
@@ -480,18 +480,15 @@ Default is <code class="docutils literal notranslate"><span class="pre">None</sp
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="utils.init_logger">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">init_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">call_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Logger</span></span></span><a class="reference internal" href="_modules/utils.html#init_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.init_logger" title="Permalink to this definition">#</a></dt>
-<dd><p>初始化一个日志记录器对象。</p>
+<dt class="sig sig-object py" id="utils.init_log">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">init_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">call_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#init_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.init_log" title="Permalink to this definition">#</a></dt>
+<dd><p>初始化一个日志配置。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>call_file_path</strong> – 调用本函数的文件的绝对路径</p></li>
 <li><p><strong>debug</strong> – 是否开启调试模式，默认为 <code class="docutils literal notranslate"><span class="pre">False</span></code>，开启则将日志打印至控制台而非写入文件</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">logging.Logger</span></code> 对象</p>
 </dd>
 </dl>
 </dd></dl>
@@ -572,7 +569,7 @@ python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast<sp
 <span class="c1"># 强制预测基准日期为2024-6-1的日前统一出清价格</span>
 python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast<span class="w"> </span>-C<span class="w"> </span>-F<span class="w"> </span>--market<span class="w"> </span><span class="m">3</span><span class="w"> </span>-D<span class="w"> </span><span class="m">2024</span>-6-1
 <span class="c1"># 预测节点电价，基准日期和市场信息默认进行推断</span>
-python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast<span class="w"> </span>-R
+python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast
 </pre></div>
 </div>
 </div>
@@ -581,7 +578,7 @@ python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast<sp
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shanxi.price_forecast.</span></span><span class="sig-name descname"><span class="pre">BaseRollPrediction</span></span><a class="reference internal" href="_modules/shanxi/price_forecast.html#BaseRollPrediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.BaseRollPrediction" title="Permalink to this definition">#</a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="shanxi.price_forecast.BaseRollPrediction.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_smooth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'da'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/shanxi/price_forecast.html#BaseRollPrediction.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.BaseRollPrediction.predict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_smooth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/shanxi/price_forecast.html#BaseRollPrediction.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.BaseRollPrediction.predict" title="Permalink to this definition">#</a></dt>
 <dd><p>读取预测数据，进行特征工程，并进行预测。</p>
 </dd></dl>
 
@@ -669,7 +666,7 @@ python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast<sp
 
 <dl class="py method">
 <dt class="sig sig-object py" id="shanxi.price_forecast.BaseRollPrediction.train_model">
-<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'da'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/shanxi/price_forecast.html#BaseRollPrediction.train_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.BaseRollPrediction.train_model" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/shanxi/price_forecast.html#BaseRollPrediction.train_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.BaseRollPrediction.train_model" title="Permalink to this definition">#</a></dt>
 <dd><p>训练一个模型。</p>
 </dd></dl>
 
@@ -698,32 +695,15 @@ python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast<sp
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="shanxi.price_forecast.fill_weather_data">
-<span class="sig-prename descclassname"><span class="pre">shanxi.price_forecast.</span></span><span class="sig-name descname"><span class="pre">fill_weather_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shanxi/price_forecast.html#fill_weather_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.fill_weather_data" title="Permalink to this definition">#</a></dt>
-<dd><p>分时天气预测数据可能会存在缺失的记录，此函数的功能是对其进行简单填充</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="shanxi.price_forecast.get_wea_data_and_feature">
-<span class="sig-prename descclassname"><span class="pre">shanxi.price_forecast.</span></span><span class="sig-name descname"><span class="pre">get_wea_data_and_feature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">for_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/shanxi/price_forecast.html#get_wea_data_and_feature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.get_wea_data_and_feature" title="Permalink to this definition">#</a></dt>
-<dd><p>获取天气数据并特征化。</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – 原始数据</p></li>
-<li><p><strong>for_train</strong> – 是否为训练集</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="shanxi.price_forecast.parse_args">
 <span class="sig-prename descclassname"><span class="pre">shanxi.price_forecast.</span></span><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shanxi/price_forecast.html#parse_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.parse_args" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shanxi.price_forecast.power_like_acc">
+<span class="sig-prename descclassname"><span class="pre">shanxi.price_forecast.</span></span><span class="sig-name descname"><span class="pre">power_like_acc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pstd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">332</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shanxi/price_forecast.html#power_like_acc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.price_forecast.power_like_acc" title="Permalink to this definition">#</a></dt>
+<dd><p>仿照功率预测准确率来计算电价预测准确率</p>
+</dd></dl>
 
 </section>
 <section id="module-shanxi.dl_node_price_forecast">
@@ -867,10 +847,8 @@ python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast<sp
 <section id="module-shanxi.ten_days_forecast">
 <span id="id7"></span><h3>1.3 旬分时电价预测<a class="headerlink" href="#module-shanxi.ten_days_forecast" title="Permalink to this heading">#</a></h3>
 <div class="custom-doc admonition">
-<p>This package is the algorithm for ten days’ electricity price forecast
-for Shanxi province, including the node-ly price and transaction price.</p>
-<p>According to the trading rules of electricity market, each hour’s price
-must in a specified price interval.</p>
+<p>预测的旬分时电价主要用于辅助开展旬集中竞价交易。</p>
+<p>本算法在旬交易开展日的前一日自动运行，预测目标旬的24点的成交价和日前均价。</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="shanxi.ten_days_forecast.TenDaysDecisionSupport">
@@ -930,7 +908,7 @@ must in a specified price interval.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="shanxi.ten_days_forecast.TenDaysForecast">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shanxi.ten_days_forecast.</span></span><span class="sig-name descname"><span class="pre">TenDaysForecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_ids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shanxi/ten_days_forecast.html#TenDaysForecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.ten_days_forecast.TenDaysForecast" title="Permalink to this definition">#</a></dt>
-<dd><p>预测旬度日前分时电价，包括两个节点和统一出清价格。</p>
+<dd><p>旬度价格预测算法。</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="shanxi.ten_days_forecast.TenDaysForecast.find_most_similar">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_most_similar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/shanxi/ten_days_forecast.html#TenDaysForecast.find_most_similar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.ten_days_forecast.TenDaysForecast.find_most_similar" title="Permalink to this definition">#</a></dt>
@@ -961,25 +939,22 @@ must in a specified price interval.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="shanxi.ten_days_forecast.TenDaysForecast.predict_final_price">
 <span class="sig-name descname"><span class="pre">predict_final_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tuple</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pd.DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shanxi/ten_days_forecast.html#TenDaysForecast.predict_final_price"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.ten_days_forecast.TenDaysForecast.predict_final_price" title="Permalink to this definition">#</a></dt>
-<dd><p>According to the inner data, predicting the final price and save.</p>
+<dd><p>预测最终的分时价格。</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="shanxi.ten_days_forecast.TenDaysForecast.predict_inner_data">
 <span class="sig-name descname"><span class="pre">predict_inner_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shanxi/ten_days_forecast.html#TenDaysForecast.predict_inner_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.ten_days_forecast.TenDaysForecast.predict_inner_data" title="Permalink to this definition">#</a></dt>
-<dd><p>This is the inner part of the main prediction.</p>
-<p>For node price prediction, new energy power data, outer load data
-and provincial load data will be predicted to forecast the final price.</p>
-<p>For transaction price prediction, only new energy power data will be
-predicted to forecast the final price. Moreover, new energy power data
-is separated into 2 parts: wind power data and solar power data.</p>
-<p>Both the 2 above processes are supported by weather (forecast) data.</p>
+<dd><p>在预测旬度价格时，需要用到的供需数据往往尚未公布，因此需要先预测这些数据。</p>
+<p>对于节点价格而言，用到的供需数据包括：新能源出力（汇总）、外送负荷、省调负荷；对于
+成交价格而言，用到的供需数据包括：风电出力、光伏出力。</p>
+<p>预测过程需要用到天气（预报）数据。</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="shanxi.ten_days_forecast.TenDaysForecast.prepare_weather_data">
 <span class="sig-name descname"><span class="pre">prepare_weather_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/shanxi/ten_days_forecast.html#TenDaysForecast.prepare_weather_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.ten_days_forecast.TenDaysForecast.prepare_weather_data" title="Permalink to this definition">#</a></dt>
-<dd><p>读取并处理天气实测数据与预报数据。</p>
+<dd><p>读取并处理来自和风气象的天气实测数据与预报数据。</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1093,15 +1068,15 @@ is separated into 2 parts: wind power data and solar power data.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="shanxi.ten_days_forecast.infer_date_t">
 <span class="sig-prename descclassname"><span class="pre">shanxi.ten_days_forecast.</span></span><span class="sig-name descname"><span class="pre">infer_date_t</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shanxi/ten_days_forecast.html#infer_date_t"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.ten_days_forecast.infer_date_t" title="Permalink to this definition">#</a></dt>
-<dd><p>This function is used in transaction price prediction to determine
-the start and end date of train dataset and predict dataset, separately.</p>
-<p>In actual scenarios, prediction algorithm will be executed at some days
-before <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, thus the start and end date needed to be modified.</p>
+<dd><p>在成交价预测时，用于确定训练集和预测集的起止日期。</p>
+<p>在实际应用时，预测算法通常会在距离目标旬还有数天的时候执行，
+因此，需要对训练集和预测集的起止日期进行调整。</p>
+<p>判断某个日期可用的标准是：该日期的新能源出力、风电出力、光伏出力均存在且完整。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start_date</strong> – Start date of ten-day</p></li>
-<li><p><strong>end_date</strong> – End date of ten-day</p></li>
+<li><p><strong>start_date</strong> – 旬的开始日期</p></li>
+<li><p><strong>end_date</strong> – 旬的结束日期</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1141,11 +1116,8 @@ before <code class="docutils literal notranslate"><span class="pre">start_date</
 <section id="module-shanxi.month_forecast">
 <span id="id8"></span><h3>1.4 月分时电价预测<a class="headerlink" href="#module-shanxi.month_forecast" title="Permalink to this heading">#</a></h3>
 <div class="custom-doc admonition">
-<p>This package is the algorithm of monthly electricity price forecast
-for Shanxi province, including the node-ly price and transaction price.</p>
-<p>According to the trading rules of electricity market, each hour’s price
-must in a specified price interval.</p>
-<p>This algorithm is one of the project results of NCEPU.</p>
+<p>预测的月分时电价主要用于辅助开展月集中竞价交易。</p>
+<p>本算法在月交易开展日的前一日自动运行，预测目标月的24点的成交价和日前均价。</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="shanxi.month_forecast.DmlModel">
@@ -1493,7 +1465,7 @@ If no such day is found, raise an error.</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="gansu.price_forecast.PriceForecast">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gansu.price_forecast.</span></span><span class="sig-name descname"><span class="pre">PriceForecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iter_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">market_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">province_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_ctrl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_clear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gansu/price_forecast.html#PriceForecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gansu.price_forecast.PriceForecast" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gansu.price_forecast.</span></span><span class="sig-name descname"><span class="pre">PriceForecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iter_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">market_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">province_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_dev_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_clear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gansu/price_forecast.html#PriceForecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gansu.price_forecast.PriceForecast" title="Permalink to this definition">#</a></dt>
 <dd><p>预测电价的类.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gansu.price_forecast.PriceForecast.add_feature">
@@ -1980,7 +1952,7 @@ end_date: 预测数据的结束日期</p>
 <li><a class="reference internal" href="#utils._get_db_url"><code class="docutils literal notranslate"><span class="pre">_get_db_url()</span></code></a></li>
 <li><a class="reference internal" href="#utils.create_engine_and_tabs"><code class="docutils literal notranslate"><span class="pre">create_engine_and_tabs()</span></code></a></li>
 <li><a class="reference internal" href="#utils.get_date_range"><code class="docutils literal notranslate"><span class="pre">get_date_range()</span></code></a></li>
-<li><a class="reference internal" href="#utils.init_logger"><code class="docutils literal notranslate"><span class="pre">init_logger()</span></code></a></li>
+<li><a class="reference internal" href="#utils.init_log"><code class="docutils literal notranslate"><span class="pre">init_log()</span></code></a></li>
 <li><a class="reference internal" href="#utils.is_leap_year"><code class="docutils literal notranslate"><span class="pre">is_leap_year()</span></code></a></li>
 <li><a class="reference internal" href="#utils.smooth_data"><code class="docutils literal notranslate"><span class="pre">smooth_data()</span></code></a></li>
 <li><a class="reference internal" href="#utils.valid_date"><code class="docutils literal notranslate"><span class="pre">valid_date()</span></code></a></li>
@@ -2006,9 +1978,8 @@ end_date: 预测数据的结束日期</p>
 <li><a class="reference internal" href="#shanxi.price_forecast.RealTimePriceRollPrediction.run"><code class="docutils literal notranslate"><span class="pre">RealTimePriceRollPrediction.run()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#shanxi.price_forecast.fill_weather_data"><code class="docutils literal notranslate"><span class="pre">fill_weather_data()</span></code></a></li>
-<li><a class="reference internal" href="#shanxi.price_forecast.get_wea_data_and_feature"><code class="docutils literal notranslate"><span class="pre">get_wea_data_and_feature()</span></code></a></li>
 <li><a class="reference internal" href="#shanxi.price_forecast.parse_args"><code class="docutils literal notranslate"><span class="pre">parse_args()</span></code></a></li>
+<li><a class="reference internal" href="#shanxi.price_forecast.power_like_acc"><code class="docutils literal notranslate"><span class="pre">power_like_acc()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-shanxi.dl_node_price_forecast">1.2 现货电价预测(基于深度学习)</a><ul>

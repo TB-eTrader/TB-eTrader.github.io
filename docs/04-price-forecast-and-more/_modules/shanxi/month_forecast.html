@@ -192,16 +192,13 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. mod-doc::</span>
 
-<span class="sd">    This package is the algorithm of monthly electricity price forecast</span>
-<span class="sd">    for Shanxi province, including the node-ly price and transaction price.</span>
+<span class="sd">    预测的月分时电价主要用于辅助开展月集中竞价交易。</span>
 
-<span class="sd">    According to the trading rules of electricity market, each hour&#39;s price</span>
-<span class="sd">    must in a specified price interval.</span>
-
-<span class="sd">    This algorithm is one of the project results of NCEPU.</span>
+<span class="sd">    本算法在月交易开展日的前一日自动运行，预测目标月的24点的成交价和日前均价。</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -215,7 +212,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">TensorDataset</span>
 
-<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">valid_month</span><span class="p">,</span> <span class="n">init_logger</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">valid_month</span><span class="p">,</span> <span class="n">init_log</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span>
                    <span class="n">DBDataLoad</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.deep_utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">calc_month</span><span class="p">,</span> <span class="n">post_process</span><span class="p">,</span>
                          <span class="n">save_result</span><span class="p">,</span> <span class="n">agg_date_time</span><span class="p">,</span>
@@ -527,7 +524,8 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">init_log</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n\n\n\n\n</span><span class="s1">args: </span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 

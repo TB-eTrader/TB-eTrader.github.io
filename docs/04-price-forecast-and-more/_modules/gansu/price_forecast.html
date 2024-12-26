@@ -200,6 +200,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">RawTextHelpFormatter</span>
@@ -209,7 +210,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">select</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">insert</span><span class="p">,</span> <span class="n">and_</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">HistGradientBoostingRegressor</span><span class="p">,</span> <span class="n">RandomForestRegressor</span>
-<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">init_logger</span><span class="p">,</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">init_log</span><span class="p">,</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span>
 
 <span class="c1"># ====================================================================</span>
 <span class="c1"># Setting zone start</span>
@@ -235,17 +236,18 @@
         <span class="mi">3</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
         <span class="mi">1</span><span class="p">:</span> <span class="mi">14</span>
     <span class="p">},</span>
-    <span class="s1">&#39;hd&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="mi">3</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="mi">10</span>
-    <span class="p">},</span>
+    <span class="c1"># 自市场合并后，弃用河东的模型id</span>
+    <span class="c1"># &#39;hd&#39;: {</span>
+    <span class="c1">#     3: 9,</span>
+    <span class="c1">#     1: 10</span>
+    <span class="c1"># },</span>
     <span class="s1">&#39;hx&#39;</span><span class="p">:</span> <span class="p">{</span>
         <span class="mi">3</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
         <span class="mi">1</span><span class="p">:</span> <span class="mi">12</span>
     <span class="p">}</span>
 <span class="p">}</span>
-<span class="c1">#</span>
-<span class="n">ZONE_ID</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;hd&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;hx&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="c1"># 弃用区域id</span>
+<span class="c1"># ZONE_ID = {&#39;hd&#39;: 1, &#39;hx&#39;: 2}</span>
 <span class="c1"># ====================================================================</span>
 <span class="c1"># Setting zone end</span>
 <span class="c1"># ====================================================================</span>
@@ -254,7 +256,7 @@
 <span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">formatter_class</span><span class="o">=</span><span class="n">RawTextHelpFormatter</span><span class="p">)</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-R&#39;</span><span class="p">,</span> <span class="s1">&#39;--remote_control&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;使用私有云数据库的外部接口&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-P&#39;</span><span class="p">,</span> <span class="s1">&#39;--prod_env&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;写入生产环境数据库&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-F&#39;</span><span class="p">,</span> <span class="s1">&#39;--force_run&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;强制执行程序&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-C&#39;</span><span class="p">,</span> <span class="s1">&#39;--clear&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;预测统一出清价格&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--market&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
@@ -304,15 +306,15 @@
 <div class="viewcode-block" id="PriceForecast"><a class="viewcode-back" href="../../api.html#gansu.price_forecast.PriceForecast">[docs]</a><span class="k">class</span> <span class="nc">PriceForecast</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;预测电价的类.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
-                 <span class="n">province_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">remote_ctrl</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">model_dt</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-                 <span class="n">cls_logger</span><span class="p">,</span> <span class="n">table_names</span><span class="p">,</span> <span class="n">is_clear</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">zone_id</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+                 <span class="n">province_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">use_dev_db</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">model_dt</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                 <span class="n">cls_logger</span><span class="p">,</span> <span class="n">table_names</span><span class="p">,</span> <span class="n">is_clear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zone_id</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;实例化.</span>
 
 <span class="sd">        :param iter_id: 节点id或区域标识</span>
 <span class="sd">        :param market_id: 日前or实时</span>
 <span class="sd">        :param base_date: 执行预测的日期</span>
 <span class="sd">        :param province_id: 电力市场id</span>
-<span class="sd">        :param remote_ctrl: 是否使用私有云数据库的外部接口</span>
+<span class="sd">        :param use_dev_db: 是否使用测试环境数据库</span>
 <span class="sd">        :param model_dt: 不同节点/统一出清市场所对应的日前or实时价格的模型id</span>
 <span class="sd">        :param cls_logger: 日志记录器</span>
 <span class="sd">        :param table_names: 表名列表</span>
@@ -328,7 +330,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">is_clear</span> <span class="o">=</span> <span class="n">is_clear</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zone_id</span> <span class="o">=</span> <span class="n">zone_id</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">remote_ctrl</span><span class="p">,</span> <span class="n">table_names</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">use_dev_db</span><span class="p">,</span> <span class="n">table_names</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">market_id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">train_start_date</span> <span class="o">=</span> <span class="n">base_date</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
@@ -462,7 +464,8 @@
             <span class="n">price_tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_clearing_price&#39;</span><span class="p">]</span>
             <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">select</span><span class="p">(</span><span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s2">&quot;price&quot;</span><span class="p">),</span> <span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_day</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span> <span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">zone_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_id</span><span class="p">[</span><span class="n">iter_id</span><span class="p">],</span>
+                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_day</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
+                       <span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="n">PROVINCE_ID</span><span class="p">,</span>
                        <span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">price_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
             <span class="p">)</span>
@@ -995,7 +998,7 @@
         <span class="n">price_tab_all</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_prediction_clearing_price_all&#39;</span><span class="p">]</span>
 
         <span class="n">model_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_dt</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_id</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">market_id</span><span class="p">]</span>
-        <span class="n">zone_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_id</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_id</span><span class="p">]</span>
+        <span class="n">zone_id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">ins_vals</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">ins_vals_all</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">forecast_start_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1067,8 +1070,9 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;开始执行程序&#39;</span><span class="p">)</span>
+    <span class="n">init_log</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;开始执行程序&#39;</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
 
@@ -1076,7 +1080,7 @@
     <span class="n">Clear</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">clear</span>
     <span class="n">Date</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">date</span>
     <span class="n">ForceRun</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">force_run</span>
-    <span class="n">RemoteControl</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">remote_control</span>
+    <span class="n">ProdEnv</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">prod_env</span>
     <span class="n">Nodes</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">node</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;参数:</span>
 <span class="s2">    MarketId: </span><span class="si">{</span><span class="n">MarketId</span><span class="si">}</span>
@@ -1084,8 +1088,9 @@
 <span class="s2">    Area: </span><span class="si">{</span><span class="n">Nodes</span><span class="si">}</span>
 <span class="s2">    Date: </span><span class="si">{</span><span class="n">Date</span><span class="si">}</span>
 <span class="s2">    ForceRun: </span><span class="si">{</span><span class="n">ForceRun</span><span class="si">}</span>
-<span class="s2">    RemoteControl: </span><span class="si">{</span><span class="n">RemoteControl</span><span class="si">}</span>
+<span class="s2">    ProdEnv: </span><span class="si">{</span><span class="n">ProdEnv</span><span class="si">}</span>
 <span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">use_dev_db</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">ProdEnv</span>
     <span class="k">if</span> <span class="n">Clear</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;预测统一出清价格&#39;</span><span class="p">)</span>
         <span class="n">id_msg</span> <span class="o">=</span> <span class="s1">&#39;zone_id&#39;</span>
@@ -1106,12 +1111,12 @@
 
     <span class="k">if</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">hour</span> <span class="o">==</span> <span class="mi">23</span> <span class="ow">or</span> <span class="p">(</span><span class="n">ForceRun</span> <span class="ow">and</span> <span class="n">MarketId</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
         <span class="n">MarketId</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="n">iter_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hd&#39;</span><span class="p">,</span> <span class="s1">&#39;hx&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">Clear</span> <span class="k">else</span> <span class="n">NodeIds</span>
+        <span class="n">iter_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hx&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">Clear</span> <span class="k">else</span> <span class="n">NodeIds</span>
         <span class="k">for</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">iter_ids</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;开始预测</span><span class="si">{</span><span class="n">id_msg</span><span class="si">}</span><span class="s1">为</span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1">的</span><span class="si">{</span><span class="n">prompt_msg</span><span class="si">}</span><span class="s1">...&#39;</span><span class="p">)</span>
             <span class="n">forecaster</span> <span class="o">=</span> <span class="n">PriceForecast</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">MarketId</span><span class="p">,</span> <span class="n">BASE_DATE</span><span class="p">,</span> <span class="n">PROVINCE_ID</span><span class="p">,</span>
-                                       <span class="n">RemoteControl</span><span class="p">,</span> <span class="n">MODEL_DT</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">,</span>
-                                       <span class="n">Clear</span><span class="p">,</span> <span class="n">ZONE_ID</span><span class="p">)</span>
+                                       <span class="n">use_dev_db</span><span class="p">,</span> <span class="n">MODEL_DT</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">,</span>
+                                       <span class="n">Clear</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">forecaster</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;完成预测(node id: </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
@@ -1122,12 +1127,12 @@
 
     <span class="k">if</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">hour</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="p">(</span><span class="n">ForceRun</span> <span class="ow">and</span> <span class="n">MarketId</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
         <span class="n">MarketId</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">iter_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hd&#39;</span><span class="p">,</span> <span class="s1">&#39;hx&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">Clear</span> <span class="k">else</span> <span class="n">NodeIds</span>
+        <span class="n">iter_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hx&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">Clear</span> <span class="k">else</span> <span class="n">NodeIds</span>
         <span class="k">for</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">iter_ids</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;开始预测:(node id: </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1">)...&#39;</span><span class="p">)</span>
             <span class="n">forecaster</span> <span class="o">=</span> <span class="n">PriceForecast</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">MarketId</span><span class="p">,</span> <span class="n">BASE_DATE</span><span class="p">,</span> <span class="n">PROVINCE_ID</span><span class="p">,</span>
-                                       <span class="n">RemoteControl</span><span class="p">,</span> <span class="n">MODEL_DT</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">,</span>
-                                       <span class="n">Clear</span><span class="p">,</span> <span class="n">ZONE_ID</span><span class="p">)</span>
+                                       <span class="n">use_dev_db</span><span class="p">,</span> <span class="n">MODEL_DT</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">,</span>
+                                       <span class="n">Clear</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">forecaster</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;完成预测(node id: </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>

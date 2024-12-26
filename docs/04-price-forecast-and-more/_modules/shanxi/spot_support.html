@@ -198,6 +198,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 
@@ -208,7 +209,7 @@
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">select</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">insert</span>
 <span class="kn">from</span> <span class="nn">pyomo.environ</span> <span class="kn">import</span> <span class="n">TerminationCondition</span>
 
-<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">init_logger</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">smooth_data</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">init_log</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">smooth_data</span>
 
 <span class="c1"># ====================================================================</span>
 <span class="c1"># Setting zone start</span>
@@ -237,9 +238,9 @@
 <span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;对指定场站, 指定日期的日前申报策略进行自动生成.&#39;</span><span class="p">)</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-R&#39;</span><span class="p">,</span> <span class="s1">&#39;--remote_control&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;是否在本地使用私有云数据库&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-P&#39;</span><span class="p">,</span> <span class="s1">&#39;--prod_env&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;写入生产环境数据库&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-D&#39;</span><span class="p">,</span> <span class="s1">&#39;--date&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">valid_date</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;策略所属日期, 如不指定, 则默认是下一个交易日(明天)&#39;</span><span class="p">)</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;策略所属日期, 如不指定, 则默认执行日后的第2天&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-S&#39;</span><span class="p">,</span> <span class="s1">&#39;--sid&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;场站id, 如不指定则运行所有场站&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
@@ -777,24 +778,27 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">init_log</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
     <span class="n">Date</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">date</span>
-    <span class="n">RemoteControl</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">remote_control</span>
+    <span class="n">ProdEnv</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">prod_env</span>
     <span class="n">StationID</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">sid</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    命令行参数:</span>
 <span class="s2">    Date: </span><span class="si">{</span><span class="n">Date</span><span class="si">}</span>
-<span class="s2">    RemoteControl: </span><span class="si">{</span><span class="n">RemoteControl</span><span class="si">}</span>
+<span class="s2">    ProdEnv: </span><span class="si">{</span><span class="n">ProdEnv</span><span class="si">}</span>
 <span class="s2">    StationID: </span><span class="si">{</span><span class="n">StationID</span><span class="si">}</span>
 <span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">use_dev_db</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">ProdEnv</span>
+
     <span class="k">if</span> <span class="n">StationID</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">StationID</span> <span class="o">=</span> <span class="n">DEFAULT_SID</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">StationID</span> <span class="ow">in</span> <span class="n">DEFAULT_SID</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s1">&#39;场站id错误&#39;</span>
         <span class="n">StationID</span> <span class="o">=</span> <span class="p">[</span><span class="n">StationID</span><span class="p">]</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;创建表及数据库连接...&#39;</span><span class="p">)</span>
-    <span class="n">tab_dict</span><span class="p">,</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">RemoteControl</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">tab_str_and_desc</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="n">tab_dict</span><span class="p">,</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">use_dev_db</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">tab_str_and_desc</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;完成&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">Date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

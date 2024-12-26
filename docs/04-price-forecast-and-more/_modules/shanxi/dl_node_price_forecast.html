@@ -211,6 +211,7 @@
 
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -222,7 +223,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">select</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">insert</span><span class="p">,</span> <span class="n">text</span>
 
-<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span> <span class="n">init_logger</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span> <span class="n">init_log</span>
 
 <span class="c1"># ====================================================================</span>
 <span class="c1"># Setting zone start</span>
@@ -295,8 +296,8 @@
 <span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-R&#39;</span><span class="p">,</span> <span class="s1">&#39;--remote_control&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;使用私有云数据库的外部接口&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-F&#39;</span><span class="p">,</span> <span class="s1">&#39;--force_run&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;强制执行程序&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-P&#39;</span><span class="p">,</span> <span class="s1">&#39;--prod_env&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;写入生产环境数据库&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-F&#39;</span><span class="p">,</span> <span class="s1">&#39;--force_run&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;强制执行程序，忽略时间限制&#39;</span><span class="p">)</span>
     <span class="n">date_help_msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;执行本预测算法的日期, 格式为&quot;yyyy-mm-dd&quot;, 不指定此参数的情况下默认为今天.</span>
 <span class="s1">    算法预测`date`+1至`date`+3共三日的价格.&#39;&#39;&#39;</span>
 
@@ -747,20 +748,21 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-
+    <span class="n">init_log</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
 
     <span class="n">Date</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">date</span>
     <span class="n">Force</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">force_run</span>
-    <span class="n">RemoteControl</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">remote_control</span>
+    <span class="n">ProdEnv</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">prod_env</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;参数:</span>
 <span class="s2">    Date: </span><span class="si">{</span><span class="n">Date</span><span class="si">}</span>
 <span class="s2">    Force: </span><span class="si">{</span><span class="n">Force</span><span class="si">}</span>
-<span class="s2">    RemoteControl: </span><span class="si">{</span><span class="n">RemoteControl</span><span class="si">}</span>
+<span class="s2">    ProdEnv: </span><span class="si">{</span><span class="n">ProdEnv</span><span class="si">}</span>
 <span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">use_dev_db</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">ProdEnv</span>
 
-    <span class="n">tab_dict</span><span class="p">,</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">RemoteControl</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">)</span>
+    <span class="n">tab_dict</span><span class="p">,</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">use_dev_db</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">hour</span> <span class="o">==</span> <span class="mi">21</span> <span class="ow">or</span> <span class="n">Force</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">Date</span><span class="p">:</span>

@@ -211,23 +211,26 @@
 <span class="sd">        # 强制预测基准日期为2024-6-1的日前统一出清价格</span>
 <span class="sd">        python -m shanxi.price_forecast -C -F --market 3 -D 2024-6-1</span>
 <span class="sd">        # 预测节点电价，基准日期和市场信息默认进行推断</span>
-<span class="sd">        python -m shanxi.price_forecast -R</span>
+<span class="sd">        python -m shanxi.price_forecast</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">RawTextHelpFormatter</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">select</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">insert</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">HistGradientBoostingRegressor</span>
 
-<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">init_logger</span><span class="p">,</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span> <span class="n">smooth_data</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">init_log</span><span class="p">,</span> <span class="n">valid_date</span><span class="p">,</span> <span class="n">create_engine_and_tabs</span><span class="p">,</span> <span class="n">smooth_data</span>
 
 <span class="c1"># ====================================================================</span>
 <span class="c1"># Setting zone start</span>
@@ -236,6 +239,7 @@
 <span class="c1"># ref: https://stackoverflow.com/a/53954986/6150878</span>
 <span class="c1">#    : https://stackoverflow.com/a/20627316/6150878</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">chained_assignment</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 <span class="c1"># 山西电力市场的唯一标识</span>
 <span class="n">PROVINCE_ID</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="c1"># 山西的两个节点的唯一标识</span>
@@ -256,10 +260,11 @@
     <span class="mi">1</span><span class="p">:</span> <span class="mi">2</span>
 <span class="p">}</span>
 <span class="c1"># 执行本算法需要用到的数据库表的名字</span>
-<span class="n">TABLE_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pt_load&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_connection_plan&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_node_price&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_prediction_node_price&#39;</span><span class="p">,</span>
+<span class="n">TABLE_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pt_prediction_node_price&#39;</span><span class="p">,</span>
                <span class="s1">&#39;pt_prediction_node_price_detail&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;pt_clearing_price&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_prediction_clearing_price&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_prediction_clearing_price_all&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;pt_hf_rt_weather&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_hf_fc_168h_weather_01&#39;</span><span class="p">]</span>
+               <span class="s1">&#39;pt_clearing_price&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_prediction_clearing_price&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_prediction_clearing_price_all&#39;</span><span class="p">]</span>
+
+
 <span class="c1"># ====================================================================</span>
 <span class="c1"># Setting zone end</span>
 <span class="c1"># ====================================================================</span>
@@ -268,9 +273,8 @@
 <div class="viewcode-block" id="parse_args"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.parse_args">[docs]</a><span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">formatter_class</span><span class="o">=</span><span class="n">RawTextHelpFormatter</span><span class="p">)</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-R&#39;</span><span class="p">,</span> <span class="s1">&#39;--remote_control&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;使用私有云数据库的外部接口&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-P&#39;</span><span class="p">,</span> <span class="s1">&#39;--prod_env&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;写入生产环境数据库&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-F&#39;</span><span class="p">,</span> <span class="s1">&#39;--force_run&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;强制执行程序&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-N&#39;</span><span class="p">,</span> <span class="s1">&#39;--no_wea&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;强制不使用天气数据作为特征&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-C&#39;</span><span class="p">,</span> <span class="s1">&#39;--clear&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;预测统一出清价格, 不指定则预测节点&#39;</span><span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--market&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
@@ -285,152 +289,17 @@
     <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="fill_weather_data"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.fill_weather_data">[docs]</a><span class="k">def</span> <span class="nf">fill_weather_data</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;分时天气预测数据可能会存在缺失的记录，此函数的功能是对其进行简单填充&quot;&quot;&quot;</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2022-1-1&#39;</span><span class="p">,</span> <span class="s1">&#39;2022-1-2&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;1H&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:00&#39;</span><span class="p">))[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="n">fill_value</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="c1"># 首先判断第一个索引处是否有值,如果没有,则将后续的第一个值填充至第一个索引处</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="n">fill_value</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-    <span class="n">fill_values</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">fill_indexes</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">fill_value</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">fill_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
-            <span class="n">fill_indexes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">break</span>
-
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">)):</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-                    <span class="n">i</span> <span class="o">=</span> <span class="n">j</span>
-                    <span class="k">break</span>
-                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="n">i</span> <span class="o">=</span> <span class="n">j</span>
-                    <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">fill_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
-                        <span class="n">fill_indexes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fill_values</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">fill_indexes</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">index</span></div>
-
-
-<span class="k">def</span> <span class="nf">_handle_weather_data1</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;对一天的实测分时天气数据进行特征化。&quot;&quot;&quot;</span>
-    <span class="c1"># 为了能将各区县按照三个区域进行区分,先梳理每个区域对应的曲线的id列表</span>
-    <span class="n">zh_2_ids</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;晋北&#39;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="mi">101100208</span><span class="p">,</span> <span class="mi">101100207</span><span class="p">,</span> <span class="mi">101100206</span><span class="p">,</span> <span class="mi">101100904</span><span class="p">,</span> <span class="mi">101100906</span><span class="p">,</span>
-            <span class="mi">101100903</span><span class="p">,</span> <span class="mi">101101005</span><span class="p">,</span> <span class="mi">101101013</span><span class="p">,</span> <span class="mi">101101008</span><span class="p">,</span> <span class="mi">101101003</span><span class="p">],</span>
-        <span class="s1">&#39;晋中&#39;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="mi">101101103</span><span class="p">,</span> <span class="mi">101101109</span><span class="p">,</span> <span class="mi">101101111</span><span class="p">,</span> <span class="mi">101101110</span><span class="p">,</span> <span class="mi">101100104</span><span class="p">,</span>
-            <span class="mi">101100103</span><span class="p">,</span> <span class="mi">101100102</span><span class="p">,</span> <span class="mi">101100407</span><span class="p">,</span> <span class="mi">101100404</span><span class="p">,</span> <span class="mi">101100410</span><span class="p">,</span>
-            <span class="mi">101100412</span><span class="p">,</span> <span class="mi">101100302</span><span class="p">,</span> <span class="mi">101100303</span><span class="p">],</span>
-        <span class="s1">&#39;晋南&#39;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="mi">101100703</span><span class="p">,</span> <span class="mi">101100710</span><span class="p">,</span> <span class="mi">101100706</span><span class="p">,</span> <span class="mi">101100714</span><span class="p">,</span> <span class="mi">101100510</span><span class="p">,</span>
-            <span class="mi">101100502</span><span class="p">,</span> <span class="mi">101100509</span><span class="p">,</span> <span class="mi">101100506</span><span class="p">,</span> <span class="mi">101100805</span><span class="p">,</span> <span class="mi">101100808</span><span class="p">,</span>
-            <span class="mi">101100811</span><span class="p">,</span> <span class="mi">101100813</span><span class="p">,</span> <span class="mi">101100605</span><span class="p">,</span> <span class="mi">101100604</span><span class="p">,</span> <span class="mi">101100606</span><span class="p">,</span> <span class="mi">101100603</span>
-        <span class="p">]</span>
-    <span class="p">}</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;windSpeed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;windSpeed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">columns</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">area</span> <span class="ow">in</span> <span class="n">zh_2_ids</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">area</span> <span class="o">==</span> <span class="s1">&#39;晋北&#39;</span><span class="p">:</span>
-            <span class="n">columns</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;n_temp&#39;</span><span class="p">,</span> <span class="s1">&#39;n_wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;n_cloud&#39;</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="n">area</span> <span class="o">==</span> <span class="s1">&#39;晋中&#39;</span><span class="p">:</span>
-            <span class="n">columns</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;m_temp&#39;</span><span class="p">,</span> <span class="s1">&#39;m_wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;m_cloud&#39;</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">columns</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;s_temp&#39;</span><span class="p">,</span> <span class="s1">&#39;s_wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;s_cloud&#39;</span><span class="p">])</span>
-
-        <span class="n">area_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cityId in </span><span class="si">{</span><span class="n">zh_2_ids</span><span class="p">[</span><span class="n">area</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">gpd</span> <span class="o">=</span> <span class="n">area_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
-        <span class="n">wea_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="p">[[</span><span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="s1">&#39;windSpeed&#39;</span><span class="p">,</span> <span class="s1">&#39;cloud&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="n">filled_df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fill_weather_data</span><span class="p">(</span><span class="n">wea_df</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">filled_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-            <span class="n">wea_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">filled_df</span><span class="p">,</span> <span class="n">wea_df</span><span class="p">])</span>
-            <span class="k">pass</span>
-        <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wea_df</span><span class="p">)</span>
-    <span class="n">ret_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">ret_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
-
-    <span class="c1"># 扩充成96点的数据</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ret_df</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;1920-1-1 00:15&#39;</span><span class="p">,</span>
-                          <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;15T&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;24:00&#39;</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">df</span>
-
-
-<div class="viewcode-block" id="get_wea_data_and_feature"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.get_wea_data_and_feature">[docs]</a><span class="k">def</span> <span class="nf">get_wea_data_and_feature</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;获取天气数据并特征化。</span>
-
-<span class="sd">    :param df: 原始数据</span>
-<span class="sd">    :param for_train: 是否为训练集</span>
-<span class="sd">    :return:</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dates</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="n">dates</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-    <span class="n">now</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-
-    <span class="n">wea_feas</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">rt_wea</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_hf_rt_weather&#39;</span><span class="p">]</span>
-    <span class="n">fc_wea</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_hf_fc_168h_weather_01&#39;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">for_train</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">date_</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
-            <span class="n">date_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">date_</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">date_</span> <span class="o">&lt;</span> <span class="n">now</span><span class="p">:</span>  <span class="c1"># Use real data</span>
-                <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">select</span><span class="p">(</span><span class="n">rt_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">cityId</span><span class="p">,</span> <span class="n">rt_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">rt_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">rt_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">windSpeed</span><span class="p">,</span> <span class="n">rt_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">cloud</span><span class="p">)</span>
-                    <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rt_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">date_</span><span class="p">)</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>  <span class="c1"># Use forecast data</span>
-                <span class="n">forecast_date</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-                <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">select</span><span class="p">(</span><span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">cityId</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fxTimeVar</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">windSpeed</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">cloud</span><span class="p">)</span>
-                    <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">forecast_date</span><span class="p">)</span>
-                    <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span> <span class="o">==</span> <span class="s1">&#39;23:00&#39;</span><span class="p">)</span>
-                    <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fxDate</span> <span class="o">==</span> <span class="n">date_</span><span class="p">)</span>
-                <span class="p">)</span>
-
-            <span class="n">wea_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-            <span class="n">wea_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cityId&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="s1">&#39;windSpeed&#39;</span><span class="p">,</span> <span class="s1">&#39;cloud&#39;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">wea_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weather data is empty for date </span><span class="si">{</span><span class="n">date_</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="n">wea_fea</span> <span class="o">=</span> <span class="n">_handle_weather_data1</span><span class="p">(</span><span class="n">wea_df</span><span class="p">)</span>
-            <span class="n">wea_feas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wea_fea</span><span class="p">)</span>
-        <span class="n">wea_fea</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">wea_feas</span><span class="p">)</span>
-        <span class="n">wea_fea</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Use forecast data.</span>
-        <span class="c1"># The forecast date of weather data is 3 days before the date of price to be predicted.</span>
-        <span class="n">forecast_date</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span><span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">cityId</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fxTimeVar</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">windSpeed</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">cloud</span><span class="p">,</span> <span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fxDate</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">forecast_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fc_wea</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span> <span class="o">==</span> <span class="s1">&#39;23:00&#39;</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">wea_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">date_</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
-            <span class="n">_wea_df</span> <span class="o">=</span> <span class="n">wea_df</span><span class="p">[</span><span class="n">wea_df</span><span class="p">[</span><span class="s1">&#39;fxDate&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">date_</span><span class="p">]</span>
-            <span class="n">_wea_df</span> <span class="o">=</span> <span class="n">_wea_df</span><span class="p">[[</span><span class="s1">&#39;cityId&#39;</span><span class="p">,</span> <span class="s1">&#39;fxTimeVar&#39;</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="s1">&#39;windSpeed&#39;</span><span class="p">,</span> <span class="s1">&#39;cloud&#39;</span><span class="p">]]</span>
-            <span class="n">_wea_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cityId&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="s1">&#39;windSpeed&#39;</span><span class="p">,</span> <span class="s1">&#39;cloud&#39;</span><span class="p">]</span>
-            <span class="n">wea_fea</span> <span class="o">=</span> <span class="n">_handle_weather_data1</span><span class="p">(</span><span class="n">_wea_df</span><span class="p">)</span>
-            <span class="n">wea_feas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wea_fea</span><span class="p">)</span>
-        <span class="n">wea_fea</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">wea_feas</span><span class="p">)</span>
-        <span class="n">wea_fea</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">wea_fea</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+<div class="viewcode-block" id="power_like_acc"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.power_like_acc">[docs]</a><span class="k">def</span> <span class="nf">power_like_acc</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">pstd</span><span class="o">=</span><span class="mi">332</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;仿照功率预测准确率来计算电价预测准确率&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">y_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">))</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="n">den</span> <span class="k">if</span> <span class="n">den</span> <span class="o">&gt;</span> <span class="n">pstd</span> <span class="o">*</span> <span class="mi">96</span> <span class="k">else</span> <span class="n">pstd</span> <span class="o">*</span> <span class="mi">96</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">acc</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">acc</span></div>
 
 
 <div class="viewcode-block" id="BaseRollPrediction"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction">[docs]</a><span class="k">class</span> <span class="nc">BaseRollPrediction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -438,6 +307,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">real_price_in_debug</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># debug模式下存储待预测日期的真实价格</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_start_date</span> <span class="o">=</span> <span class="kc">None</span>
@@ -446,6 +316,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">base_date</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bid_space_thresh</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="BaseRollPrediction.read_oneday_price"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.read_oneday_price">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_oneday_price</span><span class="p">(</span><span class="n">single_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -458,24 +329,23 @@
 <span class="sd">        :return: DataFrame，列名为：``[&#39;date&#39;, &#39;time&#39;, &#39;price&#39;]``。</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">node_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">pt_price</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_node_price&#39;</span><span class="p">]</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_node_price&#39;</span>
             <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;ahead_day_price&#39;</span> <span class="k">if</span> <span class="n">market_id</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="s1">&#39;real_time_price&#39;</span>
-            <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">select</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;price&#39;</span><span class="p">),</span> <span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_date</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">node_id</span> <span class="o">==</span> <span class="n">node_id</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            select </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> as price, `time`, `date`</span>
+<span class="s2">            from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">            where `date` = &#39;</span><span class="si">{</span><span class="n">single_date</span><span class="si">}</span><span class="s2">&#39; and node_id = </span><span class="si">{</span><span class="n">node_id</span><span class="si">}</span>
+<span class="s2">            order by `time`</span>
+<span class="s2">            &quot;&quot;&quot;</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">pt_price</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_clearing_price&#39;</span><span class="p">]</span>
-            <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">select</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;price&#39;</span><span class="p">),</span> <span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_date</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="n">PROVINCE_ID</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_price</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_clearing_price&#39;</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            select value as price, `time`, `date`</span>
+<span class="s2">            from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">            where `date` = &#39;</span><span class="si">{</span><span class="n">single_date</span><span class="si">}</span><span class="s2">&#39; and market_id = </span><span class="si">{</span><span class="n">market_id</span><span class="si">}</span><span class="s2"> and province_id = </span><span class="si">{</span><span class="n">PROVINCE_ID</span><span class="si">}</span>
+<span class="s2">            order by `time`</span>
+<span class="s2">            &quot;&quot;&quot;</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
 
@@ -502,17 +372,16 @@
 <span class="sd">        :raise ValueError: 数据校验失败</span>
 <span class="sd">        :return: DataFrame，列名为：``[&#39;date&#39;, &#39;time&#39;, &#39;value&#39;]``。</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">pt_load</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_load&#39;</span><span class="p">]</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="n">PROVINCE_ID</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">power_type_id</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_load&#39;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select `date`, `time`, value</span>
+<span class="s2">        from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">        where `date` between &#39;</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">&#39; and &#39;</span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">            and province_id = </span><span class="si">{</span><span class="n">PROVINCE_ID</span><span class="si">}</span>
+<span class="s2">            and power_type_id = 2</span>
+<span class="s2">            and market_id = </span><span class="si">{</span><span class="n">market_id</span><span class="si">}</span>
+<span class="s2">        order by `date`, `time`</span>
+<span class="s2">        &quot;&quot;&quot;</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="c1"># 数据校验</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
@@ -536,15 +405,14 @@
 <span class="sd">        :raise ValueError: 数据校验失败</span>
 <span class="sd">        :return: DataFrame，列名为：``[&#39;date&#39;, &#39;time&#39;, &#39;in_load&#39;, &#39;not_market&#39;]``。</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">pt_load</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_load&#39;</span><span class="p">]</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">power_type_id</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="n">PROVINCE_ID</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">power_type_id</span><span class="o">.</span><span class="n">in_</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_load&#39;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select `date`, `time`, value, power_type_id</span>
+<span class="s2">        from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">        where `date` = &#39;</span><span class="si">{</span><span class="n">single_date</span><span class="si">}</span><span class="s2">&#39; and market_id = 3 and province_id = </span><span class="si">{</span><span class="n">PROVINCE_ID</span><span class="si">}</span>
+<span class="s2">            and power_type_id in (1, 3)</span>
+<span class="s2">        order by `time`</span>
+<span class="s2">        &quot;&quot;&quot;</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="c1"># 数据校验</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
@@ -576,15 +444,14 @@
 <span class="sd">        :raise ValueError: 数据校验失败</span>
 <span class="sd">        :return: DataFrame，列名为：``[&#39;date&#39;, &#39;time&#39;, &#39;value&#39;]``。</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">pt_conn</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_connection_plan&#39;</span><span class="p">]</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">channel_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_connection_plan&#39;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select `date`, `time`, value</span>
+<span class="s2">        from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">        where `date` = &#39;</span><span class="si">{</span><span class="n">single_date</span><span class="si">}</span><span class="s2">&#39; and market_id = 3 and province_id = </span><span class="si">{</span><span class="n">PROVINCE_ID</span><span class="si">}</span><span class="s2"> and channel_id = 1</span>
+<span class="s2">        order by `time`</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="c1"># check data</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
@@ -611,17 +478,14 @@
 <span class="sd">        :raise ValueError: 数据校验失败</span>
 <span class="sd">        :return: DataFrame，列名为：``[&#39;date&#39;, &#39;time&#39;, &#39;in_load&#39;, &#39;out_load&#39;, &#39;in_ne&#39;, &#39;not_market&#39;]``。</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">pt_load</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_load&#39;</span><span class="p">]</span>
-        <span class="n">pt_conn</span> <span class="o">=</span> <span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_connection_plan&#39;</span><span class="p">]</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;1st, 获取新能源出力数据&#39;&#39;&#39;</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;in_ne&#39;</span><span class="p">))</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="n">PROVINCE_ID</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">power_type_id</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_load&#39;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select `date`, `time`, value as in_ne</span>
+<span class="s2">        from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">        where `date` = &#39;</span><span class="si">{</span><span class="n">single_date</span><span class="si">}</span><span class="s2">&#39; and market_id = </span><span class="si">{</span><span class="n">market_id</span><span class="si">}</span><span class="s2"> and province_id = </span><span class="si">{</span><span class="n">PROVINCE_ID</span><span class="si">}</span><span class="s2"> and power_type_id = 2</span>
+<span class="s2">        order by `time`</span>
+<span class="s2">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="c1"># 数据校验</span>
@@ -637,14 +501,12 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;2nd, 获取省调负荷数据&#39;&#39;&#39;</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;in_load&#39;</span><span class="p">))</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="n">PROVINCE_ID</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">power_type_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select `date`, `time`, value as in_load</span>
+<span class="s2">        from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">        where `date` = &#39;</span><span class="si">{</span><span class="n">single_date</span><span class="si">}</span><span class="s2">&#39; and market_id = </span><span class="si">{</span><span class="n">market_id</span><span class="si">}</span><span class="s2"> and province_id = </span><span class="si">{</span><span class="n">PROVINCE_ID</span><span class="si">}</span><span class="s2"> and power_type_id = 1</span>
+<span class="s2">        order by `time`</span>
+<span class="s2">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
@@ -659,14 +521,13 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;3rd, 获取联络线数据&#39;&#39;&#39;</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;out_load&#39;</span><span class="p">))</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="n">PROVINCE_ID</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">channel_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_conn</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_connection_plan&#39;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select `date`, `time`, value as out_load</span>
+<span class="s2">        from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">        where `date` = &#39;</span><span class="si">{</span><span class="n">single_date</span><span class="si">}</span><span class="s2">&#39; and market_id = </span><span class="si">{</span><span class="n">market_id</span><span class="si">}</span><span class="s2"> and province_id = </span><span class="si">{</span><span class="n">PROVINCE_ID</span><span class="si">}</span><span class="s2"> and channel_id = 1</span>
+<span class="s2">        order by `time`</span>
+<span class="s2">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="n">df3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
@@ -681,14 +542,13 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;4th, 获取非市场化机组出力数据&#39;&#39;&#39;</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;not_market&#39;</span><span class="p">))</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">single_date</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="n">PROVINCE_ID</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">power_type_id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">pt_load</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_load&#39;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select `date`, `time`, value as not_market</span>
+<span class="s2">        from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span>
+<span class="s2">        where `date` = &#39;</span><span class="si">{</span><span class="n">single_date</span><span class="si">}</span><span class="s2">&#39; and market_id = </span><span class="si">{</span><span class="n">market_id</span><span class="si">}</span><span class="s2"> and province_id = </span><span class="si">{</span><span class="n">PROVINCE_ID</span><span class="si">}</span><span class="s2"> and power_type_id = 3</span>
+<span class="s2">        order by `time`</span>
+<span class="s2">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="n">df4</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
@@ -710,49 +570,36 @@
 
     <span class="k">def</span> <span class="nf">_add_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                      <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                     <span class="n">price_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;da&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+                     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;为数据集增加特征。</span>
 
 <span class="sd">        :param df: 数据集</span>
 <span class="sd">        :param for_train: 是否为训练集</span>
-<span class="sd">        :param price_type: 价格类型，日前（``da``）或实时（``rt``）</span>
-<span class="sd">        :return: 增加特征后的数据集。</span>
+<span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">for_train</span><span class="p">:</span>
-            <span class="c1"># 上一天的价格与当天的时间戳对齐, 作为一个新特征</span>
-            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;one_day_shift_price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">96</span><span class="p">)</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">96</span><span class="p">:,</span> <span class="p">:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_bid_space_thresh</span><span class="p">()</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;增加时间戳特征...&#39;</span><span class="p">)</span>
-        <span class="n">ts_fts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_ts_features</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;时间戳特征增加完成&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_bid_space_thresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        分析表明，当竞价空间低于某个阈值时，容易直接出现地板价。</span>
+<span class="sd">        因此，本方法基于输入的训练数据，计算该阈值。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">opt_dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">opt_dates</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">opt_dates</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">opt_dates</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">thresh1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_date</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)][</span><span class="s1">&#39;bid_space&#39;</span><span class="p">])</span>
+                <span class="n">thresh2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_date</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)][</span><span class="s1">&#39;bid_space&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bid_space_thresh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">thresh1</span><span class="p">,</span> <span class="n">thresh2</span><span class="p">])</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;以</span><span class="si">{</span><span class="n">_date</span><span class="si">}</span><span class="s1">日的竞价空间阈值(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bid_space_thresh</span><span class="si">}</span><span class="s1">)作为截断阈值&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">continue</span>
 
-        <span class="k">if</span> <span class="n">price_type</span> <span class="o">==</span> <span class="s1">&#39;da&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_weather</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;尝试增加天气特征...&#39;</span><span class="p">)</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">we_fts</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;n_temp&#39;</span><span class="p">,</span> <span class="s1">&#39;n_wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;n_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;m_temp&#39;</span><span class="p">,</span> <span class="s1">&#39;m_wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;m_cloud&#39;</span><span class="p">,</span>
-                              <span class="s1">&#39;s_temp&#39;</span><span class="p">,</span> <span class="s1">&#39;s_wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;s_cloud&#39;</span><span class="p">]</span>
-                    <span class="n">df</span> <span class="o">=</span> <span class="n">get_wea_data_and_feature</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">for_train</span><span class="p">)</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;天气特征增加完成&#39;</span><span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;[失败]增加天气特征失败.&#39;</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">use_weather</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="n">we_fts</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;不使用天气特征.&#39;</span><span class="p">)</span>
-                <span class="n">we_fts</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># 实时电价预测过程中不使用天气特征</span>
-            <span class="n">we_fts</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># update the original feature list</span>
-        <span class="k">if</span> <span class="n">for_train</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">we_fts</span> <span class="o">+</span> <span class="n">ts_fts</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;one_day_shift_price&#39;</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">we_fts</span> <span class="o">+</span> <span class="n">ts_fts</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;特征增加完成&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bid_space_thresh</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;未找到合适的阈值&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bid_space_thresh</span> <span class="o">=</span> <span class="mi">0</span>
 
 <div class="viewcode-block" id="BaseRollPrediction.read_data"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.read_data">[docs]</a>    <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">for_train</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;读取数据的函数。</span>
@@ -821,11 +668,8 @@
                             <span class="n">target_date</span> <span class="o">-=</span> <span class="n">timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                             <span class="k">break</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;ratio1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;in_ne&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;in_ne&#39;</span><span class="p">]</span> <span class="o">+</span>
-                                                                <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;in_load&#39;</span><span class="p">]</span> <span class="o">+</span>
-                                                                <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;out_load&#39;</span><span class="p">]</span> <span class="o">+</span>
-                                                                <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;not_market&#39;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;ratio2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;out_load&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;in_ne&#39;</span><span class="p">]</span>
+            <span class="c1"># 与平台的计算竞价空间的方式保持一致</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;bid_space&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;in_load&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;in_ne&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;out_load&#39;</span><span class="p">]</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -837,6 +681,7 @@
 
             <span class="n">x_ins</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">x_outs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">target_date</span> <span class="o">=</span> <span class="n">start_date</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">days</span><span class="p">):</span>
                 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -870,60 +715,21 @@
             <span class="n">x_in</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">x_ins</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">x_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">x_outs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">x_out</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;out_load&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
             <span class="n">x_in_out</span> <span class="o">=</span> <span class="n">x_in</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">x_out</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span> <span class="o">=</span> <span class="n">x_ne</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">x_in_out</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;ratio1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;in_ne&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;in_ne&#39;</span><span class="p">]</span> <span class="o">+</span>
-                                                                    <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;in_load&#39;</span><span class="p">]</span> <span class="o">+</span>
-                                                                    <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;out_load&#39;</span><span class="p">]</span> <span class="o">+</span>
-                                                                    <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;not_market&#39;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;ratio2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;out_load&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;in_ne&#39;</span><span class="p">]</span>
+            <span class="c1"># 与平台的计算竞价空间的方式保持一致</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;bid_space&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;in_load&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;in_ne&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="s1">&#39;out_load&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;in_load&#39;</span><span class="p">,</span> <span class="s1">&#39;out_load&#39;</span><span class="p">,</span> <span class="s1">&#39;in_ne&#39;</span><span class="p">,</span> <span class="s1">&#39;not_market&#39;</span><span class="p">,</span> <span class="s1">&#39;ratio1&#39;</span><span class="p">,</span> <span class="s1">&#39;ratio2&#39;</span><span class="p">]</span>  <span class="c1"># original features</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;in_load&#39;</span><span class="p">,</span> <span class="s1">&#39;out_load&#39;</span><span class="p">,</span> <span class="s1">&#39;in_ne&#39;</span><span class="p">,</span> <span class="s1">&#39;not_market&#39;</span><span class="p">,</span> <span class="s1">&#39;bid_space&#39;</span><span class="p">]</span>  <span class="c1"># original features</span></div>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_gen_ts_features</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;基于数据集的时间和日期来生成新特征。</span>
-
-<span class="sd">        :param df: 数据集</span>
-<span class="sd">        :return: 新增的特征的名称组成的列表，新特征数据将直接在原始数据集上改写。</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">is_peak</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 是否为用电高峰</span>
-        <span class="n">hours</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 当前分段的小时</span>
-        <span class="n">weekdays</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 当前日期是星期几</span>
-        <span class="n">months</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 当前日期是哪个月</span>
-        <span class="n">is_weekend</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 是否为周末</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
-            <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">date_</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">if</span> <span class="mi">10</span> <span class="o">&lt;=</span> <span class="n">hour</span> <span class="o">&lt;=</span> <span class="mi">15</span><span class="p">:</span>
-                <span class="n">is_peak</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">is_peak</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">wd</span> <span class="o">=</span> <span class="n">date_</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
-            <span class="n">weekdays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wd</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">wd</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]:</span>
-                <span class="n">is_weekend</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">is_weekend</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">hours</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hour</span><span class="p">)</span>
-            <span class="n">months</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date_</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
-
-        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;is_peak&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_peak</span>
-        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;is_weekend&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_weekend</span>
-        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour_no&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hours</span>
-        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;weekday_no&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">weekdays</span>
-        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month_no&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">months</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;is_peak&#39;</span><span class="p">,</span> <span class="s1">&#39;is_weekend&#39;</span><span class="p">,</span> <span class="s1">&#39;hour_no&#39;</span><span class="p">,</span> <span class="s1">&#39;weekday_no&#39;</span><span class="p">,</span> <span class="s1">&#39;month_no&#39;</span><span class="p">]</span>
-
-<div class="viewcode-block" id="BaseRollPrediction.train_model"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.train_model">[docs]</a>    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;da&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseRollPrediction.train_model"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.BaseRollPrediction.train_model">[docs]</a>    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;训练一个模型。&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;增加特征...&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_feature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">,</span> <span class="n">for_train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">price_type</span><span class="o">=</span><span class="n">price_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_feature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">,</span> <span class="n">for_train</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;训练模型...&#39;</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span><span class="p">]</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span><span class="p">]</span>  <span class="c1"># noqa</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">HistGradientBoostingRegressor</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
 
@@ -931,44 +737,36 @@
                 <span class="n">market_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                 <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">do_smooth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="n">price_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;da&#39;</span>
                 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;读取预测数据，进行特征工程，并进行预测。&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;读取预测数据...&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_end_date</span><span class="p">,</span> <span class="n">market_id</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">for_train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;增加特征...&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_feature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">,</span> <span class="n">for_train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">price_type</span><span class="o">=</span><span class="n">price_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_feature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">,</span> <span class="n">for_train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;开始预测...&#39;</span><span class="p">)</span>
-        <span class="n">predict_days</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">96</span><span class="p">)</span>
-        <span class="n">one_day_ahead_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">96</span><span class="p">:][</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
-        <span class="n">pred_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span><span class="p">]</span>  <span class="c1"># noqa</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">do_smooth</span><span class="p">:</span>
+            <span class="n">y_pred</span> <span class="o">=</span> <span class="n">smooth_data</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ma&#39;</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">triangular</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y_pred</span></div>
 
-        <span class="c1"># 由于会用到上一日的价格，因此需要逐天预测</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">predict_days</span><span class="p">):</span>
-            <span class="n">sub_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">96</span><span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">96</span><span class="p">]</span>
-            <span class="n">sub_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;one_day_shift_price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">one_day_ahead_price</span>
-            <span class="n">X</span> <span class="o">=</span> <span class="n">sub_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fea_cols</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;one_day_shift_price&#39;</span><span class="p">]]</span>  <span class="c1"># noqa</span>
-            <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-            <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_process</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">do_smooth</span><span class="p">:</span>
-                <span class="n">y_pred</span> <span class="o">=</span> <span class="n">smooth_data</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ma&#39;</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">triangular</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">one_day_ahead_price</span> <span class="o">=</span> <span class="n">y_pred</span>
-            <span class="n">pred_values</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">pred_values</span></div>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_post_process</span><span class="p">(</span><span class="n">pred_vales</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_post_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">pred_vales</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;对于预测的价格进行后处理。&quot;&quot;&quot;</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pred_vales</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pred_vales</span><span class="p">):</span>
+            <span class="c1"># 小于截断阈值，则直接置为地板价</span>
+            <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;bid_space&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bid_space_thresh</span><span class="p">:</span>
                 <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1500</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">1500</span><span class="p">:</span>
                 <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">def</span> <span class="nf">_save_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predict_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1085,7 +883,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">iter_id</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model_id</span> <span class="o">=</span> <span class="n">DA_MODEL_DT</span><span class="p">[</span><span class="n">iter_id</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">use_weather</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">NoWea</span> <span class="k">else</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_date</span> <span class="o">=</span> <span class="n">base_date</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_start_date</span> <span class="o">=</span> <span class="n">base_date</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -1104,11 +901,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">train_model</span><span class="p">()</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;进行预测...&#39;</span><span class="p">)</span>
-        <span class="n">fore_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_end_date</span><span class="p">,</span>
-                                   <span class="n">do_smooth</span><span class="p">,</span> <span class="s1">&#39;da&#39;</span><span class="p">)</span>
+        <span class="n">fore_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="p">,</span>
+                                   <span class="n">do_smooth</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;保存至数据库...&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="n">fore_values</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_post_process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">,</span> <span class="n">fore_values</span><span class="p">))</span></div></div>
 
 
 <div class="viewcode-block" id="RealTimePriceRollPrediction"><a class="viewcode-back" href="../../api.html#shanxi.price_forecast.RealTimePriceRollPrediction">[docs]</a><span class="k">class</span> <span class="nc">RealTimePriceRollPrediction</span><span class="p">(</span><span class="n">BaseRollPrediction</span><span class="p">):</span>
@@ -1136,35 +933,36 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_end_date</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;训练模型...&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="n">price_type</span><span class="o">=</span><span class="s1">&#39;rt&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_model</span><span class="p">()</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;进行预测...&#39;</span><span class="p">)</span>
-        <span class="n">fore_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">price_type</span><span class="o">=</span><span class="s1">&#39;rt&#39;</span><span class="p">)</span>
+        <span class="n">fore_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_id</span><span class="p">,</span> <span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;保存至数据库...&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_post_process</span><span class="p">(</span><span class="n">fore_values</span><span class="p">))</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_post_process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_df</span><span class="p">,</span> <span class="n">fore_values</span><span class="p">))</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;开始执行程序&#39;</span><span class="p">)</span>
+    <span class="n">init_log</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;开始执行程序&#39;</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
 
     <span class="n">MarketId</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">market</span>
     <span class="n">Date</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">date</span>
     <span class="n">ForceRun</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">force_run</span>
-    <span class="n">NoWea</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">no_wea</span>
     <span class="n">Clear</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">clear</span>
-    <span class="n">RemoteControl</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">remote_control</span>
+    <span class="n">ProdEnv</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">prod_env</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;参数:</span>
 <span class="s2">    MarketId: </span><span class="si">{</span><span class="n">MarketId</span><span class="si">}</span>
 <span class="s2">    Date: </span><span class="si">{</span><span class="n">Date</span><span class="si">}</span>
 <span class="s2">    ForceRun: </span><span class="si">{</span><span class="n">ForceRun</span><span class="si">}</span>
-<span class="s2">    NoWea: </span><span class="si">{</span><span class="n">NoWea</span><span class="si">}</span>
 <span class="s2">    Clear: </span><span class="si">{</span><span class="n">Clear</span><span class="si">}</span>
-<span class="s2">    RemoteControl: </span><span class="si">{</span><span class="n">RemoteControl</span><span class="si">}</span>
+<span class="s2">    ProdEnv: </span><span class="si">{</span><span class="n">ProdEnv</span><span class="si">}</span>
 <span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">use_dev_db</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">ProdEnv</span>
+
     <span class="k">if</span> <span class="n">Clear</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;预测统一出清价格&#39;</span><span class="p">)</span>
         <span class="n">id_msg</span> <span class="o">=</span> <span class="s1">&#39;market_id&#39;</span>
@@ -1185,7 +983,7 @@
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;确定的基准日期: </span><span class="si">{</span><span class="n">BASE_DATE</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;创建表及连接engine...&#39;</span><span class="p">)</span>
-    <span class="n">tab_dict</span><span class="p">,</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">RemoteControl</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">)</span>
+    <span class="n">tab_dict</span><span class="p">,</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine_and_tabs</span><span class="p">(</span><span class="n">use_dev_db</span><span class="p">,</span> <span class="n">TABLE_NAMES</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;完成&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">hour</span> <span class="o">==</span> <span class="mi">11</span> <span class="ow">or</span> <span class="p">(</span><span class="n">ForceRun</span> <span class="ow">and</span> <span class="n">MarketId</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>

@@ -203,16 +203,15 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">logging.handlers</span> <span class="kn">import</span> <span class="n">RotatingFileHandler</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">MetaData</span><span class="p">,</span> <span class="n">Table</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">distinct</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">MetaData</span><span class="p">,</span> <span class="n">Table</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">text</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">savgol_filter</span>
 
 
-<div class="viewcode-block" id="init_logger"><a class="viewcode-back" href="../api.html#utils.init_logger">[docs]</a><span class="k">def</span> <span class="nf">init_logger</span><span class="p">(</span><span class="n">call_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;初始化一个日志记录器对象。</span>
+<div class="viewcode-block" id="init_log"><a class="viewcode-back" href="../api.html#utils.init_log">[docs]</a><span class="k">def</span> <span class="nf">init_log</span><span class="p">(</span><span class="n">call_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;初始化一个日志配置。</span>
 
 <span class="sd">    :param call_file_path: 调用本函数的文件的绝对路径</span>
 <span class="sd">    :param debug: 是否开启调试模式，默认为 ``False``，开启则将日志打印至控制台而非写入文件</span>
-<span class="sd">    :return: ``logging.Logger`` 对象</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">base_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">call_file_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">sub_pkg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">call_file_path</span><span class="p">)</span>
@@ -226,9 +225,6 @@
     <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(levelname)7s</span><span class="s1"> </span><span class="si">%(filename)8s</span><span class="s1"> line </span><span class="si">%(lineno)4d</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1"> &#39;</span><span class="p">,</span>
                                   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
 
-    <span class="n">logger_</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">base_name</span><span class="p">)</span>
-    <span class="n">logger_</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-
     <span class="c1"># info handler</span>
     <span class="n">info_file_handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_name</span><span class="si">}</span><span class="s1">-info.log&#39;</span><span class="p">),</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
                                             <span class="n">backupCount</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
@@ -236,10 +232,10 @@
     <span class="n">info_file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
 
     <span class="c1"># debug handler</span>
-    <span class="c1"># debug_file_handler = RotatingFileHandler(os.path.join(log_file_path, f&#39;{base_name}-debug.log&#39;), maxBytes=10 * 1024 * 1024,</span>
-    <span class="c1">#                                          backupCount=5, encoding=&#39;utf-8&#39;)</span>
-    <span class="c1"># debug_file_handler.setLevel(logging.DEBUG)</span>
-    <span class="c1"># debug_file_handler.setFormatter(formatter)</span>
+    <span class="n">debug_file_handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_file_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_name</span><span class="si">}</span><span class="s1">-debug.log&#39;</span><span class="p">),</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+                                             <span class="n">backupCount</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="n">debug_file_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">debug_file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
 
     <span class="c1"># debug mode handler</span>
     <span class="n">debug_stream_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
@@ -247,10 +243,14 @@
     <span class="n">debug_stream_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">debug</span><span class="p">:</span>
-        <span class="n">logger_</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">info_file_handler</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+            <span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">info_file_handler</span><span class="p">,</span> <span class="n">debug_file_handler</span><span class="p">],</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger_</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">debug_stream_handler</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">logger_</span></div>
+        <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="valid_date"><a class="viewcode-back" href="../api.html#utils.valid_date">[docs]</a><span class="k">def</span> <span class="nf">valid_date</span><span class="p">(</span><span class="n">date_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -281,21 +281,14 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid month: </span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">, format should be YYYY-mm&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="_get_db_url"><a class="viewcode-back" href="../api.html#utils._get_db_url">[docs]</a><span class="k">def</span> <span class="nf">_get_db_url</span><span class="p">(</span><span class="n">remote_control</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="_get_db_url"><a class="viewcode-back" href="../api.html#utils._get_db_url">[docs]</a><span class="k">def</span> <span class="nf">_get_db_url</span><span class="p">(</span><span class="n">use_dev_db</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;获取数据库的连接信息.</span>
 
-<span class="sd">    :param remote_control: 是否使用私有云数据库的外部接口</span>
+<span class="sd">    :param use_dev_db: 是否使用测试环境数据库</span>
 <span class="sd">    :return: 数据库连接字符串</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">DATABASE_CONF</span> <span class="kn">import</span> <span class="n">local_prod_url</span><span class="p">,</span> <span class="n">dev_url</span><span class="p">,</span> <span class="n">prod_url</span>
-    <span class="k">if</span> <span class="n">remote_control</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">local_prod_url</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ip</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">())</span>
-        <span class="k">if</span> <span class="n">ip</span> <span class="o">==</span> <span class="s1">&#39;10.97.6.3&#39;</span><span class="p">:</span>  <span class="c1"># 私有云</span>
-            <span class="k">return</span> <span class="n">prod_url</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">dev_url</span></div>
+    <span class="kn">from</span> <span class="nn">DATABASE_CONF</span> <span class="kn">import</span> <span class="n">dev_url</span><span class="p">,</span> <span class="n">prod_url</span>
+    <span class="k">return</span> <span class="n">dev_url</span> <span class="k">if</span> <span class="n">use_dev_db</span> <span class="k">else</span> <span class="n">prod_url</span></div>
 
 
 <div class="viewcode-block" id="_15min_2_hour"><a class="viewcode-back" href="../api.html#utils._15min_2_hour">[docs]</a><span class="k">def</span> <span class="nf">_15min_2_hour</span><span class="p">(</span><span class="n">time_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -353,14 +346,14 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month_str</span><span class="si">}</span><span class="s1">-3&#39;</span></div>
 
 
-<div class="viewcode-block" id="create_engine_and_tabs"><a class="viewcode-back" href="../api.html#utils.create_engine_and_tabs">[docs]</a><span class="k">def</span> <span class="nf">create_engine_and_tabs</span><span class="p">(</span><span class="n">remote_control</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">tab_name_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<div class="viewcode-block" id="create_engine_and_tabs"><a class="viewcode-back" href="../api.html#utils.create_engine_and_tabs">[docs]</a><span class="k">def</span> <span class="nf">create_engine_and_tabs</span><span class="p">(</span><span class="n">use_dev_db</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">tab_name_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;创建数据库引擎, 并生成表对象.</span>
 
-<span class="sd">    :param remote_control: 是否使用私有云数据库的外部接口</span>
+<span class="sd">    :param use_dev_db: 是否使用测试环境数据库</span>
 <span class="sd">    :param tab_name_list: 需要创建的表名列表</span>
 <span class="sd">    :return: 算法用到的表对象, 引擎</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="n">_get_db_url</span><span class="p">(</span><span class="n">remote_control</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">_get_db_url</span><span class="p">(</span><span class="n">use_dev_db</span><span class="p">)</span>
     <span class="n">engine_</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="n">meta</span> <span class="o">=</span> <span class="n">MetaData</span><span class="p">()</span>
 
@@ -526,6 +519,8 @@
             <span class="k">if</span> <span class="n">market_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span><span class="p">)</span>
                 <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span><span class="o">.</span><span class="n">in_</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">market_id</span> <span class="o">==</span> <span class="n">market_id</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">province_id</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># 甘肃省</span>
                 <span class="k">assert</span> <span class="n">zone_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;在获取甘肃的统一出清价格时，`zone_id` 必须指定&#39;</span>
                 <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">zone_id</span> <span class="o">==</span> <span class="n">zone_id</span><span class="p">)</span>
@@ -623,21 +618,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">plant_type</span> <span class="o">=</span> <span class="s1">&#39;30003&#39;</span> <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;w&#39;</span> <span class="k">else</span> <span class="s1">&#39;30002&#39;</span>
         <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;wind_speed_100m&#39;</span> <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;w&#39;</span> <span class="k">else</span> <span class="s1">&#39;irradiance&#39;</span>
-        <span class="n">plant_tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_plant_info&#39;</span><span class="p">]</span>
-        <span class="n">county_codes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">plant_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">county_code</span><span class="p">))</span>
-                                   <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">plant_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">plant_type</span> <span class="o">==</span> <span class="n">plant_type</span><span class="p">,</span>
-                                               <span class="n">plant_tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">county_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)),</span>
-                                   <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)[</span><span class="s1">&#39;county_code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-        <span class="n">all_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dict</span><span class="p">[</span><span class="s1">&#39;pt_tj_45d_1h_weather__partition_month&#39;</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">county_codes</span><span class="p">:</span>
-            <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fx_date</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fx_time</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">col</span><span class="p">])</span><span class="o">.</span>
-                   <span class="n">where</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fx_date</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
-                              <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">fx_date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span>
-                              <span class="n">tab</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">area_code</span> <span class="o">==</span> <span class="n">cc</span><span class="p">)))</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
-            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;county_code&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cc</span>
-            <span class="n">all_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">all_df</span><span class="p">,</span> <span class="n">df</span><span class="p">])</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select distinct county_code from pt_plant_info where plant_type=&#39;</span><span class="si">{</span><span class="n">plant_type</span><span class="si">}</span><span class="s2">&#39; and county_code is not null</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="n">county_codes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)[</span><span class="s1">&#39;county_code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;pt_tj_45d_1h_weather__partition_month&#39;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        select fx_date, fx_time, </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">, area_code as county_code from </span><span class="si">{</span><span class="n">tab</span><span class="si">}</span><span class="s2"> </span>
+<span class="s2">        where fx_date between &#39;</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">&#39; and &#39;</span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2">&#39;</span>
+<span class="s2">        and area_code in </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">county_codes</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="n">all_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
         <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;fx_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;fx_time&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:00&#39;</span>
         <span class="k">del</span> <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;fx_date&#39;</span><span class="p">],</span> <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;fx_time&#39;</span><span class="p">]</span>
         <span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">all_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
