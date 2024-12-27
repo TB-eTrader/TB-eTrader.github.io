@@ -560,6 +560,8 @@ Default is <code class="docutils literal notranslate"><span class="pre">None</sp
 <strong>节点电价</strong> （用于发电侧结算）和 <strong>统一出清价格</strong> （用于售电侧结算）两类。
 上述组合一共有四种，即：<strong>日前节点电价</strong>、<strong>日前统一出清价格</strong>、<strong>实时节点价格</strong> 和 <strong>实时统一出清价格</strong>。</p>
 <p>本算法对上述四种电价进行预测。</p>
+<p>在预测日前电价时，算法会预测 <code class="docutils literal notranslate"><span class="pre">date</span></code> +2 至 <code class="docutils literal notranslate"><span class="pre">date</span></code> +5 共四日的价格，训练集的数据范围为 <code class="docutils literal notranslate"><span class="pre">date</span></code> -7 至 <code class="docutils literal notranslate"><span class="pre">date</span></code> +1 共9日。</p>
+<p>在预测实时电价时，算法会预测 <code class="docutils literal notranslate"><span class="pre">date</span></code> 至 <code class="docutils literal notranslate"><span class="pre">date</span></code> +2 共三日的价格，训练集的数据范围为 <code class="docutils literal notranslate"><span class="pre">date</span></code> -7 至 <code class="docutils literal notranslate"><span class="pre">date</span></code> -1 共7日。</p>
 <p>对于周期性的定时调度任务而言，每天21点至22点之间程序会预测日前价格；每天11点至12点之间，程序会预测实时价格。
 如果指定了 <code class="docutils literal notranslate"><span class="pre">-C</span></code> 参数，则预测的是统一出清价格；否则预测节点价格。在预测节点价格时，
 目前只预测特新场站和晖源场站所在的两个节点。</p>
@@ -710,7 +712,7 @@ python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast
 <span id="id6"></span><h3>1.2 现货电价预测(基于深度学习)<a class="headerlink" href="#module-shanxi.dl_node_price_forecast" title="Permalink to this heading">#</a></h3>
 <div class="custom-doc admonition">
 <p>此外，针对日前节点电价预测这一分类，华北电力大学交付了一版基于深度学习的预测算法。
-该算法只能预测未来3天的日前节点价格。</p>
+该算法只能预测未来3天的日前节点价格。训练集的数据范围为 <code class="docutils literal notranslate"><span class="pre">date</span></code> -2至 <code class="docutils literal notranslate"><span class="pre">date</span></code> ，预测集的数据范围为 <code class="docutils literal notranslate"><span class="pre">date</span></code> +1 至 <code class="docutils literal notranslate"><span class="pre">date</span></code> +3。</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>深度学习算法的准确性非常依赖于全网开机容量，目前该参数是华电定时进行更新，
@@ -781,12 +783,6 @@ python<span class="w"> </span>-m<span class="w"> </span>shanxi.price_forecast
 <dd class="field-even"><p>DataFrame。</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="shanxi.dl_node_price_forecast.rectify_result">
-<span class="sig-prename descclassname"><span class="pre">shanxi.dl_node_price_forecast.</span></span><span class="sig-name descname"><span class="pre">rectify_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shanxi/dl_node_price_forecast.html#rectify_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shanxi.dl_node_price_forecast.rectify_result" title="Permalink to this definition">#</a></dt>
-<dd><p>对预测结果进行修正。</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1988,7 +1984,6 @@ end_date: 预测数据的结束日期</p>
 <li><a class="reference internal" href="#shanxi.dl_node_price_forecast.infer_date"><code class="docutils literal notranslate"><span class="pre">infer_date()</span></code></a></li>
 <li><a class="reference internal" href="#shanxi.dl_node_price_forecast.load_pred_data"><code class="docutils literal notranslate"><span class="pre">load_pred_data()</span></code></a></li>
 <li><a class="reference internal" href="#shanxi.dl_node_price_forecast.load_train_data"><code class="docutils literal notranslate"><span class="pre">load_train_data()</span></code></a></li>
-<li><a class="reference internal" href="#shanxi.dl_node_price_forecast.rectify_result"><code class="docutils literal notranslate"><span class="pre">rectify_result()</span></code></a></li>
 <li><a class="reference internal" href="#shanxi.dl_node_price_forecast.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
 <li><a class="reference internal" href="#shanxi.dl_node_price_forecast.run_model"><code class="docutils literal notranslate"><span class="pre">run_model()</span></code></a></li>
 <li><a class="reference internal" href="#shanxi.dl_node_price_forecast.save_result"><code class="docutils literal notranslate"><span class="pre">save_result()</span></code></a></li>
